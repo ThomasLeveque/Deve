@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 import CreateLink from './Link/CreateLink';
@@ -14,14 +14,14 @@ import firebase, { FirebaseContext } from '../firebase';
 function App() {
   const user = useAuth();
 
-  return ( 
+  return (
     <BrowserRouter>
       <FirebaseContext.Provider value={{ user, firebase }}>
         <div className="app-container">
           <Header />
           <div className="route-container">
             <Switch>
-              <Route path="/" exact render={() => <Redirect to="/new/1"/>} />
+              <Route path="/" exact render={() => <Redirect to="/new/1" />} />
               <Route path="/create" component={CreateLink} />
               <Route path="/login" component={Login} />
               <Route path="/forgot" component={ForgotPassword} />

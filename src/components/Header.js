@@ -1,10 +1,9 @@
-import React from "react";
+import React from 'react';
 import { withRouter, NavLink } from 'react-router-dom';
-import { FirebaseContext } from "../firebase";
+import { FirebaseContext } from '../firebase';
 
 function Header() {
-  const {user, firebase} = React.useContext(FirebaseContext)
-  
+  const { user, firebase } = React.useContext(FirebaseContext);
 
   return (
     <div className="header">
@@ -12,7 +11,7 @@ function Header() {
         <img src="/logo.png" alt="Hooks News logo" className="logo" />
         <NavLink to="/" className="header-title">
           Hooks News
-          </NavLink>
+        </NavLink>
         <NavLink to="/" className="header-link">
           new
         </NavLink>
@@ -23,7 +22,7 @@ function Header() {
         <div className="divider">|</div>
         <NavLink to="/search" className="header-link">
           search
-        </NavLink> 
+        </NavLink>
         {user && (
           <>
             <div className="divider">|</div>

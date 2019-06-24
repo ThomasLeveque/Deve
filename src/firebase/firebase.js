@@ -13,25 +13,26 @@ class Firebase {
 
   register = async (name, email, password) => {
     const newUser = await this.auth.createUserWithEmailAndPassword(
-      email, password
+      email,
+      password
     );
 
     return await newUser.user.updateProfile({
       displayName: name
-    })
-  }
+    });
+  };
 
   login = async (email, password) => {
-    return await this.auth.signInWithEmailAndPassword(email, password)
-  }
+    return await this.auth.signInWithEmailAndPassword(email, password);
+  };
 
   logout = async () => {
     await this.auth.signOut();
-  }
+  };
 
   resetPassword = async email => {
     await this.auth.sendPasswordResetEmail(email);
-  }
+  };
 }
 
 const firebase = new Firebase();

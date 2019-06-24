@@ -1,6 +1,6 @@
-import React from "react";
-import FirebaseContext from "../../firebase/context";
-import LinkItem from "./LinkItem";
+import React from 'react';
+import FirebaseContext from '../../firebase/context';
+import LinkItem from './LinkItem';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 
 function LinkDetail(props) {
@@ -12,53 +12,55 @@ function LinkDetail(props) {
 
   React.useEffect(() => {
     getLink();
-  }, [])
+  }, []);
 
   const getLink = async () => {
     const doc = await linkRef.get();
-    setLink({ ...doc.data(), id: doc.id })
-  }
+    setLink({ ...doc.data(), id: doc.id });
+  };
 
   const handleAddComment = async () => {
-    if(!user) {
+    if (!user) {
       props.history.push('/login');
     } else {
       const doc = await linkRef.get();
-      if(doc.exists) {
+      if (doc.exists) {
         const previousComments = doc.data().comments;
         const comment = {
           postedBy: { id: user.uid, name: user.displayName },
           created: Date.now(),
           text: commentText
-        }
+        };
         const updatedComments = [...previousComments, comment];
-        await linkRef.update({comments: updatedComments});
+        await linkRef.update({ comments: updatedComments });
         setLink(prevState => ({
           ...prevState,
           comments: updatedComments
-        }))
+        }));
         setCommentText('');
       }
     }
-  }
+  };
 
   return !link ? (
     <div>...loading</div>
   ) : (
     <div>
-      <LinkItem showCount={false} link={link}/>
-      <textarea 
-        rows='6'
-        cols='60'
+      <LinkItem showCount={false} link={link} />
+      <textarea
+        rows="6"
+        cols="60"
         onChange={event => setCommentText(event.target.value)}
         value={commentText}
       />
       <div>
-        <button onClick={handleAddComment} className='button'>Add Comment</button>
+        <button onClick={handleAddComment} className="button">
+          Add Comment
+        </button>
       </div>
       {link.comments.map((comment, index) => (
         <div key={index}>
-          <p className='comment-author'>
+          <p className="comment-author">
             {comment.postedBy.name} | {distanceInWordsToNow(comment.created)}
           </p>
           <p>{comment.text}</p>

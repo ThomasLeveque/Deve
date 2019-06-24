@@ -1,5 +1,5 @@
-import React from "react";
-import { FirebaseContext } from "../../firebase";
+import React from 'react';
+import { FirebaseContext } from '../../firebase';
 
 function ForgotPassword() {
   const { firebase } = React.useContext(FirebaseContext);
@@ -13,16 +13,16 @@ function ForgotPassword() {
       await firebase.resetPassword(resetPasswordEmail);
       setIsPasswordReset(true);
       setPasswordResetError(null);
-    } catch(err) {
+    } catch (err) {
       console.error('Error sending email', err);
       setPasswordResetError(err.message);
       setIsPasswordReset(false);
     }
-  }
+  };
 
   return (
     <div>
-      <input 
+      <input
         type="email"
         placeholder="Provide your account email"
         className="input"
