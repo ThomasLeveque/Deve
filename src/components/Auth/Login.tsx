@@ -1,27 +1,28 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 
 import useFormValidation from './useFormValidation';
 import validateLogin from './validateLogin';
 import firebase from '../../firebase';
+import { IRegisterInitialState } from '../../interfaces/initialState';
 
-const INITIAL_STATE = {
+const INITIAL_STATE: IRegisterInitialState = {
   name: '',
   email: '',
   password: ''
 };
 
-const Login = props => {
-  const [login, setLogin] = React.useState(true);
-  const [firebaseError, setFirebaseError] = React.useState(null);
+const Login: React.FC<RouteComponentProps> = ({ history }) => {
+  const [login, setLogin] = React.useState<boolean>(true);
+  const [firebaseError, setFirebaseError] = React.useState<string | null>(null);
 
-  const authenticateUser = async () => {
-    const { name, email, password } = values;
+  const authenticateUser = async (): Promise<void> => {
+    const { name, email, password }: IRegisterInitialState = values;
     try {
       login
         ? await firebase.login(email, password)
         : await firebase.register(name, email, password);
-      props.history.push('/');
+      history.push('/');
     } catch (err) {
       console.log('auth error', err);
       setFirebaseError(err.message);
@@ -35,7 +36,7 @@ const Login = props => {
     values,
     errors,
     isSubmitting
-  } = useFormValidation(INITIAL_STATE, validateLogin, authenticateUser);
+  }: any = useFormValidation(INITIAL_STATE, validateLogin, authenticateUser);
 
   return (
     <div>

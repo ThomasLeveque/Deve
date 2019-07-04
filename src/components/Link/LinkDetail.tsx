@@ -1,14 +1,26 @@
 import React from 'react';
+import { RouteComponentProps, match } from 'react-router-dom';
+
 import FirebaseContext from '../../firebase/context';
 import LinkItem from './LinkItem';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
+import { ILink } from '../../interfaces/link';
+import { IComment } from '../../interfaces/comment';
+import { FirebaseRef } from '../../interfaces/firebase';
 
-function LinkDetail(props) {
+type Params = { linkId: string };
+
+interface IProps extends RouteComponentProps<{}> {
+  match: match<Params>;
+}
+
+const LinkDetail: React.FC<IProps> = ({ match, history }) => {
   const { firebase, user } = React.useContext(FirebaseContext);
-  const [link, setLink] = React.useState(null);
-  const [commentText, setCommentText] = React.useState('');
-  const linkId = props.match.params.linkId;
-  const linkRef = firebase.db.collection('links').doc(linkId);
+
+  const [link, setLink] = React.useState<ILink | null>(null);
+  const [commentText, setCommentText] = React.useState<string>('');
+  const linkId: string = match.params.linkId;
+  const linkRef: FirebaseRef = firebase.db.collection('links').doc(linkId);
 
   React.useEffect(() => {
     getLink();
@@ -16,12 +28,13 @@ function LinkDetail(props) {
 
   const getLink = async () => {
     const doc = await linkRef.get();
+    console.log(doc);
     setLink({ ...doc.data(), id: doc.id });
   };
 
   const handleAddComment = async () => {
     if (!user) {
-      props.history.push('/login');
+      history.push('/login');
     } else {
       const doc = await linkRef.get();
       if (doc.exists) {
@@ -33,7 +46,7 @@ function LinkDetail(props) {
         };
         const updatedComments = [...previousComments, comment];
         await linkRef.update({ comments: updatedComments });
-        setLink(prevState => ({
+        setLink((prevState: any) => ({
           ...prevState,
           comments: updatedComments
         }));
@@ -48,8 +61,8 @@ function LinkDetail(props) {
     <div>
       <LinkItem showCount={false} link={link} />
       <textarea
-        rows="6"
-        cols="60"
+        rows={6}
+        cols={60}
         onChange={event => setCommentText(event.target.value)}
         value={commentText}
       />
@@ -58,7 +71,7 @@ function LinkDetail(props) {
           Add Comment
         </button>
       </div>
-      {link.comments.map((comment, index) => (
+      {link.comments.map((comment: IComment, index: number) => (
         <div key={index}>
           <p className="comment-author">
             {comment.postedBy.name} | {distanceInWordsToNow(comment.created)}

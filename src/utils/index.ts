@@ -1,6 +1,6 @@
 export const LINKS_PER_PAGE = 5;
 
-export function getDomain(url) {
+export function getDomain(url: string) {
   return url.replace(/^https?:\/\//i, '');
 }
 

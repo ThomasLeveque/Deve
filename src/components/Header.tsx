@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter, NavLink } from 'react-router-dom';
 import { FirebaseContext } from '../firebase';
 
-function Header() {
+const Header: React.FC = () => {
   const { user, firebase } = React.useContext(FirebaseContext);
 
   return (

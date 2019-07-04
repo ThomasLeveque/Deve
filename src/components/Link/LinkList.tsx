@@ -1,22 +1,34 @@
 import React from 'react';
+import { RouteComponentProps, match } from 'react-router-dom';
+
 import FirebaseContext from '../../firebase/context';
 import LinkItem from './LinkItem';
 import { LINKS_PER_PAGE } from '../../utils/index';
+import { ILink } from '../../interfaces/link';
+import { firebaseSnapshot } from '../../interfaces/firebase';
 
-function LinkList(props) {
+type Params = { page: string };
+
+interface IProps extends RouteComponentProps<{}> {
+  match: match<Params>;
+}
+
+const LinkList: React.FC<IProps> = ({ match, history, location }) => {
   const { firebase } = React.useContext(FirebaseContext);
-  const [links, setLinks] = React.useState([]);
-  const [cursor, setCursor] = React.useState(null);
-  const isTopPage = props.location.pathname.includes('top');
-  const isNewPage = props.location.pathname.includes('new');
-  const page = Number(props.match.params.page);
+
+  const [links, setLinks] = React.useState<ILink[]>([]);
+  const [cursor, setCursor] = React.useState<ILink | null>(null);
+  
+  const isTopPage: any = location.pathname.includes('top');
+  const isNewPage: any = location.pathname.includes('new');
+  const page: number = Number(match.params.page);
 
   React.useEffect(() => {
     const unsubscribe = getLinks();
     return () => unsubscribe();
   }, [isTopPage, page]);
 
-  const getLinks = () => {
+  const getLinks = (): any => {
     const hasCursor = Boolean(cursor);
     if (isTopPage) {
       return firebase.db
@@ -39,8 +51,8 @@ function LinkList(props) {
     }
   };
 
-  const handleSnapshot = snapshot => {
-    const links = snapshot.docs.map(doc => {
+  const handleSnapshot = (snapshot: firebaseSnapshot) => {
+    const links: ILink[] = snapshot.docs.map((doc: any) => {
       return {
         id: doc.id,
         ...doc.data()
@@ -51,23 +63,23 @@ function LinkList(props) {
     setCursor(lastLink);
   };
 
-  const visitePreviousPage = () => {
+  const visitePreviousPage = (): void => {
     if (page > 1) {
-      props.history.push(`/new/${page - 1}`);
+      history.push(`/new/${page - 1}`);
     }
   };
 
-  const visiteNextPage = () => {
+  const visiteNextPage = (): void => {
     if (page <= links.length / LINKS_PER_PAGE) {
-      props.history.push(`/new/${page + 1}`);
+      history.push(`/new/${page + 1}`);
     }
   };
 
-  const pageIndex = page ? (page - 1) * LINKS_PER_PAGE + 1 : 1;
+  const pageIndex: number = page ? (page - 1) * LINKS_PER_PAGE + 1 : 1;
 
   return (
     <div>
-      {links.map((link, index) => (
+      {links.map((link: ILink, index: number) => (
         <LinkItem
           key={link.id}
           showCount={true}

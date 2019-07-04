@@ -1,31 +1,48 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
+
 import { getDomain } from '../../utils';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import FirebaseContext from '../../firebase/context';
+import { IVote } from '../../interfaces/vote';
+import { ILink } from '../../interfaces/link';
+import { FirebaseRef } from '../../interfaces/firebase';
 
-const LinkItem = ({ link, index, showCount, history }) => {
+interface IProps extends RouteComponentProps<{}> {
+  link: ILink;
+  index?: number;
+  showCount: boolean;
+}
+
+const LinkItem: React.FC<IProps> = ({
+  link,
+  index,
+  showCount = false,
+  history
+}) => {
   const { firebase, user } = React.useContext(FirebaseContext);
 
-  const handleVote = async () => {
+  const handleVote = async (): Promise<void> => {
     if (!user) {
       history.push('/login');
     } else {
-      const voteRef = await firebase.db.collection('links').doc(link.id);
+      const voteRef: FirebaseRef = firebase.db.collection('links').doc(link.id);
 
       const doc = await voteRef.get();
       if (doc.exists) {
         const previousVotes = doc.data().votes;
-        const vote = { voteBy: { id: user.uid, name: user.displayName } };
-        const updatedVotes = [...previousVotes, vote];
+        const vote: IVote = {
+          voteBy: { id: user.uid, name: user.displayName }
+        };
+        const updatedVotes: IVote[] = [...previousVotes, vote];
         const voteCount = updatedVotes.length;
         voteRef.update({ votes: updatedVotes, voteCount });
       }
     }
   };
 
-  const handleDeleteLink = async () => {
-    const linkRef = await firebase.db.collection('links').doc(link.id);
+  const handleDeleteLink = async (): Promise<void> => {
+    const linkRef: FirebaseRef = firebase.db.collection('links').doc(link.id);
     try {
       await linkRef.delete();
       console.log('link deleted');
@@ -34,7 +51,7 @@ const LinkItem = ({ link, index, showCount, history }) => {
     }
   };
 
-  const postedByAuthUser = user && user.uid === link.postedBy.id;
+  const postedByAuthUser: boolean = user && user.uid === link.postedBy.id;
 
   return (
     <div className="flex items-start mt2">

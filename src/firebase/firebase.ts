@@ -5,14 +5,17 @@ import 'firebase/firestore';
 import firebaseConfig from './config';
 
 class Firebase {
+  auth: app.auth.Auth;
+  db: app.firestore.Firestore;
+  
   constructor() {
     app.initializeApp(firebaseConfig);
     this.auth = app.auth();
     this.db = app.firestore();
   }
 
-  register = async (name, email, password) => {
-    const newUser = await this.auth.createUserWithEmailAndPassword(
+  register = async (name: string, email: string, password: string): Promise<void> => {
+    const newUser: app.auth.UserCredential = await this.auth.createUserWithEmailAndPassword(
       email,
       password
     );
@@ -22,15 +25,15 @@ class Firebase {
     });
   };
 
-  login = async (email, password) => {
+  login = async (email: string, password: string): Promise<app.auth.UserCredential> => {
     return await this.auth.signInWithEmailAndPassword(email, password);
   };
 
-  logout = async () => {
+  logout = async (): Promise<void> => {
     await this.auth.signOut();
   };
 
-  resetPassword = async email => {
+  resetPassword = async (email: string): Promise<void> => {
     await this.auth.sendPasswordResetEmail(email);
   };
 }

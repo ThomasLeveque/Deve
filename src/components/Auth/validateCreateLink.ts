@@ -1,5 +1,10 @@
-export default function validateCreateLink(values) {
-  let errors = {};
+import { ICreateLinkErrors } from '../../interfaces/errors';
+
+export default function validateCreateLink(values: any) {
+  let errors: ICreateLinkErrors = {
+    description: '',
+    url: ''
+  };
 
   // Description Erros
   if (!values.description) {

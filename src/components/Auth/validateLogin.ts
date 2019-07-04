@@ -1,5 +1,10 @@
-export default function validateLogin(values) {
-  let errors = {};
+import { ILoginErrors } from "../../interfaces/errors";
+
+export default function validateLogin(values: any) {
+  let errors: ILoginErrors = {
+    email: '',
+    password: ''
+  };
 
   // Email Erros
   if (!values.email) {

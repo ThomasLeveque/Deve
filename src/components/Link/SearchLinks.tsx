@@ -1,17 +1,20 @@
 import React from 'react';
 import FirebaseContext from '../../firebase/context';
 import LinkItem from './LinkItem';
+import { ILink } from '../../interfaces/link';
+import { firebaseSnapshot } from '../../interfaces/firebase';
 
-function SearchLinks() {
+const SearchLinks: React.FC = () => {
   const { firebase } = React.useContext(FirebaseContext);
-  const [filteredLinks, setFilteredLinks] = React.useState([]);
-  const [links, setLinks] = React.useState([]);
-  const [filter, setFilter] = React.useState('');
 
-  const handleSearch = e => {
+  const [filteredLinks, setFilteredLinks] = React.useState<ILink[]>([]);
+  const [links, setLinks] = React.useState<ILink[]>([]);
+  const [filter, setFilter] = React.useState<string>('');
+
+  const handleSearch = (e: any): void => {
     e.preventDefault();
     const query = filter.toLowerCase();
-    const matchedLinks = links.filter(link => {
+    const matchedLinks: ILink[] = links.filter((link: ILink) => {
       return (
         link.description.toLowerCase().includes(query) ||
         link.url.toLowerCase().includes(query) ||
@@ -26,10 +29,10 @@ function SearchLinks() {
     getInitialLinks();
   }, []);
 
-  const getInitialLinks = async () => {
-    const snapshot = await firebase.db.collection('links').get();
+  const getInitialLinks = async (): Promise<void> => {
+    const snapshot: firebaseSnapshot = await firebase.db.collection('links').get();
 
-    const links = snapshot.docs.map(doc => {
+    const links: ILink[] = snapshot.docs.map((doc: any) => {
       return { id: doc.ic, ...doc.data() };
     });
     setLinks(links);
@@ -39,11 +42,11 @@ function SearchLinks() {
     <div>
       <form onSubmit={handleSearch}>
         <div>
-          Search <input onChange={event => setFilter(event.target.value)} />
+          Search <input onChange={(event: any) => setFilter(event.target.value)} />
           <button>Ok</button>
         </div>
       </form>
-      {filteredLinks.map((filteredLink, index) => (
+      {filteredLinks.map((filteredLink: ILink, index: number) => (
         <LinkItem
           key={filteredLink.id}
           showCount={false}
@@ -53,6 +56,6 @@ function SearchLinks() {
       ))}
     </div>
   );
-}
+};
 
 export default SearchLinks;

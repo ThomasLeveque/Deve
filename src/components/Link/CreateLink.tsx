@@ -1,20 +1,24 @@
 import React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
+
 import useFormValidation from '../Auth/useFormValidation';
 import validateCreateLink from '../Auth/validateCreateLink';
 import FirebaseContext from '../../firebase/context';
+import { ILink } from '../../interfaces/link';
+import { ICreateLinkInitialState } from '../../interfaces/initialState';
 
-const INITIAL_STATE = {
+const INITIAL_STATE: ICreateLinkInitialState = {
   description: '',
   url: ''
 };
 
-const CreateLink = props => {
-  const handleCreateLink = async () => {
+const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
+  const handleCreateLink = async (): Promise<void> => {
     if (!user) {
-      props.history.push('/login');
+      history.push('/login');
     } else {
-      const { url, description } = values;
-      const newLink = {
+      const { url, description }: ICreateLinkInitialState = values;
+      const newLink: ILink = {
         url,
         description,
         postedBy: {
@@ -28,7 +32,7 @@ const CreateLink = props => {
       };
 
       await firebase.db.collection('links').add(newLink);
-      props.history.push('/');
+      history.push('/');
     }
   };
 
