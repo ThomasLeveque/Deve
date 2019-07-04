@@ -11,7 +11,7 @@ const SearchLinks: React.FC = () => {
   const [links, setLinks] = React.useState<ILink[]>([]);
   const [filter, setFilter] = React.useState<string>('');
 
-  const handleSearch = (e: any): void => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const query = filter.toLowerCase();
     const matchedLinks: ILink[] = links.filter((link: ILink) => {
@@ -42,7 +42,7 @@ const SearchLinks: React.FC = () => {
     <div>
       <form onSubmit={handleSearch}>
         <div>
-          Search <input onChange={(event: any) => setFilter(event.target.value)} />
+          Search <input onChange={(event: React.ChangeEvent<HTMLInputElement>) => setFilter(event.target.value)} />
           <button>Ok</button>
         </div>
       </form>

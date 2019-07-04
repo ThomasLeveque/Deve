@@ -17,7 +17,7 @@ const useFormValidation = (initialState: any, validate: any, authenticate: any) 
     }
   }, [errors]);
 
-  const handleChange = (event: any): void => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     event.persist();
     setValues((previousValues: any) => ({
       ...previousValues,
@@ -30,7 +30,7 @@ const useFormValidation = (initialState: any, validate: any, authenticate: any) 
     setErrors(validationErrors);
   };
 
-  const handleSubmit = (event: any): void => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     const validationErrors = validate(values);
     setErrors(validationErrors);

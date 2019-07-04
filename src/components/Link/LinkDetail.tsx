@@ -63,7 +63,7 @@ const LinkDetail: React.FC<IProps> = ({ match, history }) => {
       <textarea
         rows={6}
         cols={60}
-        onChange={event => setCommentText(event.target.value)}
+        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => setCommentText(event.target.value)}
         value={commentText}
       />
       <div>
