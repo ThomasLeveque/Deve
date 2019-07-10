@@ -5,7 +5,6 @@
   "dependencies": {
     "@types/jest": "^24.0.15",
     "@types/node": "^12.0.10",
-    "@types/react": "^16.8.22",
     "@types/react-dom": "^16.8.4",
     "@types/react-router-dom": "^4.3.4",
     "axios": "^0.18.0",
@@ -13,11 +12,13 @@
     "firebase": "^6.0.0",
     "firebase-admin": "^7.3.0",
     "firebase-functions": "^2.3.1",
+    "formik": "^1.5.7",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.2",
+    "yup": "^0.27.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -39,5 +40,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.23",
+    "@types/yup": "^0.26.21"
   }
 }

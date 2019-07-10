@@ -1,11 +1,11 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import useFormValidation from '../Auth/useFormValidation';
-import validateCreateLink from '../Auth/validateCreateLink';
 import FirebaseContext from '../../firebase/context';
 import { ILink } from '../../interfaces/link';
 import { ICreateLinkInitialState } from '../../interfaces/initialState';
+import { Formik, FormikActions, Form, Field, ErrorMessage } from 'formik';
+import { linkSchema } from '../../validationSchema/linkSchema';
 
 const INITIAL_STATE: ICreateLinkInitialState = {
   description: '',
@@ -13,7 +13,9 @@ const INITIAL_STATE: ICreateLinkInitialState = {
 };
 
 const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
-  const handleCreateLink = async (): Promise<void> => {
+  const handleCreateLink = async (
+    values: ICreateLinkInitialState
+  ): Promise<void> => {
     if (!user) {
       history.push('/login');
     } else {
@@ -22,8 +24,8 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
         url,
         description,
         postedBy: {
-          id: user.uid,
-          name: user.displayName
+          id: user.id,
+          name: user.name
         },
         voteCount: 0,
         votes: [],
@@ -37,38 +39,54 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
   };
 
   const { firebase, user } = React.useContext(FirebaseContext);
-  const { handleSubmit, handleChange, values, errors } = useFormValidation(
-    INITIAL_STATE,
-    validateCreateLink,
-    handleCreateLink
-  );
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-column mt3">
-      <input
-        onChange={handleChange}
-        value={values.description}
-        name="description"
-        placeholder="A description for your link"
-        autoComplete="off"
-        type="text"
-        className={errors.description && 'error-input'}
-      />
-      {errors.description && <p className="error-text">{errors.description}</p>}
-      <input
-        onChange={handleChange}
-        value={values.url}
-        name="url"
-        placeholder="The URL of the link"
-        autoComplete="off"
-        type="text"
-        className={errors.url && 'error-input'}
-      />
-      {errors.url && <p className="error-text">{errors.url}</p>}
-      <button className="button" type="submit">
-        Submit
-      </button>
-    </form>
+    <Formik
+      initialValues={INITIAL_STATE}
+      validationSchema={linkSchema}
+      onSubmit={async (
+        values: ICreateLinkInitialState,
+        { setSubmitting }: FormikActions<ICreateLinkInitialState>
+      ) => {
+        await handleCreateLink(values);
+        setSubmitting(false);
+      }}
+    >
+      {({ isSubmitting, isValid, errors, touched }: any) => (
+        <Form className="flex flex-column">
+          <Field
+            name="description"
+            placeholder="A description for your link"
+            autoComplete="off"
+            className={
+              errors.description && touched.description && 'error-input'
+            }
+          />
+          <ErrorMessage
+            component="span"
+            name="description"
+            className="error-text"
+          />
+
+          <Field
+            name="url"
+            className={errors.url && touched.url && 'error-input'}
+            placeholder="The URL of the link"
+          />
+          <ErrorMessage component="span" name="url" className="error-text" />
+          <button
+            type="submit"
+            className="button pointer mr2"
+            disabled={isSubmitting || !isValid}
+            style={{
+              backgroundColor: isSubmitting || !isValid ? 'grey' : 'orange'
+            }}
+          >
+            Submit
+          </button>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

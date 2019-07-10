@@ -1,22 +1,31 @@
 import React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { Formik, Form, Field, ErrorMessage, FormikActions } from 'formik';
 
-import useFormValidation from './useFormValidation';
-import validateLogin from './validateLogin';
 import firebase from '../../firebase';
-import { IRegisterInitialState } from '../../interfaces/initialState';
+import {
+  IRegisterInitialState,
+  ILoginInitialState
+} from '../../interfaces/initialState';
+import { loginSchema, registerSchema } from '../../validationSchema/userSchema';
 
-const INITIAL_STATE: IRegisterInitialState = {
-  name: '',
+const INITIAL_LOGIN_STATE: ILoginInitialState = {
   email: '',
   password: ''
+};
+
+const INITIAL_REGISTER_STATE: IRegisterInitialState = {
+  name: '',
+  ...INITIAL_LOGIN_STATE
 };
 
 const Login: React.FC<RouteComponentProps> = ({ history }) => {
   const [login, setLogin] = React.useState<boolean>(true);
   const [firebaseError, setFirebaseError] = React.useState<string | null>(null);
 
-  const authenticateUser = async (): Promise<void> => {
+  const authenticateUser = async (
+    values: IRegisterInitialState | ILoginInitialState
+  ): Promise<void> => {
     const { name, email, password }: IRegisterInitialState = values;
     try {
       login
@@ -24,76 +33,92 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
         : await firebase.register(name, email, password);
       history.push('/');
     } catch (err) {
-      console.log('auth error', err);
       setFirebaseError(err.message);
     }
   };
 
-  const {
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    values,
-    errors,
-    isSubmitting
-  }: any = useFormValidation(INITIAL_STATE, validateLogin, authenticateUser);
-
   return (
     <div>
       <h2>{login ? 'Login' : 'Create account'}</h2>
-      <form onSubmit={handleSubmit} className="flex flex-column">
-        {!login && (
-          <input
-            type="text"
-            name="name"
-            value={values.name}
-            placeholder="Your name"
-            autoComplete="off"
-            onChange={handleChange}
-          />
+      <Formik
+        initialValues={login ? INITIAL_LOGIN_STATE : INITIAL_REGISTER_STATE}
+        validationSchema={login ? loginSchema : registerSchema}
+        onSubmit={async (
+          values: IRegisterInitialState | ILoginInitialState,
+          {
+            setSubmitting
+          }: FormikActions<IRegisterInitialState | ILoginInitialState>
+        ) => {
+          await authenticateUser(values);
+          setSubmitting(false);
+        }}
+      >
+        {({ isSubmitting, isValid, errors, touched }: any) => (
+          <Form className="flex flex-column">
+            {!login && (
+              <>
+                <Field
+                  name="name"
+                  placeholder="Your name"
+                  autoComplete="off"
+                  className={errors.name && touched.name && 'error-input'}
+                />
+                <ErrorMessage
+                  component="span"
+                  name="name"
+                  className="error-text"
+                />
+              </>
+            )}
+            <Field
+              name="email"
+              placeholder="Your email"
+              autoComplete="off"
+              className={errors.email && touched.email && 'error-input'}
+            />
+            <ErrorMessage
+              component="span"
+              name="email"
+              className="error-text"
+            />
+
+            <Field
+              name="password"
+              type="password"
+              className={errors.password && touched.password && 'error-input'}
+              placeholder="Choose a secure password"
+            />
+            <ErrorMessage
+              component="span"
+              name="password"
+              className="error-text"
+            />
+
+            {firebaseError && <p className="error-text">{firebaseError}</p>}
+            <div className="flex mt3">
+              <button
+                type="submit"
+                className="button pointer mr2"
+                disabled={isSubmitting || !isValid}
+                style={{
+                  backgroundColor: isSubmitting || !isValid ? 'grey' : 'orange'
+                }}
+              >
+                Submit
+              </button>
+              <button
+                type="button"
+                className="pointer button"
+                onClick={() => setLogin(prevLogin => !prevLogin)}
+              >
+                {login
+                  ? 'Need to create an account ?'
+                  : 'Already have an account ?'}
+              </button>
+            </div>
+          </Form>
         )}
-        <input
-          type="email"
-          name="email"
-          value={values.email}
-          placeholder="Your email"
-          autoComplete="off"
-          className={errors.email && 'error-input'}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        {errors.email && <p className="error-text">{errors.email}</p>}
-        <input
-          type="password"
-          name="password"
-          value={values.password}
-          className={errors.password && 'error-input'}
-          placeholder="Choose a secure password"
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        {errors.password && <p className="error-text">{errors.password}</p>}
-        {firebaseError && <p className="error-text">{firebaseError}</p>}
-        <div className="flex mt3">
-          <button
-            type="submit"
-            className="button pointer mr2"
-            disabled={isSubmitting}
-            style={{ backgroundColor: isSubmitting ? 'grey' : 'orange' }}
-          >
-            Submit
-          </button>
-          <button
-            type="button"
-            className="pointer button"
-            onClick={() => setLogin(prevLogin => !prevLogin)}
-          >
-            {login
-              ? 'Need to create an account ?'
-              : 'Already have an account ?'}
-          </button>
-        </div>
-      </form>
+      </Formik>
       <div className="forgot-password">
         <Link to="/forgot">Forgot password ?</Link>
       </div>

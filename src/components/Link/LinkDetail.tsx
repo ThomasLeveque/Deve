@@ -28,7 +28,6 @@ const LinkDetail: React.FC<IProps> = ({ match, history }) => {
 
   const getLink = async () => {
     const doc = await linkRef.get();
-    console.log(doc);
     setLink({ ...doc.data(), id: doc.id });
   };
 
@@ -40,7 +39,7 @@ const LinkDetail: React.FC<IProps> = ({ match, history }) => {
       if (doc.exists) {
         const previousComments = doc.data().comments;
         const comment = {
-          postedBy: { id: user.uid, name: user.displayName },
+          postedBy: { id: user.id, name: user.name },
           created: Date.now(),
           text: commentText
         };

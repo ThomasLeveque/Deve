@@ -32,7 +32,7 @@ const LinkItem: React.FC<IProps> = ({
       if (doc.exists) {
         const previousVotes = doc.data().votes;
         const vote: IVote = {
-          voteBy: { id: user.uid, name: user.displayName }
+          voteBy: { id: user.id, name: user.name }
         };
         const updatedVotes: IVote[] = [...previousVotes, vote];
         const voteCount = updatedVotes.length;
@@ -45,13 +45,12 @@ const LinkItem: React.FC<IProps> = ({
     const linkRef: FirebaseRef = firebase.db.collection('links').doc(link.id);
     try {
       await linkRef.delete();
-      console.log('link deleted');
     } catch (err) {
       console.error('Error deleting document', err);
     }
   };
 
-  const postedByAuthUser: boolean = user && user.uid === link.postedBy.id;
+  const postedByAuthUser: boolean = user && user.id === link.postedBy.id;
 
   return (
     <div className="flex items-start mt2">

@@ -4,7 +4,6 @@ import { FirebaseContext } from '../firebase';
 
 const Header: React.FC = () => {
   const { user, firebase } = React.useContext(FirebaseContext);
-
   return (
     <div className="header">
       <div className="flex">
@@ -35,7 +34,7 @@ const Header: React.FC = () => {
       <div className="flex">
         {user ? (
           <>
-            <div className="header-name">{user.displayName}</div>
+            <div className="header-name">{user.name}</div>
             <div className="divider">|</div>
             <div className="header-button" onClick={() => firebase.logout()}>
               logout

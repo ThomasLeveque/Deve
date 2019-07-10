@@ -1,13 +1,9 @@
-export interface ICreateLinkInitialState {
-  description: string;
-  url: string;
-}
+import * as yup from 'yup';
+import { linkSchema } from '../validationSchema/linkSchema';
+import { registerSchema, loginSchema } from '../validationSchema/userSchema';
 
-export interface IRegisterInitialState extends ILoginInitialState {
-  name: string;
-}
+export type ICreateLinkInitialState = yup.InferType<typeof linkSchema>;
 
-interface ILoginInitialState {
-  email: string;
-  password: string;
-}
+export type IRegisterInitialState = yup.InferType<typeof registerSchema>;
+
+export type ILoginInitialState = yup.InferType<typeof loginSchema>;
