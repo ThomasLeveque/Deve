@@ -109,7 +109,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
               <button
                 type="button"
                 className="pointer button"
-                onClick={() => setLogin(prevLogin => !prevLogin)}
+                onClick={() => setLogin((prevLogin: boolean) => !prevLogin)}
               >
                 {login
                   ? 'Need to create an account ?'

@@ -66,6 +66,7 @@ const LinkItem: React.FC<IProps> = ({
             {link.description}
           </a>{' '}
           <span className="link">({getDomain(link.url)})</span>
+          {' '}<span className="orange-txt">{link.category}</span>
         </div>
         <div className="f6 lh-copy gray">
           {link.voteCount} votes by {link.postedBy.name}{' '}

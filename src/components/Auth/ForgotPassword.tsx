@@ -25,7 +25,6 @@ const ForgotPassword: React.FC = () => {
       <input
         type="email"
         placeholder="Provide your account email"
-        className="input"
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => setResetPasswordEmail(event.target.value)}
       />
       <div>
