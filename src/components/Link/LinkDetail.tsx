@@ -6,7 +6,6 @@ import LinkItem from './LinkItem';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { ILink } from '../../interfaces/link';
 import { IComment } from '../../interfaces/comment';
-import { FirebaseRef } from '../../interfaces/firebase';
 
 type Params = { linkId: string };
 
@@ -17,17 +16,17 @@ interface IProps extends RouteComponentProps<{}> {
 const LinkDetail: React.FC<IProps> = ({ match, history }) => {
   const { firebase, user } = React.useContext(FirebaseContext);
 
-  const [link, setLink] = React.useState<ILink | null>(null);
+  const [link, setLink] = React.useState<any>(null);
   const [commentText, setCommentText] = React.useState<string>('');
   const linkId: string = match.params.linkId;
-  const linkRef: FirebaseRef = firebase.db.collection('links').doc(linkId);
+  const linkRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(linkId);
 
   React.useEffect(() => {
     getLink();
   }, []);
 
   const getLink = async () => {
-    const doc = await linkRef.get();
+    const doc: firebase.firestore.QueryDocumentSnapshot = await linkRef.get();
     setLink({ ...doc.data(), id: doc.id });
   };
 
@@ -35,7 +34,7 @@ const LinkDetail: React.FC<IProps> = ({ match, history }) => {
     if (!user) {
       history.push('/login');
     } else {
-      const doc = await linkRef.get();
+      const doc: firebase.firestore.QueryDocumentSnapshot = await linkRef.get();
       if (doc.exists) {
         const previousComments = doc.data().comments;
         const comment = {

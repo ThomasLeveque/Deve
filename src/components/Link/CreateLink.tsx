@@ -6,7 +6,6 @@ import { ILink, ICategory } from '../../interfaces/link';
 import { ICreateLinkInitialState } from '../../interfaces/initialState';
 import { Formik, FormikActions, Form, Field, ErrorMessage } from 'formik';
 import { linkSchema, categorySchema } from '../../validationSchema/linkSchema';
-import { firebaseSnapshot } from '../../interfaces/firebase';
 
 const INITIAL_STATE: ICreateLinkInitialState = {
   description: '',
@@ -17,6 +16,13 @@ const INITIAL_STATE: ICreateLinkInitialState = {
 const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
   const [isAddCategory, setIsAddCategory] = React.useState<boolean>(false);
   const [categories, setCategories] = React.useState<ICategory[]>([]);
+
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [addCatLoading, setAddCatLoading] = React.useState<boolean>(false);
+  const [createLinkLoading, setCreateLinkLoading] = React.useState<boolean>(
+    false
+  );
+
   const { firebase, user } = React.useContext(FirebaseContext);
 
   React.useEffect(() => {
@@ -24,10 +30,11 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
   }, []);
 
   const getCategories = (): any => {
+    setLoading(true);
     return firebase.db.collection('categories').onSnapshot(handleSnapshot);
   };
 
-  const handleSnapshot = (snapshot: firebaseSnapshot) => {
+  const handleSnapshot = (snapshot: firebase.firestore.QuerySnapshot) => {
     const categories: ICategory[] = snapshot.docs.map((doc: any) => {
       return {
         id: doc.id,
@@ -35,13 +42,16 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
       };
     });
     setCategories(categories);
+    setLoading(false);
   };
 
   const handleAddCategory = async (values: ICategory): Promise<void> => {
     if (!user) {
       history.push('/login');
     } else {
+      setAddCatLoading(true);
       await firebase.db.collection('categories').add(values);
+      setAddCatLoading(false);
     }
   };
 
@@ -66,13 +76,13 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
         comments: [],
         created: Date.now()
       };
-
+      setCreateLinkLoading(true);
       await firebase.db.collection('links').add(newLink);
       history.push('/');
     }
   };
 
-  return (
+  let content: JSX.Element = (
     <>
       <Formik
         initialValues={INITIAL_STATE}
@@ -81,7 +91,6 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
           values: ICreateLinkInitialState,
           { setSubmitting }: FormikActions<ICreateLinkInitialState>
         ) => {
-          console.log(values);
           await handleCreateLink(values);
           setSubmitting(false);
         }}
@@ -118,7 +127,12 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
                 Choose a category
               </option>
               {categories.map((category: ICategory) => (
-                <option key={category.id} value={category.name.toLocaleLowerCase()}>{category.name}</option>
+                <option
+                  key={category.id}
+                  value={category.name.toLocaleLowerCase()}
+                >
+                  {category.name}
+                </option>
               ))}
             </Field>
             <ErrorMessage
@@ -142,7 +156,7 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
                 backgroundColor: isSubmitting || !isValid ? 'grey' : 'orange'
               }}
             >
-              Submit
+              {createLinkLoading ? 'Loading...' : 'Submit'}
             </button>
           </Form>
         )}
@@ -180,7 +194,7 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
                   backgroundColor: isSubmitting || !isValid ? 'grey' : 'orange'
                 }}
               >
-                Add category
+                {addCatLoading ? 'Loading...' : 'Add category'}
               </button>
             </Form>
           )}
@@ -188,6 +202,12 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
       )}
     </>
   );
+
+  if (loading) {
+    content = <p>Loading...</p>;
+  }
+
+  return <>{content}</>;
 };
 
 export default CreateLink;

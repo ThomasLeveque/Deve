@@ -6,7 +6,6 @@ import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import FirebaseContext from '../../firebase/context';
 import { IVote } from '../../interfaces/vote';
 import { ILink } from '../../interfaces/link';
-import { FirebaseRef } from '../../interfaces/firebase';
 
 interface IProps extends RouteComponentProps<{}> {
   link: ILink;
@@ -26,7 +25,7 @@ const LinkItem: React.FC<IProps> = ({
     if (!user) {
       history.push('/login');
     } else {
-      const voteRef: FirebaseRef = firebase.db.collection('links').doc(link.id);
+      const voteRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(link.id);
 
       const doc = await voteRef.get();
       if (doc.exists) {
@@ -42,7 +41,7 @@ const LinkItem: React.FC<IProps> = ({
   };
 
   const handleDeleteLink = async (): Promise<void> => {
-    const linkRef: FirebaseRef = firebase.db.collection('links').doc(link.id);
+    const linkRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(link.id);
     try {
       await linkRef.delete();
     } catch (err) {

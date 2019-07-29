@@ -2,7 +2,6 @@ import React from 'react';
 import FirebaseContext from '../../firebase/context';
 import LinkItem from './LinkItem';
 import { ILink } from '../../interfaces/link';
-import { firebaseSnapshot } from '../../interfaces/firebase';
 
 const SearchLinks: React.FC = () => {
   const { firebase } = React.useContext(FirebaseContext);
@@ -30,7 +29,7 @@ const SearchLinks: React.FC = () => {
   }, []);
 
   const getInitialLinks = async (): Promise<void> => {
-    const snapshot: firebaseSnapshot = await firebase.db.collection('links').get();
+    const snapshot: firebase.firestore.QuerySnapshot = await firebase.db.collection('links').get();
 
     const links: ILink[] = snapshot.docs.map((doc: any) => {
       return { id: doc.ic, ...doc.data() };
