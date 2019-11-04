@@ -1,5 +1,5 @@
 import React from 'react';
-import { FirebaseContext } from '../../firebase';
+import { FirebaseContext } from '../firebase';
 
 const ForgotPassword: React.FC = () => {
   const { firebase } = React.useContext(FirebaseContext);

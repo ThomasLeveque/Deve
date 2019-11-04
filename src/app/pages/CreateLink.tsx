@@ -1,11 +1,11 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import FirebaseContext from '../../firebase/context';
-import { ILink, ICategory } from '../../interfaces/link';
-import { ICreateLinkInitialState } from '../../interfaces/initialState';
+import FirebaseContext from '../firebase/context';
+import { ILink, ICategory } from '../interfaces/link';
+import { ICreateLinkInitialState } from '../interfaces/initialState';
 import { Formik, FormikActions, Form, Field, ErrorMessage } from 'formik';
-import { linkSchema, categorySchema } from '../../validationSchema/linkSchema';
+import { linkSchema, categorySchema } from '../validationSchema/linkSchema';
 
 const INITIAL_STATE: ICreateLinkInitialState = {
   description: '',
@@ -15,35 +15,13 @@ const INITIAL_STATE: ICreateLinkInitialState = {
 
 const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
   const [isAddCategory, setIsAddCategory] = React.useState<boolean>(false);
-  const [categories, setCategories] = React.useState<ICategory[]>([]);
 
-  const [loading, setLoading] = React.useState<boolean>(false);
   const [addCatLoading, setAddCatLoading] = React.useState<boolean>(false);
   const [createLinkLoading, setCreateLinkLoading] = React.useState<boolean>(
     false
   );
 
-  const { firebase, user } = React.useContext(FirebaseContext);
-
-  React.useEffect(() => {
-    getCategories();
-  }, []);
-
-  const getCategories = (): any => {
-    setLoading(true);
-    return firebase.db.collection('categories').onSnapshot(handleSnapshot);
-  };
-
-  const handleSnapshot = (snapshot: firebase.firestore.QuerySnapshot) => {
-    const categories: ICategory[] = snapshot.docs.map((doc: any) => {
-      return {
-        id: doc.id,
-        ...doc.data()
-      };
-    });
-    setCategories(categories);
-    setLoading(false);
-  };
+  const { firebase, user, categories } = React.useContext(FirebaseContext);
 
   const handleAddCategory = async (values: ICategory): Promise<void> => {
     if (!user) {
@@ -82,7 +60,7 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
     }
   };
 
-  let content: JSX.Element = (
+  return (
     <>
       <Formik
         initialValues={INITIAL_STATE}
@@ -202,12 +180,6 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
       )}
     </>
   );
-
-  if (loading) {
-    content = <p>Loading...</p>;
-  }
-
-  return <>{content}</>;
 };
 
 export default CreateLink;

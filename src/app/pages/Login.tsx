@@ -2,12 +2,12 @@ import React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage, FormikActions } from 'formik';
 
-import firebase from '../../firebase';
+import firebase from '../firebase';
 import {
   IRegisterInitialState,
   ILoginInitialState
-} from '../../interfaces/initialState';
-import { loginSchema, registerSchema } from '../../validationSchema/userSchema';
+} from '../interfaces/initialState';
+import { loginSchema, registerSchema } from '../validationSchema/userSchema';
 
 const INITIAL_LOGIN_STATE: ILoginInitialState = {
   email: '',

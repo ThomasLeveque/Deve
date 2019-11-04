@@ -1,11 +1,11 @@
 import React from 'react';
 import { RouteComponentProps, match } from 'react-router-dom';
 
-import FirebaseContext from '../../firebase/context';
-import LinkItem from './LinkItem';
+import FirebaseContext from '../firebase/context';
+import LinkItem from '../components/Link/LinkItem';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
-import { ILink } from '../../interfaces/link';
-import { IComment } from '../../interfaces/comment';
+import { ILink } from '../interfaces/link';
+import { IComment } from '../interfaces/comment';
 
 type Params = { linkId: string };
 
@@ -16,10 +16,12 @@ interface IProps extends RouteComponentProps<{}> {
 const LinkDetail: React.FC<IProps> = ({ match, history }) => {
   const { firebase, user } = React.useContext(FirebaseContext);
 
-  const [link, setLink] = React.useState<any>(null);
+  const [link, setLink] = React.useState<ILink | any>(null);
   const [commentText, setCommentText] = React.useState<string>('');
   const linkId: string = match.params.linkId;
-  const linkRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(linkId);
+  const linkRef: firebase.firestore.DocumentReference = firebase.db
+    .collection('links')
+    .doc(linkId);
 
   React.useEffect(() => {
     getLink();
@@ -61,7 +63,9 @@ const LinkDetail: React.FC<IProps> = ({ match, history }) => {
       <textarea
         rows={6}
         cols={60}
-        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => setCommentText(event.target.value)}
+        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+          setCommentText(event.target.value)
+        }
         value={commentText}
       />
       <div>
@@ -79,6 +83,6 @@ const LinkDetail: React.FC<IProps> = ({ match, history }) => {
       ))}
     </div>
   );
-}
+};
 
 export default LinkDetail;
