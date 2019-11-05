@@ -6,7 +6,7 @@ import firebase from '../firebase';
 import {
   IRegisterInitialState,
   ILoginInitialState
-} from '../interfaces/initialStates.type';
+} from '../interfaces/initial-states.type';
 import { loginSchema, registerSchema } from '../schemas/user.schema';
 
 const INITIAL_LOGIN_STATE: ILoginInitialState = {

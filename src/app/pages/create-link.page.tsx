@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 
 import FirebaseContext from '../firebase/firebase.context';
 import { ILink, ICategory } from '../interfaces/link.interface';
-import { ICreateLinkInitialState } from '../interfaces/initialStates.type';
+import { ICreateLinkInitialState } from '../interfaces/initial-states.type';
 import { Formik, FormikActions, Form, Field, ErrorMessage } from 'formik';
 import { linkSchema, categorySchema } from '../schemas/link.schema';
 
