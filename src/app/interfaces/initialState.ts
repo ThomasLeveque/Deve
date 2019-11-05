@@ -1,6 +1,6 @@
 import * as yup from 'yup';
-import { linkSchema } from '../validationSchema/linkSchema';
-import { registerSchema, loginSchema } from '../validationSchema/userSchema';
+import { linkSchema } from '../schema/linkSchema';
+import { registerSchema, loginSchema } from '../schema/userSchema';
 
 export type ICreateLinkInitialState = yup.InferType<typeof linkSchema>;
 

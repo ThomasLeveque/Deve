@@ -5,7 +5,7 @@ import FirebaseContext from '../firebase/context';
 import { ILink, ICategory } from '../interfaces/link';
 import { ICreateLinkInitialState } from '../interfaces/initialState';
 import { Formik, FormikActions, Form, Field, ErrorMessage } from 'formik';
-import { linkSchema, categorySchema } from '../validationSchema/linkSchema';
+import { linkSchema, categorySchema } from '../schema/linkSchema';
 
 const INITIAL_STATE: ICreateLinkInitialState = {
   description: '',

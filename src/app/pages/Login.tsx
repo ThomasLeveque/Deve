@@ -7,7 +7,7 @@ import {
   IRegisterInitialState,
   ILoginInitialState
 } from '../interfaces/initialState';
-import { loginSchema, registerSchema } from '../validationSchema/userSchema';
+import { loginSchema, registerSchema } from '../schema/userSchema';
 
 const INITIAL_LOGIN_STATE: ILoginInitialState = {
   email: '',
