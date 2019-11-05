@@ -1,9 +1,9 @@
 import React from 'react';
-import FirebaseContext from '../firebase/context';
-import LinkItem from '../components/Link/LinkItem';
-import { ILink, ICategory } from '../interfaces/link';
+import FirebaseContext from '../firebase/firebase.context';
+import LinkItem from '../components/link-item/link-item';
+import { ILink, ICategory } from '../interfaces/link.interface';
 
-const SearchLinks: React.FC = () => {
+const SearchLinksPage: React.FC = () => {
   const { firebase, categories } = React.useContext(FirebaseContext);
 
   const [filteredLinks, setFilteredLinks] = React.useState<ILink[]>([]);
@@ -94,4 +94,4 @@ const SearchLinks: React.FC = () => {
   );
 };
 
-export default SearchLinks;
+export default SearchLinksPage;

@@ -3,9 +3,11 @@ import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 
 import { getDomain } from '../../utils';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
-import FirebaseContext from '../../firebase/context';
-import { IVote } from '../../interfaces/vote';
-import { ILink } from '../../interfaces/link';
+import FirebaseContext from '../../firebase/firebase.context';
+import { IVote } from '../../interfaces/vote.interface';
+import { ILink } from '../../interfaces/link.interface';
+
+import './link-item.style.scss';
 
 interface IProps extends RouteComponentProps<{}> {
   link: ILink;
@@ -25,7 +27,9 @@ const LinkItem: React.FC<IProps> = ({
     if (!user) {
       history.push('/login');
     } else {
-      const voteRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(link.id);
+      const voteRef: firebase.firestore.DocumentReference = firebase.db
+        .collection('links')
+        .doc(link.id);
 
       const doc = await voteRef.get();
       if (doc.exists) {
@@ -41,7 +45,9 @@ const LinkItem: React.FC<IProps> = ({
   };
 
   const handleDeleteLink = async (): Promise<void> => {
-    const linkRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(link.id);
+    const linkRef: firebase.firestore.DocumentReference = firebase.db
+      .collection('links')
+      .doc(link.id);
     try {
       await linkRef.delete();
     } catch (err) {
@@ -64,8 +70,8 @@ const LinkItem: React.FC<IProps> = ({
           <a href={link.url} className="black no-underline">
             {link.description}
           </a>{' '}
-          <span className="link">({getDomain(link.url)})</span>
-          {' '}<span className="orange-txt">{link.category}</span>
+          <span className="link">({getDomain(link.url)})</span>{' '}
+          <span className="orange-txt">{link.category}</span>
         </div>
         <div className="f6 lh-copy gray">
           {link.voteCount} votes by {link.postedBy.name}{' '}

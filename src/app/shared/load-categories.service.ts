@@ -1,8 +1,8 @@
 import React from 'react';
-import firebase from '../../firebase';
-import { ICategory } from '../../interfaces/link';
+import firebase from '../firebase';
+import { ICategory } from '../interfaces/link.interface';
 
-function loadCategories() {
+const loadCategoriesService = () => {
   const [categories, setCategories] = React.useState<ICategory[]>([]);
 
   const handleSnapshot = (snapshot: firebase.firestore.QuerySnapshot) => {
@@ -25,4 +25,4 @@ function loadCategories() {
   return categories;
 }
 
-export default loadCategories;
+export default loadCategoriesService;

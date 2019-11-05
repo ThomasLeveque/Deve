@@ -1,6 +1,9 @@
 import React from 'react';
 import { withRouter, NavLink } from 'react-router-dom';
-import { FirebaseContext } from '../firebase';
+
+import { FirebaseContext } from '../../firebase';
+
+import './header.style.scss';
 
 const Header: React.FC = () => {
   const { user, firebase } = React.useContext(FirebaseContext);

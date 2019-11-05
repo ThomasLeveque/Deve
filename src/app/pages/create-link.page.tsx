@@ -1,11 +1,11 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import FirebaseContext from '../firebase/context';
-import { ILink, ICategory } from '../interfaces/link';
-import { ICreateLinkInitialState } from '../interfaces/initialState';
+import FirebaseContext from '../firebase/firebase.context';
+import { ILink, ICategory } from '../interfaces/link.interface';
+import { ICreateLinkInitialState } from '../interfaces/initialStates.type';
 import { Formik, FormikActions, Form, Field, ErrorMessage } from 'formik';
-import { linkSchema, categorySchema } from '../schema/linkSchema';
+import { linkSchema, categorySchema } from '../schemas/link.schema';
 
 const INITIAL_STATE: ICreateLinkInitialState = {
   description: '',
@@ -13,7 +13,7 @@ const INITIAL_STATE: ICreateLinkInitialState = {
   category: ''
 };
 
-const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
+const CreateLinkPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [isAddCategory, setIsAddCategory] = React.useState<boolean>(false);
 
   const [addCatLoading, setAddCatLoading] = React.useState<boolean>(false);
@@ -182,4 +182,4 @@ const CreateLink: React.FC<RouteComponentProps> = ({ history }) => {
   );
 };
 
-export default CreateLink;
+export default CreateLinkPage;

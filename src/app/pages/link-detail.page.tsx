@@ -1,11 +1,11 @@
 import React from 'react';
 import { RouteComponentProps, match } from 'react-router-dom';
 
-import FirebaseContext from '../firebase/context';
-import LinkItem from '../components/Link/LinkItem';
+import FirebaseContext from '../firebase/firebase.context';
+import LinkItem from '../components/link-item/link-item';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
-import { ILink } from '../interfaces/link';
-import { IComment } from '../interfaces/comment';
+import { ILink } from '../interfaces/link.interface';
+import { IComment } from '../interfaces/comment.interface';
 
 type Params = { linkId: string };
 
@@ -13,7 +13,7 @@ interface IProps extends RouteComponentProps<{}> {
   match: match<Params>;
 }
 
-const LinkDetail: React.FC<IProps> = ({ match, history }) => {
+const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
   const { firebase, user } = React.useContext(FirebaseContext);
 
   const [link, setLink] = React.useState<ILink | any>(null);
@@ -85,4 +85,4 @@ const LinkDetail: React.FC<IProps> = ({ match, history }) => {
   );
 };
 
-export default LinkDetail;
+export default LinkDetailPage;

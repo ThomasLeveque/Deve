@@ -1,6 +1,6 @@
-import { IUser } from './user';
-import { IVote } from './vote';
-import { IComment } from './comment';
+import { IUser } from './user.interface';
+import { IVote } from './vote.interface';
+import { IComment } from './comment.interface';
 
 export interface ILink {
   id?: string;

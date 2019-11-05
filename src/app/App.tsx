@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import Header from './components/Header';
-import Routes from './Routes';
-import useAuth from './components/Auth/useAuth';
-import loadCategories from './components/Category/loadCategories';
+import Header from './components/header/header';
+import AppRoutes from './app.routes';
+import useAuth from './shared/use-auth.service';
+import loadCategories from './shared/load-categories.service';
 import firebase, { FirebaseContext } from './firebase';
-import { ICategory } from './interfaces/link';
+import { ICategory } from './interfaces/link.interface';
 
 function App() {
   const user = useAuth();
@@ -17,7 +17,7 @@ function App() {
       <FirebaseContext.Provider value={{ user, firebase, categories }}>
         <div className="app-container">
           <Header />
-          {categories.length ? <Routes /> : <p>LOADING...</p>}
+          {categories.length ? <AppRoutes /> : <p>LOADING...</p>}
         </div>
       </FirebaseContext.Provider>
     </BrowserRouter>

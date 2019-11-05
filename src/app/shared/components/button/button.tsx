@@ -1,4 +1,4 @@
-import './index.scss';
+import './button.style.scss';
 
 const Button = () => {};
 

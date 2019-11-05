@@ -1,10 +1,10 @@
 import React from 'react';
 import { RouteComponentProps, match } from 'react-router-dom';
 
-import FirebaseContext from '../firebase/context';
-import LinkItem from '../components/Link/LinkItem';
+import FirebaseContext from '../firebase/firebase.context';
+import LinkItem from '../components/link-item/link-item';
 import { LINKS_PER_PAGE } from '../utils/index';
-import { ILink } from '../interfaces/link';
+import { ILink } from '../interfaces/link.interface';
 
 type Params = { page: string };
 
@@ -12,7 +12,7 @@ interface IProps extends RouteComponentProps<{}> {
   match: match<Params>;
 }
 
-const LinkList: React.FC<IProps> = ({ match, history, location }) => {
+const LinkListPage: React.FC<IProps> = ({ match, history, location }) => {
   const { firebase } = React.useContext(FirebaseContext);
 
   const [links, setLinks] = React.useState<ILink[]>([]);
@@ -128,4 +128,4 @@ const LinkList: React.FC<IProps> = ({ match, history, location }) => {
   );
 };
 
-export default LinkList;
+export default LinkListPage;

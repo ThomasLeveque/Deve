@@ -1,7 +1,7 @@
 import React from 'react';
 import { FirebaseContext } from '../firebase';
 
-const ForgotPassword: React.FC = () => {
+const ForgotPasswordPage: React.FC = () => {
   const { firebase } = React.useContext(FirebaseContext);
 
   const [resetPasswordEmail, setResetPasswordEmail] = React.useState<string>('');
@@ -38,4 +38,4 @@ const ForgotPassword: React.FC = () => {
   );
 }
 
-export default ForgotPassword;
+export default ForgotPasswordPage;

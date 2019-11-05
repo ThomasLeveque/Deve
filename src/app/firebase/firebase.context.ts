@@ -1,5 +1,5 @@
 import React from 'react';
-import { ICategory } from '../interfaces/link';
+import { ICategory } from '../interfaces/link.interface';
 
 interface IfirebaseContext {
     user: any;

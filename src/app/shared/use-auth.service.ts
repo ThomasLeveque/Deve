@@ -1,8 +1,8 @@
 import React from 'react';
-import firebase from '../../firebase';
-import { IUser } from '../../interfaces/user';
+import firebase from '../firebase';
+import { IUser } from '../interfaces/user.interface';
 
-function useAuth() {
+const useAuthService = () => {
   const [authUser, setAuthUser] = React.useState<IUser | null>(null);
 
   React.useEffect(() => {
@@ -25,4 +25,4 @@ function useAuth() {
   return authUser;
 }
 
-export default useAuth;
+export default useAuthService;

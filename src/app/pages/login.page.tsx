@@ -6,8 +6,8 @@ import firebase from '../firebase';
 import {
   IRegisterInitialState,
   ILoginInitialState
-} from '../interfaces/initialState';
-import { loginSchema, registerSchema } from '../schema/userSchema';
+} from '../interfaces/initialStates.type';
+import { loginSchema, registerSchema } from '../schemas/user.schema';
 
 const INITIAL_LOGIN_STATE: ILoginInitialState = {
   email: '',
@@ -19,7 +19,7 @@ const INITIAL_REGISTER_STATE: IRegisterInitialState = {
   ...INITIAL_LOGIN_STATE
 };
 
-const Login: React.FC<RouteComponentProps> = ({ history }) => {
+const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [login, setLogin] = React.useState<boolean>(true);
   const [firebaseError, setFirebaseError] = React.useState<string | null>(null);
 
@@ -126,4 +126,4 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
   );
 };
 
-export default Login;
+export default LoginPage;
