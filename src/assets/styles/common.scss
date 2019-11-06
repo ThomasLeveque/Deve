@@ -1,0 +1,65 @@
+@import './colors.scss';
+@import './vars.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+  color: black;
+}
+
+body {
+  background-color: $light-gray-2;
+}
+
+h2 {
+  font-weight: 400;
+  font-size: 22px;
+  margin: 0px;
+}
+
+h4 {
+  font-weight: 400;
+  margin-top: 0;
+  font-size: 14px;
+}
+
+h6 {
+  font-size: 12px;
+  font-weight: 400;
+  color: $dark-gray-2;
+  margin: 0;
+}
+
+// CSS Reset
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color linear 0.15s;
+  cursor: pointer;
+
+  &:visited,
+  &:active {
+    color: unset;
+  }
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+input[type='text'],
+input[type='text']:focus {
+  border: none;
+  outline: none;
+}
+
+.flex {
+  display: flex;
+}

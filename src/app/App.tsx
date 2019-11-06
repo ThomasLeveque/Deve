@@ -7,6 +7,7 @@ import useAuth from './shared/use-auth.service';
 import loadCategories from './shared/load-categories.service';
 import firebase, { FirebaseContext } from './firebase';
 import { ICategory } from './interfaces/link.interface';
+import Layout from './components/layout/layout';
 
 function App() {
   const user = useAuth();
@@ -15,10 +16,8 @@ function App() {
   return (
     <BrowserRouter>
       <FirebaseContext.Provider value={{ user, firebase, categories }}>
-        <div className="app-container">
-          <Header />
-          {categories.length ? <AppRoutes /> : <p>LOADING...</p>}
-        </div>
+        <Header />
+        <Layout>{categories.length ? <AppRoutes /> : <p>LOADING...</p>}</Layout>
       </FirebaseContext.Provider>
     </BrowserRouter>
   );

@@ -8,38 +8,30 @@ import './header.style.scss';
 const Header: React.FC = () => {
   const { user, firebase } = React.useContext(FirebaseContext);
   return (
-    <div className="header">
+    <header className="header">
       <div className="flex">
-        <img src="/logo.png" alt="Hooks News logo" className="logo" />
-        <NavLink to="/" className="header-title">
-          Hooks News
-        </NavLink>
-        <NavLink to="/" className="header-link">
+        <h1 className="header-title">Hooks News</h1>
+        <NavLink to="/new" className="header-link">
           new
         </NavLink>
-        <div className="divider">|</div>
         <NavLink to="/top" className="header-link">
           top
         </NavLink>
-        <div className="divider">|</div>
         <NavLink to="/search" className="header-link">
           search
         </NavLink>
         {user && (
-          <>
-            <div className="divider">|</div>
-            <NavLink to="/create" className="header-link">
-              submit
-            </NavLink>
-          </>
+          <NavLink to="/create" className="header-link">
+            submit
+          </NavLink>
         )}
       </div>
       <div className="flex">
         {user ? (
           <>
             <div className="header-name">{user.name}</div>
-            <div className="divider">|</div>
-            <div className="header-button" onClick={() => firebase.logout()}>
+            <div>|</div>
+            <div className="header-button pointer" onClick={() => firebase.logout()}>
               logout
             </div>
           </>
@@ -49,8 +41,8 @@ const Header: React.FC = () => {
           </NavLink>
         )}
       </div>
-    </div>
+    </header>
   );
-}
+};
 
 export default withRouter(Header);

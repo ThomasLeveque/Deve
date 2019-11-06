@@ -1,0 +1,29 @@
+@import '../../../assets/styles/colors.scss';
+@import '../../../assets/styles/vars.scss';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 $globalHorizontalPadding;
+  height: 60px;
+  background-color: #fff;
+
+  > div {
+    align-items: center;
+  }
+
+  &-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-right: 20px;
+  }
+
+  &-link {
+    margin-right: 10px;
+
+    &.active {
+      color: $primary-color;
+    }
+  }
+}
