@@ -1,0 +1,17 @@
+@import '../../../assets/styles/colors.scss';
+
+.tag {
+  border-radius: 20px;
+  font-size: 14px;
+  padding: 6px 16px;
+
+  &-green {
+    color: $primary-color;
+    background-color: $success-color;
+  }
+
+  &-black {
+    color: #000;
+    background-color: $gray-color-3;
+  }
+}
