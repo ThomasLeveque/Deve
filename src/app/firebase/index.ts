@@ -1,4 +1,4 @@
-import firebase from './firebase';
+import firebase from './firebase.service';
 import FirebaseContext from './firebase.context';
 
 export { FirebaseContext };

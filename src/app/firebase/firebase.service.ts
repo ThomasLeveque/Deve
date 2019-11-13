@@ -2,19 +2,26 @@ import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-import firebaseConfig from './firebase.config';
+import { firebaseRoutes, firebaseConfigDev } from './firebase.config';
+import { IfirebaseConfig } from '../interfaces/firebase-config.interface';
 
 class Firebase {
   auth: app.auth.Auth;
   db: app.firestore.Firestore;
-  
+
   constructor() {
+    const firebaseConfig = ((domain: string): IfirebaseConfig =>
+      firebaseRoutes[domain] || firebaseConfigDev)(window.document.domain);
     app.initializeApp(firebaseConfig);
     this.auth = app.auth();
     this.db = app.firestore();
   }
 
-  register = async (name: string, email: string, password: string): Promise<void> => {
+  register = async (
+    name: string,
+    email: string,
+    password: string
+  ): Promise<void> => {
     const newUser: app.auth.UserCredential = await this.auth.createUserWithEmailAndPassword(
       email,
       password
@@ -25,7 +32,10 @@ class Firebase {
     });
   };
 
-  login = async (email: string, password: string): Promise<app.auth.UserCredential> => {
+  login = async (
+    email: string,
+    password: string
+  ): Promise<app.auth.UserCredential> => {
     return await this.auth.signInWithEmailAndPassword(email, password);
   };
 
