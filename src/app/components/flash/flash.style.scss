@@ -1,0 +1,33 @@
+@import '../../../assets/styles/colors.scss';
+
+.alert {
+  color: white;
+  border-radius: 5px;
+  position: absolute;
+  top: 70px;
+  right: 10px;
+  padding: 15px;
+  display: flex;
+  align-items: flex-start;
+  z-index: 1111;
+  max-width: 250px;
+
+  p {
+    margin: 0;
+    word-break: break-all;
+  }
+
+  &-error {
+    background: $error-color;
+  }
+
+  &-success {
+    background: $success-color;
+  }
+
+  .close {
+    color: white;
+    cursor: pointer;
+    margin-left: 5px;
+  }
+}

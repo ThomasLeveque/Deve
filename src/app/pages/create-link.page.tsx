@@ -21,7 +21,7 @@ const CreateLinkPage: React.FC<RouteComponentProps> = ({ history }) => {
     false
   );
 
-  const { firebase, user, categories } = React.useContext(FirebaseContext);
+  const { firebase, user, categories, _window } = React.useContext(FirebaseContext);
 
   const handleAddCategory = async (values: ICategory): Promise<void> => {
     if (!user) {
