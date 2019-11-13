@@ -4,10 +4,7 @@ import { Close } from '@material-ui/icons';
 
 import './flash.style.scss';
 
-export enum FlashType {
-  success = 'success',
-  error = 'error'
-}
+export type FlashType = 'success' | 'error';
 
 const Flash = () => {
   let [visibility, setVisibility] = useState<boolean>(false);

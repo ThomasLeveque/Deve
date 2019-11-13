@@ -2,10 +2,7 @@ import React from 'react';
 
 import './tag.style.scss';
 
-export enum TagColors {
-  green = 'green',
-  black = 'black'
-}
+type TagColors = 'green' | 'black';
 
 interface IProps {
   text: string;

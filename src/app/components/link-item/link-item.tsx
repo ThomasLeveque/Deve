@@ -6,7 +6,7 @@ import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import FirebaseContext from '../../firebase/firebase.context';
 import { IVote } from '../../interfaces/vote.interface';
 import { ILink } from '../../interfaces/link.interface';
-import Tag, { TagColors } from '../tag/tag';
+import Tag from '../tag/tag';
 
 import './link-item.style.scss';
 
@@ -72,9 +72,7 @@ const LinkItem: React.FC<IProps> = ({
             {link.description}
           </a>{' '}
           <span className="link">({getDomain(link.url)})</span>{' '}
-          {link.category && (
-            <Tag text={link.category} color={TagColors.green} />
-          )}
+          {link.category && <Tag text={link.category} color="green" />}
         </div>
         <div className="f6 lh-copy gray">
           {link.voteCount} votes by {link.postedBy.name}{' '}

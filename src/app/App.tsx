@@ -23,7 +23,7 @@ function App() {
 
   const _window = window as MyWindow & typeof globalThis;
 
-  _window.flash = (message: string, type: FlashType = FlashType.success) =>
+  _window.flash = (message: string, type: FlashType = 'success') =>
     Bus.emit('flash', { message, type });
 
   return (
