@@ -10,7 +10,7 @@ const Header: React.FC = () => {
   return (
     <header className="header">
       <div className="flex">
-        <h1 className="header-title">Hooks News</h1>
+        <h2 className="header-title">Hooks News</h2>
         <NavLink to="/new" className="header-link">
           new
         </NavLink>

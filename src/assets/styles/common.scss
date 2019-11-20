@@ -4,6 +4,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 html,
@@ -19,23 +20,34 @@ body {
   background-color: $light-gray-2;
 }
 
-h2 {
+h1 {
+  font-size: 30px;
   font-weight: 400;
-  font-size: 22px;
-  margin: 0px;
+  margin-bottom: 40px;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 21px;
+  font-weight: 400;
 }
 
 h4 {
+  font-size: 17px;
   font-weight: 400;
-  margin-top: 0;
-  font-size: 14px;
 }
 
-h6 {
-  font-size: 12px;
+p {
+  font-size: 13px;
   font-weight: 400;
-  color: $dark-gray-2;
-  margin: 0;
+
+  &.bold {
+    font-weight: 700;
+  }
 }
 
 // CSS Reset
@@ -55,11 +67,58 @@ a {
 }
 
 input[type='text'],
-input[type='text']:focus {
-  border: none;
+input[type='text']:focus,
+input[type='password'],
+input[type='password']:focus,
+input[type='email'],
+input[type='email']:focus {
   outline: none;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .flex {
   display: flex;
+}
+
+.align-items {
+  &-center {
+    align-items: center;
+  }
+
+  &-end {
+    align-items: flex-end;
+  }
+
+  &-start {
+    align-items: flex-start;
+  }
+}
+
+.justify-content {
+  &-center {
+    justify-content: center;
+  }
+
+  &-end {
+    justify-content: flex-end;
+  }
+
+  &-start {
+    justify-content: flex-start;
+  }
+}
+
+.text-align {
+  &-center {
+    text-align: center;
+  }
+}
+
+.error-text {
+  font-size: 12px;
+  font-weight: 400;
+  color: $error-color;
 }
