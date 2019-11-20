@@ -13,7 +13,7 @@ interface IProps extends RouteComponentProps<{}> {
 }
 
 const LinkListPage: React.FC<IProps> = ({ match, history, location }) => {
-  const { firebase } = React.useContext(FirebaseContext);
+  const { firebase, _window } = React.useContext(FirebaseContext);
 
   const [links, setLinks] = React.useState<ILink[]>([]);
   const [cursor, setCursor] = React.useState<ILink | null>(null);
@@ -28,6 +28,7 @@ const LinkListPage: React.FC<IProps> = ({ match, history, location }) => {
   );
 
   React.useEffect(() => {
+    // _window.flash('Salut mon gars', 'error');
     getLinks();
   }, [isTopPage, isNewPage]);
 
@@ -95,11 +96,11 @@ const LinkListPage: React.FC<IProps> = ({ match, history, location }) => {
     }
   };
 
-  let linkList: JSX.Element[] | JSX.Element = links.map(
-    (link: ILink, index: number) => (
-      <LinkItem key={link.id} showCount={true} link={link} index={index + 1} />
-    )
-  );
+  let linkList:
+    | JSX.Element[]
+    | JSX.Element = links.map((link: ILink, index: number) => (
+    <LinkItem key={link.id} showCount={true} link={link} index={index + 1} />
+  ));
 
   let loadMoreButton: JSX.Element = (
     <button

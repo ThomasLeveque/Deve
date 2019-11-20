@@ -16,7 +16,7 @@ const generateRoutes = () =>
 
 const AppRoutes = () => {
   return (
-    <div className="route-container">
+    <div className="route-container flex justify-content-center">
       <Switch>
         <Route path="/" exact render={() => <Redirect to="/new" />} />
         {generateRoutes()}
