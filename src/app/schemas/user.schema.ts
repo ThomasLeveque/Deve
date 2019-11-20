@@ -1,11 +1,15 @@
 import * as yup from 'yup';
 
-const emailPasswordSchema = {
+const emailSchema = {
   email: yup
     .string()
     .email('Invalid email address')
     .max(255)
-    .required('Email required'),
+    .required('Email required')
+};
+
+const emailPasswordSchema = {
+  ...emailSchema,
   password: yup
     .string()
     .min(6, 'Password must be at least 6 characters')
@@ -23,4 +27,6 @@ const registerSchema = yup.object().shape({
 
 const loginSchema = yup.object().shape(emailPasswordSchema);
 
-export { registerSchema, loginSchema };
+const resetSchema = yup.object().shape(emailSchema);
+
+export { registerSchema, loginSchema, resetSchema };
