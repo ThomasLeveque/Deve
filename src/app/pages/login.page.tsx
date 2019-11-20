@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage, FormikActions } from 'formik';
+import { Formik, Form, Field, FormikActions, FormikProps } from 'formik';
 
 import firebase from '../firebase';
 import {
@@ -8,6 +8,8 @@ import {
   ILoginInitialState
 } from '../interfaces/initial-states.type';
 import { loginSchema, registerSchema } from '../schemas/user.schema';
+import { FormInput } from '../shared/components/input/input';
+import Button from '../shared/components/button/button';
 
 const INITIAL_LOGIN_STATE: ILoginInitialState = {
   email: '',
@@ -38,8 +40,10 @@ const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
   };
 
   return (
-    <div>
-      <h2>{login ? 'Login' : 'Create account'}</h2>
+    <div className="login-page">
+      <h1 className="text-align-center">
+        {login ? 'Login' : 'Create account'}
+      </h1>
       <Formik
         initialValues={login ? INITIAL_LOGIN_STATE : INITIAL_REGISTER_STATE}
         validationSchema={login ? loginSchema : registerSchema}
@@ -53,59 +57,44 @@ const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
           setSubmitting(false);
         }}
       >
-        {({ isSubmitting, isValid, errors, touched }: any) => (
-          <Form className="flex flex-column">
+        {({
+          isSubmitting,
+          isValid
+        }: FormikProps<IRegisterInitialState | ILoginInitialState>) => (
+          <Form autoComplete="off">
             {!login && (
-              <>
-                <Field
-                  name="name"
-                  placeholder="Your name"
-                  autoComplete="off"
-                  className={errors.name && touched.name && 'error-input'}
-                />
-                <ErrorMessage
-                  component="span"
-                  name="name"
-                  className="error-text"
-                />
-              </>
+              <Field
+                name="name"
+                placeholder="Your name"
+                autoComplete="off"
+                type="text"
+                component={FormInput}
+              />
             )}
             <Field
               name="email"
               placeholder="Your email"
               autoComplete="off"
-              className={errors.email && touched.email && 'error-input'}
-            />
-            <ErrorMessage
-              component="span"
-              name="email"
-              className="error-text"
+              type="text"
+              component={FormInput}
             />
 
             <Field
               name="password"
-              type="password"
-              className={errors.password && touched.password && 'error-input'}
               placeholder="Choose a secure password"
-            />
-            <ErrorMessage
-              component="span"
-              name="password"
-              className="error-text"
+              autoComplete="current-password"
+              type="password"
+              component={FormInput}
             />
 
             {firebaseError && <p className="error-text">{firebaseError}</p>}
             <div className="flex mt3">
-              <button
+              <Button
+                text="Submitttt"
                 type="submit"
                 className="button pointer mr2"
                 disabled={isSubmitting || !isValid}
-                style={{
-                  backgroundColor: isSubmitting || !isValid ? 'grey' : 'orange'
-                }}
-              >
-                Submit
-              </button>
+              />
               <button
                 type="button"
                 className="pointer button"

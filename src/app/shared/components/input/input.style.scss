@@ -1,0 +1,63 @@
+@import '../../../../assets/styles/colors.scss';
+
+$inputHorizontalPadding: 16px;
+$resetIconSize: 20px;
+
+.input {
+  margin-bottom: 20px;
+
+  &-container {
+    position: relative;
+  }
+
+  svg.input-icon {
+    font-size: $resetIconSize;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: $inputHorizontalPadding;
+
+    &-gray {
+      color: $dark-gray-2;
+    }
+
+    &-green {
+      color: $primary-color;
+    }
+  }
+
+  &-component {
+    width: 100%;
+    height: 42px;
+    border-radius: 3px;
+    background-color: $light-gray-2;
+    font-size: 13px;
+    font-weight: 400;
+    border: none;
+    padding: 0 calc(#{$resetIconSize} + #{$inputHorizontalPadding} + 10px) 0
+      $inputHorizontalPadding;
+
+    &:focus {
+      background-color: white;
+      color: black;
+      border: none;
+      box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    &::placeholder {
+      color: $dark-gray-2;
+      opacity: 1;
+    }
+  }
+
+  &-error {
+    background-color: $error-bg-color;
+    border: 1px solid $error-color;
+
+    &-text {
+      color: $error-color;
+      font-weight: 400;
+      font-size: 10px;
+    }
+  }
+}
