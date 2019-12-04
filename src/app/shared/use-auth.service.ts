@@ -2,27 +2,37 @@ import React from 'react';
 import firebase from '../firebase';
 import { IUser } from '../interfaces/user.interface';
 
-const useAuthService = () => {
-  const [authUser, setAuthUser] = React.useState<IUser | null>(null);
+const getAuthUser = (): { user: IUser; userError: string; userLoaded: boolean } => {
+  const [user, setUser] = React.useState<IUser | null>(null);
+  const [userError, setUserError] = React.useState<string>('');
+  const [userLoaded, setUserLoaded] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const unsubcribe = firebase.auth.onAuthStateChanged(user => {
-      if (user) {
-        const formatedUser: IUser = {
-          id: user.uid,
-          name: user.displayName,
-          email: user.email
+    const unsubscribe = firebase.auth.onAuthStateChanged(
+      (user: firebase.User | null) => {
+        if (user) {
+          const formatedUser: IUser = {
+            id: user.uid,
+            name: user.displayName,
+            email: user.email
+          };
+          setUser(formatedUser);
+          setUserLoaded(true);
+        } else {
+          setUser(null);
+          setUserLoaded(true);
         }
-        setAuthUser(formatedUser);
-      } else {
-        setAuthUser(null);
+      },
+      (err: firebase.auth.Error) => {
+        setUserError(err.message);
+        setUserLoaded(true);
       }
-    });
+    );
 
-    return () => unsubcribe();
+    return () => unsubscribe();
   }, []);
 
-  return authUser;
-}
+  return { user, userError, userLoaded };
+};
 
-export default useAuthService;
+export { getAuthUser };
