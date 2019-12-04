@@ -27,14 +27,11 @@ const LinkListPage: React.FC<IProps> = ({ match, history, location }) => {
   const isNewPage: any = location.pathname.includes('new');
   const linkRef: firebase.firestore.CollectionReference = firebase.db.collection('links');
 
-  useAsyncEffect(
-    async isMounted => {
-      // _window.flash('Salut mon gars', 'error');
-      if (!isMounted()) return;
-      getLinks();
-    },
-    [isTopPage, isNewPage]
-  );
+  React.useEffect(() => {
+    // _window.flash('Salut mon gars', 'error');
+    const unsubscribe = getLinks().onSnapshot((snapshot: firebase.firestore.QuerySnapshot) => handleSnapshot(snapshot, true), handleError);
+    return () => unsubscribe();
+  }, [isTopPage, isNewPage]);
 
   const getTotalLinks = async () => {
     const snap: firebase.firestore.QuerySnapshot = await linkRef.get();
@@ -45,26 +42,18 @@ const LinkListPage: React.FC<IProps> = ({ match, history, location }) => {
     return totalLinks === links.length;
   };
 
-  const getLinks = async () => {
-    try {
-      await getTotalLinks();
-
-      if (isTopPage) {
-        return linkRef
-          .orderBy('voteCount', 'desc')
-          .onSnapshot((snapshot: firebase.firestore.QuerySnapshot) => handleSnapshot(snapshot, true), handleError);
-      } else if (isNewPage) {
-        return linkRef
-          .orderBy('created', 'desc')
-          .limit(LINKS_PER_PAGE)
-          .onSnapshot((snapshot: firebase.firestore.QuerySnapshot) => handleSnapshot(snapshot, true), handleError);
-      }
-    } catch (err) {
-      setError(err.message || err.toString());
+  const getLinks = () => {
+    if (isTopPage) {
+      return linkRef.orderBy('voteCount', 'desc');
+    } else if (isNewPage) {
+      return linkRef.orderBy('created', 'desc').limit(LINKS_PER_PAGE);
+    } else {
+      return linkRef;
     }
   };
 
-  const handleSnapshot = (snapshot: firebase.firestore.QuerySnapshot, isSwitchRoute = false) => {
+  const handleSnapshot = async (snapshot: firebase.firestore.QuerySnapshot, isSwitchRoute = false) => {
+    await getTotalLinks();
     const links: ILink[] | any = snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => {
       return {
         id: doc.id,
@@ -86,17 +75,13 @@ const LinkListPage: React.FC<IProps> = ({ match, history, location }) => {
   };
 
   const loadMoreLinks = async (): Promise<void> => {
-    try {
+    if (cursor) {
       setLoadingButton(true);
-      await getTotalLinks();
-
       linkRef
         .orderBy('created', 'desc')
         .startAfter(cursor.created)
         .limit(LINKS_PER_PAGE)
-        .onSnapshot(handleSnapshot);
-    } catch (err) {
-      setError(err.message);
+        .onSnapshot(handleSnapshot, handleError);
     }
   };
 
@@ -105,12 +90,7 @@ const LinkListPage: React.FC<IProps> = ({ match, history, location }) => {
   ));
 
   let loadMoreButton: JSX.Element = (
-    <button
-      type="button"
-      disabled={loadingButton || isLastPage()}
-      className={isLastPage() ? 'button disabled' : 'button pointer'}
-      onClick={loadMoreLinks}
-    >
+    <button type="button" disabled={loadingButton || isLastPage()} className="button" onClick={loadMoreLinks}>
       {isLastPage() ? 'No more links' : loadingButton ? 'Loading...' : 'Load more'}
     </button>
   );

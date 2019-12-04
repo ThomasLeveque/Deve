@@ -25,14 +25,14 @@ const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
   const linkId: string = match.params.linkId;
   const linkRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(linkId);
 
-  useAsyncEffect(async isMounted => {
-    if (!isMounted()) return;
-    getLink();
+  React.useEffect(() => {
+    const unsubcribe = linkRef.onSnapshot(handleSnapshot, handleError);
+    return () => unsubcribe();
   }, []);
 
-  const getLink = async (): Promise<void> => {
-    linkRef.onSnapshot(handleSnapshot, handleError);
-  };
+  // const getLink = async (): Promise<void> => {
+  //   linkRef.onSnapshot(handleSnapshot, handleError);
+  // };
 
   const handleSnapshot = (doc: firebase.firestore.DocumentSnapshot) => {
     const link: ILink | any = { ...doc.data(), id: doc.id };
