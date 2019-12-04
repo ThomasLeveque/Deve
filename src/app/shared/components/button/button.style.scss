@@ -9,4 +9,10 @@
   border-radius: 5px;
   border: none;
   margin-bottom: 10px;
+  cursor: pointer;
+
+  &:disabled {
+    background-color: lightgrey;
+    cursor: initial;
+  }
 }
