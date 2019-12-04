@@ -33,7 +33,7 @@ const SearchLinksPage: React.FC = () => {
       .collection('links')
       .get();
 
-    const links: ILink[] = snapshot.docs.map((doc: any) => {
+    const links: ILink[] | any = snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => {
       return { id: doc.id, ...doc.data() };
     });
     setLinks(links);
@@ -46,7 +46,7 @@ const SearchLinksPage: React.FC = () => {
       .where('category', '==', _categoryName)
       .get();
 
-    const links: ILink[] = snapshot.docs.map((doc: any) => {
+    const links: ILink[] | any = snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => {
       return { id: doc.id, ...doc.data() };
     });
     setFilteredLinks(links);

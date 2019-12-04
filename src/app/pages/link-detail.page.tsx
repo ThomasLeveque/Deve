@@ -1,5 +1,6 @@
 import React from 'react';
 import { RouteComponentProps, match } from 'react-router-dom';
+import useAsyncEffect from 'use-async-effect';
 
 import FirebaseContext from '../firebase/firebase.context';
 import LinkItem from '../components/link-item/link-item';
@@ -16,20 +17,32 @@ interface IProps extends RouteComponentProps<{}> {
 const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
   const { firebase, user } = React.useContext(FirebaseContext);
 
-  const [link, setLink] = React.useState<ILink | any>(null);
+  const [link, setLink] = React.useState<ILink>(null);
+  const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string>('');
   const [commentText, setCommentText] = React.useState<string>('');
-  const linkId: string = match.params.linkId;
-  const linkRef: firebase.firestore.DocumentReference = firebase.db
-    .collection('links')
-    .doc(linkId);
 
-  React.useEffect(() => {
+  const linkId: string = match.params.linkId;
+  const linkRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(linkId);
+
+  useAsyncEffect(async isMounted => {
+    if (!isMounted()) return;
     getLink();
   }, []);
 
-  const getLink = async () => {
-    const doc: firebase.firestore.QueryDocumentSnapshot = await linkRef.get();
-    setLink({ ...doc.data(), id: doc.id });
+  const getLink = async (): Promise<void> => {
+    linkRef.onSnapshot(handleSnapshot, handleError);
+  };
+
+  const handleSnapshot = (doc: firebase.firestore.DocumentSnapshot) => {
+    const link: ILink | any = { ...doc.data(), id: doc.id };
+    setLink(link);
+    setIsLoaded(true);
+  };
+
+  const handleError = (err: any) => {
+    setError(err.message || err.toString());
+    setIsLoaded(true);
   };
 
   const handleAddComment = async () => {
@@ -46,26 +59,26 @@ const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
         };
         const updatedComments = [...previousComments, comment];
         await linkRef.update({ comments: updatedComments });
-        setLink((prevState: any) => ({
-          ...prevState,
-          comments: updatedComments
-        }));
         setCommentText('');
       }
     }
   };
 
-  return !link ? (
-    <div>...loading</div>
-  ) : (
+  if (!isLoaded) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p className="error-text">{error}</p>;
+  }
+
+  return (
     <div>
       <LinkItem showCount={false} link={link} />
       <textarea
         rows={6}
         cols={60}
-        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
-          setCommentText(event.target.value)
-        }
+        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => setCommentText(event.target.value)}
         value={commentText}
       />
       <div>

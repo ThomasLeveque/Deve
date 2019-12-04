@@ -32,7 +32,7 @@ const LinkItem: React.FC<IProps> = ({
         .collection('links')
         .doc(link.id);
 
-      const doc = await voteRef.get();
+      const doc: firebase.firestore.DocumentSnapshot = await voteRef.get();
       if (doc.exists) {
         const previousVotes = doc.data().votes;
         const vote: IVote = {
@@ -62,7 +62,7 @@ const LinkItem: React.FC<IProps> = ({
     <div className="flex items-start mt2">
       <div className="flex items-center">
         {showCount && <span className="gray">{index}.</span>}
-        <div className="vote-button" onClick={handleVote}>
+        <div className="pointer" onClick={handleVote}>
           ⬆︎
         </div>
       </div>
