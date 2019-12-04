@@ -61,7 +61,7 @@ const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
           isSubmitting,
           isValid
         }: FormikProps<IRegisterInitialState | ILoginInitialState>) => (
-          <Form autoComplete="off">
+          <Form autoComplete="off" className="flex column align-items-center">
             {!login && (
               <Field
                 name="name"
@@ -88,29 +88,23 @@ const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
             />
 
             {firebaseError && <p className="error-text">{firebaseError}</p>}
-            <div className="flex mt3">
-              <Button
-                text="Submitttt"
-                type="submit"
-                className="button pointer mr2"
-                disabled={isSubmitting || !isValid}
-              />
-              <button
-                type="button"
-                className="pointer button"
-                onClick={() => setLogin((prevLogin: boolean) => !prevLogin)}
-              >
-                {login
-                  ? 'Need to create an account ?'
-                  : 'Already have an account ?'}
-              </button>
-            </div>
+            <Button
+              text="Sign Up"
+              type="submit"
+              disabled={isSubmitting || !isValid}
+            />
+            <Button
+              text={login ? 'Create an account' : 'Already have an account ?'}
+              type="button"
+              disabled={isSubmitting || !isValid}
+              onClick={() => setLogin((prevLogin: boolean) => !prevLogin)}
+            />
+            <Link className="forgot-link" to="/forgot">
+              Forgot password ?
+            </Link>
           </Form>
         )}
       </Formik>
-      <div className="forgot-password">
-        <Link to="/forgot">Forgot password ?</Link>
-      </div>
     </div>
   );
 };

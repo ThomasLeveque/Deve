@@ -4,6 +4,7 @@ import { IResetInitialState } from '../interfaces/initial-states.type';
 import { Formik, FormikActions, FormikProps, Form, Field } from 'formik';
 import { resetSchema } from '../schemas/user.schema';
 import { FormInput } from '../shared/components/input/input';
+import Button from '../shared/components/button/button';
 
 const INITIAL_RESET_STATE: IResetInitialState = {
   email: ''
@@ -55,16 +56,13 @@ const ForgotPasswordPage: React.FC = () => {
               type="text"
               component={FormInput}
             />
-            <button
+            <Button
+              text="Reset password"
               type="submit"
-              className="button pointer"
               disabled={isSubmitting || !isValid}
-              style={{
-                backgroundColor: isSubmitting || !isValid ? 'grey' : 'orange'
-              }}
             >
               Reset password
-            </button>
+            </Button>
           </Form>
         )}
       </Formik>

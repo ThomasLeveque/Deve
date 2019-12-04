@@ -1,0 +1,12 @@
+@import '../../../../assets/styles/colors.scss';
+
+.button {
+  background-color: $primary-color;
+  font-size: 15px;
+  color: white;
+  text-align: center;
+  padding: 13px 30px;
+  border-radius: 5px;
+  border: none;
+  margin-bottom: 10px;
+}
