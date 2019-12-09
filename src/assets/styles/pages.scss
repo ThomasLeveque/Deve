@@ -1,7 +1,29 @@
-.login-page,
-.reset-page {
+.forms-page-container {
   padding: 50px 70px;
   background-color: white;
   width: 500px;
   max-width: 100%;
+}
+
+.login-page {
+  @extend .forms-page-container;
+
+  .forgot-link {
+    font-size: 12px;
+    color: black;
+    text-decoration: underline;
+    font-weight: 700;
+    margin-top: 20px;
+  }
+
+  button[type='submit'] {
+    margin-top: 20px;
+  }
+}
+
+.reset-page {
+  @extend .forms-page-container;
+  button[type='submit'] {
+    margin-top: 15px;
+  }
 }

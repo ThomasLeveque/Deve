@@ -16,21 +16,14 @@ interface IProps extends RouteComponentProps<{}> {
   showCount: boolean;
 }
 
-const LinkItem: React.FC<IProps> = ({
-  link,
-  index,
-  showCount = false,
-  history
-}) => {
+const LinkItem: React.FC<IProps> = ({ link, index, showCount = false, history }) => {
   const { firebase, user } = React.useContext(FirebaseContext);
 
   const handleVote = async (): Promise<void> => {
     if (!user) {
       history.push('/login');
     } else {
-      const voteRef: firebase.firestore.DocumentReference = firebase.db
-        .collection('links')
-        .doc(link.id);
+      const voteRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(link.id);
 
       const doc: firebase.firestore.DocumentSnapshot = await voteRef.get();
       if (doc.exists) {
@@ -46,9 +39,7 @@ const LinkItem: React.FC<IProps> = ({
   };
 
   const handleDeleteLink = async (): Promise<void> => {
-    const linkRef: firebase.firestore.DocumentReference = firebase.db
-      .collection('links')
-      .doc(link.id);
+    const linkRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(link.id);
     try {
       await linkRef.delete();
     } catch (err) {
@@ -59,9 +50,9 @@ const LinkItem: React.FC<IProps> = ({
   const postedByAuthUser: boolean = user && user.id === link.postedBy.id;
 
   return (
-    <div className="flex items-start mt2">
-      <div className="flex items-center">
-        {showCount && <span className="gray">{index}.</span>}
+    <div className="flex">
+      <div className="flex">
+        {showCount && <span>{index}.</span>}
         <div className="pointer" onClick={handleVote}>
           ⬆︎
         </div>
@@ -71,18 +62,12 @@ const LinkItem: React.FC<IProps> = ({
           <a href={link.url} className="black no-underline">
             {link.description}
           </a>{' '}
-          <span className="link">({getDomain(link.url)})</span>{' '}
-          {link.category && <Tag text={link.category} color="green" />}
+          <span className="link">({getDomain(link.url)})</span> {link.category && <Tag text={link.category} color="green" />}
         </div>
         <div className="f6 lh-copy gray">
-          {link.voteCount} votes by {link.postedBy.name}{' '}
-          {distanceInWordsToNow(link.created)}
+          {link.voteCount} votes by {link.postedBy.name} {distanceInWordsToNow(link.created)}
           {' | '}
-          <Link to={`/link/${link.id}`}>
-            {link.comments.length > 0
-              ? `${link.comments.length} comments`
-              : 'discuss'}
-          </Link>
+          <Link to={`/link/${link.id}`}>{link.comments.length > 0 ? `${link.comments.length} comments` : 'discuss'}</Link>
           {postedByAuthUser && (
             <>
               {' | '}

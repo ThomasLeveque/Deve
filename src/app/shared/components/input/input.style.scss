@@ -36,8 +36,7 @@ $resetIconSize: 20px;
     font-size: 13px;
     font-weight: 400;
     border: none;
-    padding: 0 calc(#{$resetIconSize} + #{$inputHorizontalPadding} + 10px) 0
-      $inputHorizontalPadding;
+    padding: 0 calc(#{$resetIconSize} + #{$inputHorizontalPadding} + 10px) 0 $inputHorizontalPadding;
 
     &:focus {
       background-color: white;
