@@ -40,6 +40,7 @@ const ForgotPasswordPage: React.FC = () => {
       >
         {({ isSubmitting, isValid }: FormikProps<IResetInitialState>) => (
           <Form autoComplete="off" className="flex column align-items-center">
+            <label htmlFor="email">Email</label>
             <Field name="email" placeholder="Provide your account email" autoComplete="off" type="text" component={FormInput} />
             {passwordResetError && <p className="error-text text-align-center">{passwordResetError}</p>}
             <Button text="Reset password" buttonType="primary" type="submit" disabled={isSubmitting || !isValid} loading={isSubmitting}>

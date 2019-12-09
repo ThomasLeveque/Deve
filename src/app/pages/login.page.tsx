@@ -48,18 +48,30 @@ const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
       >
         {({ isSubmitting, isValid, setFieldValue }: FormikProps<IRegisterInitialState | ILoginInitialState>) => (
           <Form autoComplete="off" className="flex column align-items-center">
-            {!login && <Field name="name" placeholder="Your name" autoComplete="off" type="text" component={FormInput} />}
+            {!login && (
+              <>
+                <label htmlFor="name">Name</label>
+                <Field name="name" placeholder="Your name" autoComplete="off" type="text" component={FormInput} />
+              </>
+            )}
+            <label htmlFor="email">Email</label>
             <Field name="email" placeholder="Your email" autoComplete="off" type="text" component={FormInput} />
-
+            <label htmlFor="password">Password (at least 6 characters)</label>
             <Field
               name="password"
-              placeholder="Choose a secure password (6chars min)"
+              placeholder="Choose a secure password"
               autoComplete="current-password"
               type="password"
               component={FormInput}
             />
             {firebaseError && <p className="error-text text-align-center">{firebaseError}</p>}
-            <Button text={login ? 'Sign Up' : 'Sign In'} buttonType="primary" type="submit" disabled={isSubmitting || !isValid} loading={isSubmitting} />
+            <Button
+              text={login ? 'Sign Up' : 'Sign In'}
+              buttonType="primary"
+              type="submit"
+              disabled={isSubmitting || !isValid}
+              loading={isSubmitting}
+            />
             <Button
               text={login ? 'Create an account' : 'Already have an account ?'}
               buttonType="secondary"

@@ -3,6 +3,15 @@
   background-color: white;
   width: 500px;
   max-width: 100%;
+
+  label {
+    display: block;
+    color: black;
+    font-weight: 400;
+    font-size: 11px;
+    margin-bottom: 5px;
+    align-self: flex-start;
+  }
 }
 
 .login-page {

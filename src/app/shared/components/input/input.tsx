@@ -32,24 +32,13 @@ const FormInput: React.FC<IProps> = ({
   return (
     <div className="input">
       <div className="input-container">
-        <input
-          {...field}
-          {...props}
-          className={
-            isError() ? 'input-error input-component' : 'input-component'
-          }
-        />
+        <input {...field} {...props} id={field.name} className={isError() ? 'input-error input-component' : 'input-component'} />
         {isError() && field.value.length !== 0 && (
-          <Cancel
-            className="input-icon input-icon-gray pointer"
-            onClick={() => setFieldValue(field.name, '', true)}
-          />
+          <Cancel className="input-icon input-icon-gray pointer" onClick={() => setFieldValue(field.name, '', true)} />
         )}
         {isValid() && <Check className="input-icon input-icon-green" />}
       </div>
-      {isError() && (
-        <span className="input-error-text">{errors[field.name]}</span>
-      )}
+      {isError() && <span className="input-error-text">{errors[field.name]}</span>}
     </div>
   );
 };
