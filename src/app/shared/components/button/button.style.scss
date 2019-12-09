@@ -1,18 +1,50 @@
 @import '../../../../assets/styles/colors.scss';
 
 .button {
-  background-color: $primary-color;
   font-size: 15px;
-  color: white;
   text-align: center;
-  padding: 13px 30px;
+  padding: 13px 25px;
   border-radius: 5px;
   border: none;
   margin-bottom: 10px;
   cursor: pointer;
+  transition: all 0.2s ease-out;
+
+  .button-loader {
+    margin-left: 10px;
+  }
+
+  &-primary {
+    background-color: $primary-color;
+    color: white;
+
+    &:hover {
+      box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    &:disabled {
+      cursor: initial;
+      background-color: $light-gray-2;
+      box-shadow: none;
+    }
+  }
+
+  &-secondary {
+    background-color: white;
+    color: black;
+    border: 1px solid $light-gray-1;
+
+    &:hover {
+      background-color: $light-gray-2;
+    }
+
+    &:disabled {
+      background-color: $light-gray-1;
+    }
+  }
 
   &:disabled {
-    background-color: lightgrey;
     cursor: initial;
+    color: $gray;
   }
 }

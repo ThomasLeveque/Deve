@@ -11,25 +11,19 @@ const INITIAL_RESET_STATE: IResetInitialState = {
 };
 
 const ForgotPasswordPage: React.FC = () => {
-  const { firebase } = React.useContext(FirebaseContext);
+  const { firebase, _window } = React.useContext(FirebaseContext);
 
-  const [isPasswordReset, setIsPasswordReset] = React.useState<boolean>(false);
-  const [passwordResetError, setPasswordResetError] = React.useState<
-    string | null
-  >(null);
+  const [passwordResetError, setPasswordResetError] = React.useState<string | null>(null);
 
-  const handleResetPassword = async (
-    values: IResetInitialState
-  ): Promise<void> => {
+  const handleResetPassword = async (values: IResetInitialState): Promise<void> => {
     const { email }: IResetInitialState = values;
     try {
       await firebase.resetPassword(email);
-      setIsPasswordReset(true);
+      _window.flash('Check email to reset password !', 'success');
       setPasswordResetError(null);
     } catch (err) {
       console.error('Error sending email', err);
       setPasswordResetError(err.message);
-      setIsPasswordReset(false);
     }
   };
 
@@ -39,35 +33,21 @@ const ForgotPasswordPage: React.FC = () => {
       <Formik
         initialValues={INITIAL_RESET_STATE}
         validationSchema={resetSchema}
-        onSubmit={async (
-          values: IResetInitialState,
-          { setSubmitting }: FormikActions<IResetInitialState>
-        ) => {
+        onSubmit={async (values: IResetInitialState, { setSubmitting }: FormikActions<IResetInitialState>) => {
           await handleResetPassword(values);
           setSubmitting(false);
         }}
       >
         {({ isSubmitting, isValid }: FormikProps<IResetInitialState>) => (
-          <Form autoComplete="off">
-            <Field
-              name="email"
-              placeholder="Provide your account email"
-              autoComplete="off"
-              type="text"
-              component={FormInput}
-            />
-            <Button
-              text="Reset password"
-              type="submit"
-              disabled={isSubmitting || !isValid}
-            >
+          <Form autoComplete="off" className="flex column align-items-center">
+            <Field name="email" placeholder="Provide your account email" autoComplete="off" type="text" component={FormInput} />
+            {passwordResetError && <p className="error-text text-align-center">{passwordResetError}</p>}
+            <Button text="Reset password" buttonType="primary" type="submit" disabled={isSubmitting || !isValid} loading={isSubmitting}>
               Reset password
             </Button>
           </Form>
         )}
       </Formik>
-      {isPasswordReset && <p>Check email to reset password !</p>}
-      {passwordResetError && <p className="error-text">{passwordResetError}</p>}
     </div>
   );
 };
