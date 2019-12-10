@@ -9,6 +9,7 @@ import firebase, { FirebaseContext } from './firebase';
 import Layout from './components/layout/layout';
 import Flash, { FlashType } from './components/flash/flash';
 import Bus from './utils/bus';
+import ProgressBar from './components/Bar/progress-bar';
 
 declare global {
   interface MyWindow extends Window {
@@ -22,13 +23,9 @@ function App() {
 
   const _window = window as MyWindow & typeof globalThis;
 
-  _window.flash = (message: string, type: FlashType = 'success') => Bus.emit('flash', { message, type });
+  _window.flash = (message: string, subtitle: string, type: FlashType = 'success') => Bus.emit('flash', { message, subtitle, type });
 
   const renderContent = () => {
-    if (!catLoaded) {
-      return <p>LOADING...</p>;
-    }
-
     if (userError) {
       return <p className="error-text">{userError}</p>;
     }
@@ -37,7 +34,9 @@ function App() {
       return <p className="error-text">{catError}</p>;
     }
 
-    return <AppRoutes />;
+    if (catLoaded && userLoaded) {
+      return <AppRoutes />;
+    }
   };
 
   return (
@@ -45,6 +44,7 @@ function App() {
       <Flash />
       <FirebaseContext.Provider value={{ user, firebase, categories, _window, userLoaded }}>
         <Header />
+        <ProgressBar isAnimating={!catLoaded || !userLoaded} />
         <Layout>{renderContent()}</Layout>
       </FirebaseContext.Provider>
     </BrowserRouter>
