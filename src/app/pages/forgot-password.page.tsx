@@ -19,7 +19,7 @@ const ForgotPasswordPage: React.FC = () => {
     const { email }: IResetInitialState = values;
     try {
       await firebase.resetPassword(email);
-      _window.flash('Check email to reset password !', 'success');
+      _window.flash('Email send', `to ${email}`, 'success');
       setPasswordResetError(null);
     } catch (err) {
       console.error('Error sending email', err);

@@ -9,12 +9,14 @@ export type FlashType = 'success' | 'error';
 const Flash = () => {
   let [visibility, setVisibility] = useState<boolean>(false);
   let [message, setMessage] = useState<string>('');
+  let [subtitle, setSubtitle] = useState<string>('');
   let [type, setType] = useState<string>('');
 
   useEffect(() => {
-    Bus.addListener('flash', ({ message, type }) => {
+    Bus.addListener('flash', ({ message, subtitle, type }) => {
       setVisibility(true);
       setMessage(message);
+      setSubtitle(subtitle);
       setType(type);
       setTimeout(() => {
         setVisibility(false);
@@ -24,16 +26,17 @@ const Flash = () => {
 
   useEffect(() => {
     if (document.querySelector('.close') !== null) {
-      document
-        .querySelector('.close')
-        .addEventListener('click', () => setVisibility(false));
+      document.querySelector('.close').addEventListener('click', () => setVisibility(false));
     }
   });
 
   return (
     visibility && (
       <div className={`alert alert-${type}`}>
-        <p>{message}</p>
+        <div>
+          <p className={subtitle && 'bold'}>{message}</p>
+          {subtitle && <span>{subtitle}</span>}
+        </div>
         <Close className="close pointer" />
       </div>
     )
