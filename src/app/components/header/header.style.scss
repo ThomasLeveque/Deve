@@ -2,11 +2,15 @@
 @import '../../../assets/styles/vars.scss';
 
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 $globalHorizontalPadding;
-  height: 60px;
+  height: $headerHeight;
   background-color: #fff;
 
   > div {

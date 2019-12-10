@@ -1,6 +1,5 @@
 import React from 'react';
 import { RouteComponentProps, match } from 'react-router-dom';
-import useAsyncEffect from 'use-async-effect';
 
 import FirebaseContext from '../firebase/firebase.context';
 import LinkItem from '../components/link-item/link-item';
@@ -104,7 +103,7 @@ const LinkListPage: React.FC<IProps> = ({ match, history, location }) => {
   }
 
   return (
-    <div>
+    <div className="page">
       {linkList}
       {isNewPage && loadMoreButton}
     </div>

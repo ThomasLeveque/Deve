@@ -61,7 +61,7 @@ const CreateLinkPage: React.FC<RouteComponentProps> = ({ history }) => {
   };
 
   return (
-    <>
+    <div className="page">
       <Formik
         initialValues={INITIAL_STATE}
         validationSchema={linkSchema}
@@ -178,7 +178,7 @@ const CreateLinkPage: React.FC<RouteComponentProps> = ({ history }) => {
           )}
         </Formik>
       )}
-    </>
+    </div>
   );
 };
 

@@ -29,9 +29,7 @@ const SearchLinksPage: React.FC = () => {
   }, []);
 
   const getInitialLinks = async (): Promise<void> => {
-    const snapshot: firebase.firestore.QuerySnapshot = await firebase.db
-      .collection('links')
-      .get();
+    const snapshot: firebase.firestore.QuerySnapshot = await firebase.db.collection('links').get();
 
     const links: ILink[] | any = snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => {
       return { id: doc.id, ...doc.data() };
@@ -53,15 +51,10 @@ const SearchLinksPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="page">
       <form onSubmit={handleSearch}>
         <div>
-          Search{' '}
-          <input
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              setFilter(event.target.value)
-            }
-          />
+          Search <input onChange={(event: React.ChangeEvent<HTMLInputElement>) => setFilter(event.target.value)} />
           <button>Ok</button>
         </div>
       </form>
@@ -83,12 +76,7 @@ const SearchLinksPage: React.FC = () => {
       ))}
       {!filteredLinks.length && <p>No results</p>}
       {filteredLinks.map((filteredLink: ILink, index: number) => (
-        <LinkItem
-          key={filteredLink.id}
-          showCount={false}
-          link={filteredLink}
-          index={index}
-        />
+        <LinkItem key={filteredLink.id} showCount={false} link={filteredLink} index={index} />
       ))}
     </div>
   );

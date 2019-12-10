@@ -2,5 +2,6 @@
 @import '../../../assets/styles/vars.scss';
 
 .layout {
-  margin: 30px $globalHorizontalPadding;
+  margin: 0 $globalHorizontalPadding 30px $globalHorizontalPadding;
+  padding-top: calc(#{$headerHeight} + 30px);
 }
