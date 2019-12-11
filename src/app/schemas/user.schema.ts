@@ -1,10 +1,15 @@
 import * as yup from 'yup';
 
+const nameMax = 255;
+const emailMax = 255;
+const passwordMin = 6;
+const passwordMax = 64;
+
 const emailSchema = {
   email: yup
     .string()
     .email('Invalid email address')
-    .max(255)
+    .max(emailMax, `Email must be shorter than ${emailMax} characters`)
     .required('Email required')
 };
 
@@ -12,15 +17,15 @@ const emailPasswordSchema = {
   ...emailSchema,
   password: yup
     .string()
-    .min(6, 'Password must be at least 6 characters')
-    .max(64, 'Password must be shorter than 64 characters')
+    .min(passwordMin, `Password must be at least ${passwordMin} characters`)
+    .max(passwordMax, `Password must be shorter than ${passwordMax} characters`)
     .required('Password required')
 };
 
 const registerSchema = yup.object().shape({
   name: yup
     .string()
-    .max(255)
+    .max(nameMax, `Name must be shorter than ${nameMax} characters`)
     .required('Name required'),
   ...emailPasswordSchema
 });
