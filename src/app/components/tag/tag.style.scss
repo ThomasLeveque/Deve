@@ -1,9 +1,12 @@
 @import '../../../assets/styles/colors.scss';
 
 .tag {
+  display: inline-flex;
   border-radius: 20px;
-  font-size: 14px;
-  padding: 6px 16px;
+  font-size: 11px;
+  padding: 4px 8px;
+  text-transform: uppercase;
+  font-weight: 700;
 
   &-green {
     color: $primary-color;

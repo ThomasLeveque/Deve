@@ -9,7 +9,7 @@ import firebase, { FirebaseContext } from './firebase';
 import Layout from './components/layout/layout';
 import Flash, { FlashType } from './components/flash/flash';
 import Bus from './utils/bus';
-import ProgressBar from './components/Bar/progress-bar';
+import ProgressBar from './components/bar/progress-bar';
 
 declare global {
   interface MyWindow extends Window {

@@ -32,12 +32,12 @@ const Header: React.FC = () => {
             <div className="header-name">{user.name}</div>
             <div>|</div>
             <div className="header-button pointer" onClick={() => firebase.logout()}>
-              logout
+              Sign out
             </div>
           </>
         ) : (
           <NavLink to="/login" className="header-link">
-            login
+            Sign in
           </NavLink>
         )}
       </div>

@@ -34,8 +34,8 @@ const Flash = () => {
     visibility && (
       <div className={`alert alert-${type}`}>
         <div>
-          <p className={subtitle && 'bold'}>{message}</p>
-          {subtitle && <span>{subtitle}</span>}
+          <p className={subtitle ? 'bold break-word' : 'break-word'}>{message}</p>
+          {subtitle && <span className="break-word">{subtitle}</span>}
         </div>
         <Close className="close pointer" />
       </div>

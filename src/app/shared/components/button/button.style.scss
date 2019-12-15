@@ -15,7 +15,7 @@
   }
 
   &-primary {
-    background-color: $primary-color;
+    background-color: $secondary-color;
     color: white;
 
     &:hover {
@@ -31,7 +31,7 @@
 
   &-secondary {
     background-color: white;
-    color: black;
+    color: $primary-color;
     border: 1px solid $light-gray-1;
 
     &:hover {

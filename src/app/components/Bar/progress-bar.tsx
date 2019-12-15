@@ -26,7 +26,7 @@ const ProgressBar: React.FC<IProps> = ({ isAnimating }) => {
     >
       <div
         style={{
-          background: '#00ae96',
+          background: '#0973ba',
           height: 2,
           left: 0,
           marginLeft: `${(-1 + progress) * 100}%`,

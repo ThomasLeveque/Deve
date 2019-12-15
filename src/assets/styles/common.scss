@@ -50,11 +50,23 @@ p {
   }
 }
 
+.bold {
+  font-weight: 700;
+}
+
+.medium {
+  font-weight: 600;
+}
+
+.light {
+  font-weight: 300;
+}
+
 // CSS Reset
 a {
   text-decoration: none;
   color: inherit;
-  transition: color linear 0.15s;
+  transition: color $bezier 0.15s;
   cursor: pointer;
 
   &:visited,
@@ -124,6 +136,18 @@ button {
   &-center {
     text-align: center;
   }
+
+  &-left {
+    text-align: left;
+  }
+
+  &-right {
+    text-align: right;
+  }
+}
+
+.break-word {
+  word-break: break-word;
 }
 
 .error-text {
