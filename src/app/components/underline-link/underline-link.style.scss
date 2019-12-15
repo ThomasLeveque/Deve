@@ -1,0 +1,20 @@
+@import '../../../assets/styles/vars.scss';
+
+.underline-link {
+  font-size: 12px;
+  color: black;
+  text-decoration: underline;
+  font-weight: 600;
+  display: inline-flex;
+
+  &:hover svg.underline-link-icon {
+    clip-path: inset(0 0 0 0);
+  }
+
+  svg.underline-link-icon {
+    margin-left: 3px;
+    font-size: 17px;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.2s $bezier;
+  }
+}
