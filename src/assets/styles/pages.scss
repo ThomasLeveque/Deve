@@ -1,3 +1,6 @@
+@import './colors.scss';
+@import './vars.scss';
+
 .forms-page-container {
   padding: 50px 70px;
   background-color: white;
@@ -18,19 +21,58 @@
   width: 100%;
 }
 
+.placeholder-page {
+  width: 100%;
+}
+
 .login-page {
   @extend .forms-page-container;
 
-  .forgot-link {
-    font-size: 12px;
-    color: black;
-    text-decoration: underline;
-    font-weight: 700;
-    margin-top: 20px;
+  .underline-link {
+    margin-top: 10px;
   }
 
   button[type='submit'] {
     margin-top: 20px;
+  }
+
+  .MuiTabs {
+    &-root {
+      margin-bottom: 40px;
+      border-bottom: 1px solid $light-gray-1;
+      min-height: none;
+      overflow: visible;
+
+      button.active {
+        color: black;
+        font-weight: 600;
+      }
+    }
+
+    &-fixed {
+      overflow: visible !important;
+    }
+
+    &-indicator {
+      background-color: $primary-color;
+      transition: all 0.3s $bezier;
+      bottom: -1px;
+    }
+  }
+
+  .MuiTab {
+    &-root {
+      opacity: 1;
+      width: 50%;
+      color: $light-gray-1;
+      font-weight: 300;
+      font-size: 18px;
+      text-transform: none;
+      font-family: 'Open Sans', sans-serif;
+      padding: 0;
+      min-height: none;
+      transition: all 0.3s $bezier;
+    }
   }
 }
 

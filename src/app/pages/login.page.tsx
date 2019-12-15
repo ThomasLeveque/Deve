@@ -1,12 +1,15 @@
 import React from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { Formik, Form, Field, FormikActions, FormikProps } from 'formik';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 import firebase from '../firebase';
 import { IRegisterInitialState, ILoginInitialState } from '../interfaces/initial-states.type';
 import { loginSchema, registerSchema } from '../schemas/user.schema';
 import { FormInput } from '../shared/components/input/input';
 import Button from '../shared/components/button/button';
+import UnderlineLink from '../components/underline-link/underline-link';
 
 const INITIAL_LOGIN_STATE: ILoginInitialState = {
   email: '',
@@ -19,13 +22,13 @@ const INITIAL_REGISTER_STATE: IRegisterInitialState = {
 };
 
 const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
-  const [login, setLogin] = React.useState<boolean>(true);
+  const [login, setLogin] = React.useState<number>(0);
   const [firebaseError, setFirebaseError] = React.useState<string | null>(null);
 
   const authenticateUser = async (values: IRegisterInitialState | ILoginInitialState): Promise<void> => {
     const { name, email, password }: IRegisterInitialState = values;
     try {
-      login ? await firebase.login(email, password) : await firebase.register(name, email, password);
+      login === 0 ? await firebase.login(email, password) : await firebase.register(name, email, password);
       history.push('/');
     } catch (err) {
       setFirebaseError(err.message);
@@ -34,10 +37,9 @@ const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
 
   return (
     <div className="login-page">
-      <h1 className="text-align-center">{login ? 'Login' : 'Create account'}</h1>
       <Formik
-        initialValues={login ? INITIAL_LOGIN_STATE : INITIAL_REGISTER_STATE}
-        validationSchema={login ? loginSchema : registerSchema}
+        initialValues={login === 0 ? INITIAL_LOGIN_STATE : INITIAL_REGISTER_STATE}
+        validationSchema={login === 0 ? loginSchema : registerSchema}
         onSubmit={async (
           values: IRegisterInitialState | ILoginInitialState,
           { setSubmitting }: FormikActions<IRegisterInitialState | ILoginInitialState>
@@ -47,44 +49,48 @@ const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
         }}
       >
         {({ isSubmitting, isValid, setFieldValue }: FormikProps<IRegisterInitialState | ILoginInitialState>) => (
-          <Form autoComplete="off" className="flex column align-items-center">
-            {!login && (
-              <>
-                <label htmlFor="name">Name</label>
-                <Field name="name" placeholder="Your name" autoComplete="off" type="text" component={FormInput} />
-              </>
-            )}
-            <label htmlFor="email">Email</label>
-            <Field name="email" placeholder="Your email" autoComplete="off" type="text" component={FormInput} />
-            <label htmlFor="password">Password (at least 6 characters)</label>
-            <Field
-              name="password"
-              placeholder="Choose a secure password"
-              autoComplete="current-password"
-              type="password"
-              component={FormInput}
-            />
-            {firebaseError && <p className="error-text text-align-center">{firebaseError}</p>}
-            <Button
-              text={login ? 'Sign Up' : 'Sign In'}
-              buttonType="primary"
-              type="submit"
-              disabled={isSubmitting || !isValid}
-              loading={isSubmitting}
-            />
-            <Button
-              text={login ? 'Create an account' : 'Already have an account ?'}
-              buttonType="secondary"
-              type="button"
-              onClick={() => {
-                setLogin((prevLogin: boolean) => !prevLogin);
+          <>
+            <Tabs
+              value={login}
+              onChange={(event: React.ChangeEvent<{}>, newLogin: number) => {
+                setLogin(newLogin);
                 setFieldValue('name', '');
               }}
-            />
-            <Link className="forgot-link" to="/forgot">
-              Forgot password ?
-            </Link>
-          </Form>
+              aria-label="login tabs"
+            >
+              <Tab disableRipple className={login === 0 && 'active'} label="Sign in" />
+              <Tab disableRipple className={login !== 0 && 'active'} label="Sign up" />
+            </Tabs>
+            <Form autoComplete="off" className="flex column align-items-center">
+              {login !== 0 && (
+                <>
+                  <label htmlFor="name">Name</label>
+                  <Field name="name" placeholder="Your name" autoComplete="off" type="text" component={FormInput} />
+                </>
+              )}
+              <label htmlFor="email">Email</label>
+              <Field name="email" placeholder="Your email" autoComplete="off" type="text" component={FormInput} />
+              <label htmlFor="password">Password (at least 6 characters)</label>
+              <Field
+                name="password"
+                placeholder="Choose a secure password"
+                autoComplete="current-password"
+                type="password"
+                component={FormInput}
+              />
+              {firebaseError && <p className="error-text text-align-center">{firebaseError}</p>}
+              <Button
+                text={login === 0 ? 'Sign in' : 'Sign up'}
+                buttonType="primary"
+                type="submit"
+                disabled={isSubmitting || !isValid}
+                loading={isSubmitting}
+              />
+              <UnderlineLink type="insider" to="/forgot">
+                Forgot password ?
+              </UnderlineLink>
+            </Form>
+          </>
         )}
       </Formik>
     </div>
