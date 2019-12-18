@@ -1,7 +1,7 @@
-@import '../../../../assets/styles/colors.scss';
+@import '../../../../assets/styles/colors.less';
 
-$inputHorizontalPadding: 16px;
-$resetIconSize: 20px;
+@inputHorizontalPadding: 16px;
+@resetIconSize: 18px;
 
 .input {
   margin-bottom: 20px;
@@ -12,19 +12,19 @@ $resetIconSize: 20px;
     width: 100%;
   }
 
-  svg.input-icon {
-    font-size: $resetIconSize;
+  i.input-icon {
+    font-size: @resetIconSize;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: $inputHorizontalPadding;
+    right: @inputHorizontalPadding;
 
     &-gray {
-      color: $dark-gray-2;
+      color: @dark-gray-2;
     }
 
     &-green {
-      color: $primary-color;
+      color: @my-primary-color;
     }
   }
 
@@ -32,11 +32,11 @@ $resetIconSize: 20px;
     width: 100%;
     height: 42px;
     border-radius: 3px;
-    background-color: $light-gray-2;
+    background-color: @light-gray-2;
     font-size: 13px;
     font-weight: 400;
     border: none;
-    padding: 0 calc(#{$resetIconSize} + #{$inputHorizontalPadding} + 10px) 0 $inputHorizontalPadding;
+    padding: 0 calc(@resetIconSize + @inputHorizontalPadding + 10px) 0 @inputHorizontalPadding;
 
     &:focus {
       background-color: white;
@@ -46,17 +46,17 @@ $resetIconSize: 20px;
     }
 
     &::placeholder {
-      color: $dark-gray-2;
+      color: @dark-gray-2;
       opacity: 1;
     }
   }
 
   &-error {
-    background-color: $error-bg-color;
-    border: 1px solid $error-color;
+    background-color: @my-error-bg-color;
+    border: 1px solid @my-error-color;
 
     &-text {
-      color: $error-color;
+      color: @my-error-color;
       font-weight: 400;
       font-size: 10px;
     }

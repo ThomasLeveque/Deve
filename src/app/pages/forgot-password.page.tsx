@@ -11,7 +11,7 @@ const INITIAL_RESET_STATE: IResetInitialState = {
 };
 
 const ForgotPasswordPage: React.FC = () => {
-  const { firebase, _window } = React.useContext(FirebaseContext);
+  const { firebase, openNotification } = React.useContext(FirebaseContext);
 
   const [passwordResetError, setPasswordResetError] = React.useState<string | null>(null);
 
@@ -19,10 +19,11 @@ const ForgotPasswordPage: React.FC = () => {
     const { email }: IResetInitialState = values;
     try {
       await firebase.resetPassword(email);
-      _window.flash('Email send', `to ${email}`, 'success');
+      openNotification('Email send', `to ${email}`, 'success');
       setPasswordResetError(null);
     } catch (err) {
-      console.error('Error sending email', err);
+      openNotification('Error sending email', err.message, 'error');
+      console.error(err);
       setPasswordResetError(err.message);
     }
   };

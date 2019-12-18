@@ -1,8 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Formik, Form, Field, FormikActions, FormikProps } from 'formik';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { Tabs } from 'antd';
 
 import firebase from '../firebase';
 import { IRegisterInitialState, ILoginInitialState } from '../interfaces/initial-states.type';
@@ -24,6 +23,7 @@ const INITIAL_REGISTER_STATE: IRegisterInitialState = {
 const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [login, setLogin] = React.useState<number>(0);
   const [firebaseError, setFirebaseError] = React.useState<string | null>(null);
+  const { TabPane } = Tabs;
 
   const authenticateUser = async (values: IRegisterInitialState | ILoginInitialState): Promise<void> => {
     const { name, email, password }: IRegisterInitialState = values;
@@ -51,15 +51,15 @@ const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
         {({ isSubmitting, isValid, setFieldValue }: FormikProps<IRegisterInitialState | ILoginInitialState>) => (
           <>
             <Tabs
-              value={login}
-              onChange={(event: React.ChangeEvent<{}>, newLogin: number) => {
-                setLogin(newLogin);
+              size="large"
+              defaultActiveKey="0"
+              onChange={(key: string) => {
+                setLogin(+key);
                 setFieldValue('name', '');
               }}
-              aria-label="login tabs"
             >
-              <Tab disableRipple className={login === 0 && 'active'} label="Sign in" />
-              <Tab disableRipple className={login !== 0 && 'active'} label="Sign up" />
+              <TabPane tab="Sign in" key="0" />
+              <TabPane tab="Sign up" key="1" />
             </Tabs>
             <Form autoComplete="off" className="flex column align-items-center">
               {login !== 0 && (

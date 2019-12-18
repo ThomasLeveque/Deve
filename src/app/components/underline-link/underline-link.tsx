@@ -1,8 +1,8 @@
 import React from 'react';
 import { withRouter, Link, RouteComponentProps } from 'react-router-dom';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { Icon } from 'antd';
 
-import './underline-link.style.scss';
+import './underline-link.style.less';
 
 type UnderlineLinkType = 'insider' | 'external';
 
@@ -24,7 +24,7 @@ const UnderlineLink: React.FC<IProps> = ({ type, to, href, children }) => {
   return (
     <a className="underline-link" target="_blank" href={href}>
       {children}
-      <ExitToAppIcon className="underline-link-icon" color="inherit" />
+      <Icon className="underline-link-icon" type="export" />
     </a>
   );
 };

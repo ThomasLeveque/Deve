@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormikProps } from 'formik';
-import { Cancel, Check } from '@material-ui/icons';
+import { Icon } from 'antd';
 
-import './input.style.scss';
+import './input.style.less';
 
 interface IField {
   name: string;
@@ -34,9 +34,14 @@ const FormInput: React.FC<IProps> = ({
       <div className="input-container">
         <input {...field} {...props} id={field.name} className={isError() ? 'input-error input-component' : 'input-component'} />
         {isError() && field.value.length !== 0 && (
-          <Cancel className="input-icon input-icon-gray pointer" onClick={() => setFieldValue(field.name, '', true)} />
+          <Icon
+            type="close-circle"
+            theme="filled"
+            className="input-icon input-icon-gray pointer"
+            onClick={() => setFieldValue(field.name, '', true)}
+          />
         )}
-        {isValid() && <Check className="input-icon input-icon-green" />}
+        {isValid() && <Icon type="smile" className="input-icon input-icon-green" />}
       </div>
       {isError() && <span className="input-error-text">{errors[field.name]}</span>}
     </div>

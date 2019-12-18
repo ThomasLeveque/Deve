@@ -1,23 +1,10 @@
-@import './colors.scss';
-@import './vars.scss';
+@import './colors.less';
+@import './vars.less';
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-html,
-body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  font-family: 'Open Sans', sans-serif;
-  color: black;
-}
-
-body {
-  background-color: $light-gray-2;
 }
 
 h1 {
@@ -66,7 +53,7 @@ p {
 a {
   text-decoration: none;
   color: inherit;
-  transition: color $bezier 0.15s;
+  transition: color @bezier 0.15s;
   cursor: pointer;
 
   &:visited,
@@ -74,7 +61,7 @@ a {
     color: unset;
   }
   &:hover {
-    color: $primary-color;
+    color: @my-primary-color;
   }
 }
 
@@ -153,5 +140,61 @@ button {
 .error-text {
   font-size: 12px;
   font-weight: 400;
-  color: $error-color;
+  color: @my-error-color;
+}
+
+div.ant-notification {
+  max-width: 400px;
+  min-width: 200px;
+  width: auto;
+
+  .ant-notification-notice {
+    margin-top: 58px;
+    padding: 15px 15px;
+
+    &-close {
+      font-size: 16px;
+      color: black;
+      right: 16px;
+      top: 12px;
+    }
+
+    &-content {
+      .ant-notification-notice-with-icon {
+        .ant-notification-notice-message {
+          font-size: 14px;
+          .bold();
+          margin-bottom: 0;
+          margin-left: 42px;
+        }
+
+        .ant-notification-notice-description {
+          font-size: 11px;
+          color: @dark-gray-2;
+          margin-left: 42px;
+        }
+      }
+
+      .ant-notification-notice-message {
+        font-size: 14px;
+        .bold();
+        margin-bottom: 0;
+      }
+
+      .ant-notification-notice-description {
+        font-size: 11px;
+        color: @dark-gray-2;
+      }
+    }
+  }
+
+  &-success {
+    border: 1px solid @my-success-color;
+    background-color: @my-success-bg-color;
+  }
+
+  &-error {
+    border: 1px solid @my-error-color;
+    background-color: @my-error-bg-color;
+  }
 }

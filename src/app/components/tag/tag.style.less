@@ -1,4 +1,4 @@
-@import '../../../assets/styles/colors.scss';
+@import '../../../assets/styles/colors.less';
 
 .tag {
   display: inline-flex;
@@ -9,12 +9,12 @@
   font-weight: 700;
 
   &-green {
-    color: $primary-color;
-    background-color: $bg-tag-green;
+    color: @my-primary-color;
+    background-color: @bg-tag-green;
   }
 
   &-black {
     color: #000;
-    background-color: $bg-tag-gray;
+    background-color: @bg-tag-gray;
   }
 }

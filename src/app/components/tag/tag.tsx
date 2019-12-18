@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './tag.style.scss';
+import './tag.style.less';
 
 type TagColors = 'green' | 'black';
 

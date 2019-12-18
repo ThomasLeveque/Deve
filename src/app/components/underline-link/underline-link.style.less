@@ -1,4 +1,4 @@
-@import '../../../assets/styles/vars.scss';
+@import '../../../assets/styles/vars.less';
 
 .underline-link {
   font-size: 12px;
@@ -7,14 +7,16 @@
   font-weight: 600;
   display: inline-flex;
 
-  &:hover svg.underline-link-icon {
+  &:hover i.underline-link-icon {
     clip-path: inset(0 0 0 0);
+    text-decoration: underline;
   }
 
-  svg.underline-link-icon {
+  i.underline-link-icon {
     margin-left: 3px;
-    font-size: 17px;
+    font-size: 15px;
     clip-path: inset(0 100% 0 0);
-    transition: clip-path 0.2s $bezier;
+    transition: clip-path 0.2s @bezier;
+    color: inherit;
   }
 }

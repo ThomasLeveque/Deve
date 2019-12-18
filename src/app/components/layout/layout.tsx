@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './layout.style.scss';
+import './layout.style.less';
 
 const Layout: React.FC = ({ children }) => {
   return (

@@ -1,0 +1,51 @@
+@import '../../../../assets/styles/colors.less';
+
+.button {
+  font-size: 14px;
+  text-align: center;
+  padding: 13px 25px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+
+  &-icon {
+    margin-left: 8px;
+    color: inherit;
+    font-size: 14px;
+  }
+
+  &-primary {
+    background-color: @my-primary-color;
+    color: white;
+
+    &:hover {
+      box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    &:disabled {
+      cursor: initial;
+      background-color: @light-gray-2;
+      box-shadow: none;
+    }
+  }
+
+  &-secondary {
+    background-color: white;
+    color: @my-secondary-color;
+    border: 1px solid @light-gray-1;
+
+    &:hover {
+      background-color: @light-gray-2;
+    }
+
+    &:disabled {
+      background-color: @light-gray-1;
+    }
+  }
+
+  &:disabled {
+    cursor: initial;
+    color: @gray;
+  }
+}
