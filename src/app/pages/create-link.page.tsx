@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import FirebaseContext from '../firebase/firebase.context';
 import { ILink, ICategory } from '../interfaces/link.interface';
 import { ICreateLinkInitialState } from '../interfaces/initial-states.type';
-import { Formik, FormikActions, Form, Field, ErrorMessage } from 'formik';
+import { Formik, FormikHelpers, Form, Field, ErrorMessage } from 'formik';
 import { linkSchema, categorySchema } from '../schemas/link.schema';
 
 const INITIAL_STATE: ICreateLinkInitialState = {
@@ -67,7 +67,7 @@ const CreateLinkPage: React.FC<RouteComponentProps> = ({ history }) => {
         validationSchema={linkSchema}
         onSubmit={async (
           values: ICreateLinkInitialState,
-          { setSubmitting }: FormikActions<ICreateLinkInitialState>
+          { setSubmitting }: FormikHelpers<ICreateLinkInitialState>
         ) => {
           await handleCreateLink(values);
           setSubmitting(false);
@@ -145,7 +145,7 @@ const CreateLinkPage: React.FC<RouteComponentProps> = ({ history }) => {
           validationSchema={categorySchema}
           onSubmit={async (
             values: ICategory,
-            { setSubmitting }: FormikActions<ICategory>
+            { setSubmitting }: FormikHelpers<ICategory>
           ) => {
             await handleAddCategory(values);
             setSubmitting(false);

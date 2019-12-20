@@ -29,10 +29,6 @@ const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
     return () => unsubcribe();
   }, []);
 
-  // const getLink = async (): Promise<void> => {
-  //   linkRef.onSnapshot(handleSnapshot, handleError);
-  // };
-
   const handleSnapshot = (doc: firebase.firestore.DocumentSnapshot) => {
     const link: ILink | any = { ...doc.data(), id: doc.id };
     setLink(link);

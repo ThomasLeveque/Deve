@@ -76,7 +76,7 @@ const SearchLinksPage: React.FC = () => {
       ))}
       {!filteredLinks.length && <p>No results</p>}
       {filteredLinks.map((filteredLink: ILink, index: number) => (
-        <LinkItem key={filteredLink.id} showCount={false} link={filteredLink} index={index} />
+        <LinkItem key={filteredLink.id} showCount={false} link={filteredLink} />
       ))}
     </div>
   );
