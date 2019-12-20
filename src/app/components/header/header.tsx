@@ -1,46 +1,39 @@
 import React from 'react';
-import { withRouter, NavLink } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { Icon, Dropdown, Menu, Button } from 'antd';
 
 import { FirebaseContext } from '../../firebase';
 
-import './header.style.scss';
+import './header.style.less';
 
-const Header: React.FC = () => {
+const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   const { user, firebase } = React.useContext(FirebaseContext);
+  const menu = (
+    <Menu>
+      <Menu.Item key="0">
+        <div className="pointer" onClick={() => firebase.logout()}>
+          Sign out
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <header className="header">
-      <div className="flex">
-        <h2 className="header-title">Hooks News</h2>
-        <NavLink to="/new" className="header-link">
-          new
-        </NavLink>
-        <NavLink to="/top" className="header-link">
-          top
-        </NavLink>
-        <NavLink to="/search" className="header-link">
-          search
-        </NavLink>
-        {user && (
-          <NavLink to="/create" className="header-link">
-            submit
-          </NavLink>
-        )}
-      </div>
-      <div className="flex">
-        {user ? (
-          <>
-            <div className="header-name">{user.name}</div>
-            <div>|</div>
-            <div className="header-button pointer" onClick={() => firebase.logout()}>
-              Sign out
-            </div>
-          </>
-        ) : (
-          <NavLink to="/login" className="header-link">
-            Sign in
-          </NavLink>
-        )}
-      </div>
+      <h2 className="header-title pointer" onClick={() => history.push('/')}>
+        Hooks News
+      </h2>
+      {user ? (
+        <Dropdown placement="bottomRight" overlay={menu} trigger={['click']}>
+          <Button type="link">
+            {user.name} <Icon type="down" />
+          </Button>
+        </Dropdown>
+      ) : (
+        <Button type="link" onClick={() => history.push('/login')}>
+          Sign in <Icon type="login" />
+        </Button>
+      )}
     </header>
   );
 };
