@@ -18,7 +18,7 @@
     "firebase": "^6.3.0",
     "firebase-admin": "^7.4.0",
     "firebase-functions": "^2.3.1",
-    "formik": "^1.5.7",
+    "formik": "^2.0.8",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "react": "^16.8.6",
