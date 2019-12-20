@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Formik, Form, Field, FormikActions, FormikProps } from 'formik';
+import { Formik, Form, Field, FormikHelpers, FormikProps } from 'formik';
 import { Tabs } from 'antd';
 
 import firebase from '../firebase';
@@ -42,40 +42,37 @@ const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
         validationSchema={login === 0 ? loginSchema : registerSchema}
         onSubmit={async (
           values: IRegisterInitialState | ILoginInitialState,
-          { setSubmitting }: FormikActions<IRegisterInitialState | ILoginInitialState>
+          { setSubmitting }: FormikHelpers<IRegisterInitialState | ILoginInitialState>
         ) => {
           await authenticateUser(values);
           setSubmitting(false);
         }}
+        enableReinitialize
       >
-        {({ isSubmitting, isValid, setFieldValue }: FormikProps<IRegisterInitialState | ILoginInitialState>) => (
+        {({ isSubmitting, isValid }: FormikProps<IRegisterInitialState | ILoginInitialState>) => (
           <>
             <Tabs
               size="large"
               defaultActiveKey="0"
               onChange={(key: string) => {
                 setLogin(+key);
-                setFieldValue('name', '');
               }}
             >
               <TabPane tab="Sign in" key="0" />
               <TabPane tab="Sign up" key="1" />
             </Tabs>
-            <Form autoComplete="off" className="flex column align-items-center">
+            <Form autoComplete="on" className="flex column align-items-center">
               {login !== 0 && (
-                <>
-                  <label htmlFor="name">Name</label>
-                  <Field name="name" placeholder="Your name" autoComplete="off" type="text" component={FormInput} />
-                </>
+                <Field autoComplete="on" name="name" placeholder="Your name" type="text" hasLabel label="Name" component={FormInput} />
               )}
-              <label htmlFor="email">Email</label>
-              <Field name="email" placeholder="Your email" autoComplete="off" type="text" component={FormInput} />
-              <label htmlFor="password">Password (at least 6 characters)</label>
+              <Field name="email" autoComplete="on" placeholder="Your email" type="text" hasLabel label="Email" component={FormInput} />
               <Field
                 name="password"
                 placeholder="Choose a secure password"
                 autoComplete="current-password"
                 type="password"
+                hasLabel
+                label="Password (at least 6 characters)"
                 component={FormInput}
               />
               {firebaseError && <p className="error-text text-align-center">{firebaseError}</p>}
