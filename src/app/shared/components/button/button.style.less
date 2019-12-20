@@ -1,4 +1,5 @@
 @import '../../../../assets/styles/colors.less';
+@import '../../../../assets/styles/vars.less';
 
 .button {
   font-size: 14px;
@@ -16,11 +17,11 @@
   }
 
   &-primary {
-    background-color: @my-primary-color;
+    background-color: @my-secondary-color;
     color: white;
 
     &:hover {
-      box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.2);
+      box-shadow: @buttonShadow;
     }
 
     &:disabled {
@@ -32,11 +33,11 @@
 
   &-secondary {
     background-color: white;
-    color: @my-secondary-color;
+    color: black;
     border: 1px solid @light-gray-1;
 
     &:hover {
-      background-color: @light-gray-2;
+      color: @my-primary-color;
     }
 
     &:disabled {
