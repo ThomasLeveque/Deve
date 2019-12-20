@@ -1,27 +1,33 @@
 import React from 'react';
-import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { Icon, Row, Col, Typography, Tooltip } from 'antd';
 
-import { getDomain } from '../../utils';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import FirebaseContext from '../../firebase/firebase.context';
 import { IVote } from '../../interfaces/vote.interface';
 import { ILink } from '../../interfaces/link.interface';
 import Tag from '../tag/tag';
+import UnderlineLink from '../underline-link/underline-link';
+import { getDomain } from '../../utils';
 
-import './link-item.style.scss';
+import './link-item.style.less';
 
 interface IProps extends RouteComponentProps<{}> {
   link: ILink;
-  index?: number;
   showCount: boolean;
 }
 
-const LinkItem: React.FC<IProps> = ({ link, index, showCount = false, history }) => {
-  const { firebase, user } = React.useContext(FirebaseContext);
+const LinkItem: React.FC<IProps> = ({ link, showCount = false, history }) => {
+  const { firebase, user, openNotification } = React.useContext(FirebaseContext);
+  const { Title } = Typography;
+  const postedByAuthUser: boolean = user && user.id === link.postedBy.id;
+  const alreadyLiked: boolean = !!link.votes.find((vote: IVote) => user && vote.voteBy.id === user.id);
 
   const handleVote = async (): Promise<void> => {
     if (!user) {
       history.push('/login');
+    } else if (alreadyLiked) {
+      openNotification('You already liked it !', '', 'info');
     } else {
       const voteRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(link.id);
 
@@ -38,47 +44,51 @@ const LinkItem: React.FC<IProps> = ({ link, index, showCount = false, history })
     }
   };
 
-  const handleDeleteLink = async (): Promise<void> => {
-    const linkRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(link.id);
-    try {
-      await linkRef.delete();
-    } catch (err) {
-      console.error('Error deleting document', err);
-    }
-  };
-
-  const postedByAuthUser: boolean = user && user.id === link.postedBy.id;
+  // const handleDeleteLink = async (): Promise<void> => {
+  //   const linkRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(link.id);
+  //   try {
+  //     await linkRef.delete();
+  //   } catch (err) {
+  //     console.error('Error deleting document', err);
+  //   }
+  // };
 
   return (
-    <div className="flex">
-      <div className="flex">
-        {showCount && <span>{index}.</span>}
-        <div className="pointer" onClick={handleVote}>
-          ⬆︎
+    <Col span={6}>
+      <div className="link-item">
+        <div className="link-item-data">
+          <div>
+            {link.category && <Tag text={link.category} color="green" />}
+            <Tooltip title={link.description}>
+              <Title ellipsis={{ rows: 3 }} level={4}>
+                {link.description}
+              </Title>
+            </Tooltip>
+            <UnderlineLink type="external" href={link.url}>
+              On {getDomain(link.url)}
+            </UnderlineLink>
+          </div>
+          <Row type="flex" align="bottom" className="author light">
+            <Col span={12} className="break-word">
+              by {link.postedBy.name}
+            </Col>
+            <Col span={12} className="text-align-right">
+              {distanceInWordsToNow(link.created)}
+            </Col>
+          </Row>
+        </div>
+        <div className="link-item-actions flex">
+          <div className={alreadyLiked ? 'favorite pointer liked' : 'favorite pointer'} onClick={handleVote}>
+            <Icon type="fire" theme={alreadyLiked ? 'filled' : 'outlined'} className="icon" />
+            <span className="count">{link.voteCount === 0 ? 'like' : link.voteCount}</span>
+          </div>
+          <div className="comment pointer" onClick={() => history.push(`/link/${link.id}`)}>
+            <Icon type="message" className="icon" />
+            <span className="count">{link.comments.length} comments</span>
+          </div>
         </div>
       </div>
-      <div className="ml1">
-        <div>
-          <a href={link.url} className="black no-underline">
-            {link.description}
-          </a>{' '}
-          <span className="link">({getDomain(link.url)})</span> {link.category && <Tag text={link.category} color="green" />}
-        </div>
-        <div className="f6 lh-copy gray">
-          {link.voteCount} votes by {link.postedBy.name} {distanceInWordsToNow(link.created)}
-          {' | '}
-          <Link to={`/link/${link.id}`}>{link.comments.length > 0 ? `${link.comments.length} comments` : 'discuss'}</Link>
-          {postedByAuthUser && (
-            <>
-              {' | '}
-              <span className="delete-button" onClick={handleDeleteLink}>
-                delete
-              </span>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
+    </Col>
   );
 };
 
