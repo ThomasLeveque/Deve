@@ -11,11 +11,13 @@ const getAuthUser = (): { user: IUser; userError: string; userLoaded: boolean } 
     const unsubscribe = firebase.auth.onAuthStateChanged(
       (user: firebase.User | null) => {
         if (user) {
+          console.log('user', user.displayName);
           const formatedUser: IUser = {
             id: user.uid,
             name: user.displayName,
             email: user.email
           };
+          console.log('formatedUser', formatedUser)
           setUser(formatedUser);
           setUserLoaded(true);
         } else {

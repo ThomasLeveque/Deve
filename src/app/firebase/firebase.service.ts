@@ -10,33 +10,22 @@ class Firebase {
   db: app.firestore.Firestore;
 
   constructor() {
-    const firebaseConfig = ((domain: string): IfirebaseConfig =>
-      firebaseRoutes[domain] || firebaseConfigDev)(window.document.domain);
+    const firebaseConfig = ((domain: string): IfirebaseConfig => firebaseRoutes[domain] || firebaseConfigDev)(window.document.domain);
     app.initializeApp(firebaseConfig);
     this.auth = app.auth();
     this.db = app.firestore();
   }
 
-  register = async (
-    name: string,
-    email: string,
-    password: string
-  ): Promise<void> => {
-    const newUser: app.auth.UserCredential = await this.auth.createUserWithEmailAndPassword(
-      email,
-      password
-    );
+  register = async (name: string, email: string, password: string): Promise<void> => {
+    const newUser: app.auth.UserCredential = await this.auth.createUserWithEmailAndPassword(email, password);
 
-    return await newUser.user.updateProfile({
+    await newUser.user.updateProfile({
       displayName: name
     });
   };
 
-  login = async (
-    email: string,
-    password: string
-  ): Promise<app.auth.UserCredential> => {
-    return await this.auth.signInWithEmailAndPassword(email, password);
+  login = async (email: string, password: string): Promise<void> => {
+    await this.auth.signInWithEmailAndPassword(email, password);
   };
 
   logout = async (): Promise<void> => {
