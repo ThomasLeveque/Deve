@@ -23,7 +23,7 @@ const emailPasswordSchema = {
 };
 
 const registerSchema = yup.object().shape({
-  name: yup
+  displayName: yup
     .string()
     .max(nameMax, `Name must be shorter than ${nameMax} characters`)
     .required('Name required'),

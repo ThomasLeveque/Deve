@@ -1,0 +1,45 @@
+.sign-in-and-sign-up-page {
+  padding: 50px 70px;
+  background-color: white;
+  width: 500px;
+  max-width: 100%;
+  margin: auto;
+
+  label {
+    display: block;
+    color: black;
+    font-weight: 400;
+    font-size: 11px;
+    margin-bottom: 5px;
+    align-self: flex-start;
+  }
+
+  .underline-link {
+    margin-top: 10px;
+  }
+
+  button{
+    &[type='submit'] {
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    &[type='button'] {
+      margin-top: 20px;
+    }
+  }
+
+  .ant-tabs {
+    margin-bottom: 10px;
+
+    &-nav {
+      width: 100%;
+
+      .ant-tabs-tab {
+        margin: 0;
+        width: 50%;
+        text-align: center;
+      }
+    }
+  }
+}

@@ -7,11 +7,12 @@ export interface ILink {
   url: string;
   description: string;
   category: string;
-  created: Date | number;
   postedBy: IUser;
   voteCount: number;
   votes: IVote[];
   comments: IComment[];
+  createdAt: Date | number;
+  updatedAt: Date | number;
 }
 
 export interface ICategory {

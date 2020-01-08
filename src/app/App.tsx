@@ -1,52 +1,40 @@
-import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { notification } from 'antd';
+import React, { useContext } from 'react';
 
-import Header from './components/header/header';
 import AppRoutes from './app.routes';
-import { getAuthUser } from './shared/use-auth.service';
-import { getCategories } from './shared/categories.service';
-import firebase, { FirebaseContext } from './firebase';
-import Layout from './components/layout/layout';
-import ProgressBar from './components/bar/progress-bar';
-import { NotifType } from './utils/index';
+import Header from './components/header/header.component';
+import ProgressBar from './components/progress-bar/progress-bar.component';
+import { CurrentUserContext } from './providers/current-user/current-user.provider';
+import { CategoriesContext } from './providers/categories/categories.provider';
 
-function App() {
-  const { user, userError, userLoaded } = getAuthUser();
-  const { categories, catError, catLoaded } = getCategories();
+import './app.styles.less';
 
-  const openNotification = (message: string, description: string, type: NotifType) => {
-    notification[type]({
-      message,
-      description,
-      duration: 4,
-      className: `ant-notification-${type}`
-    });
-  };
+const App = () => {
+  const { currentUserError, currentUserLoaded } = useContext(CurrentUserContext);
+  const { categoriesError, categoriesLoaded } = useContext(CategoriesContext);
 
-  const renderContent = () => {
-    if (userError) {
-      return <p className="error-text">{userError}</p>;
+  const renderRoutes = () => {
+    if (currentUserError) {
+      return <p className="error-text">{currentUserError}</p>;
     }
 
-    if (catError) {
-      return <p className="error-text">{catError}</p>;
+    if (categoriesError) {
+      return <p className="error-text">{categoriesError}</p>;
     }
 
-    if (catLoaded && userLoaded) {
+    if (categoriesLoaded && currentUserLoaded) {
       return <AppRoutes />;
     }
+
+    return null;
   };
 
   return (
-    <BrowserRouter>
-      <FirebaseContext.Provider value={{ user, firebase, categories, userLoaded, openNotification }}>
-        <Header />
-        <ProgressBar isAnimating={!catLoaded || !userLoaded} />
-        <Layout>{renderContent()}</Layout>
-      </FirebaseContext.Provider>
-    </BrowserRouter>
+    <div className="app">
+      <Header />
+      <ProgressBar isAnimating={!categoriesLoaded || !currentUserLoaded} />
+      <main>{renderRoutes()}</main>
+    </div>
   );
-}
+};
 
 export default App;
