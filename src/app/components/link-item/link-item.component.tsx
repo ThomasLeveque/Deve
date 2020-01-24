@@ -88,7 +88,7 @@ const LinkItem: React.FC<IProps> = ({ link, showCount = false, history }) => {
           <Icon type="fire" theme={alreadyLiked ? 'filled' : 'outlined'} className="icon" />
           <span className="count">{link.voteCount === 0 ? 'like' : link.voteCount}</span>
         </div>
-        <div className="comment pointer" onClick={() => history.push(`/link/${link.id}`)}>
+        <div className="comment pointer" onClick={() => history.push(`/links/${link.id}`)}>
           <Icon type="message" className="icon" />
           <span className="count">{link.comments.length} comments</span>
         </div>

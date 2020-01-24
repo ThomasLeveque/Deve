@@ -59,6 +59,16 @@
       color: @dark-gray-2;
       opacity: 1;
     }
+
+    &.search {
+      background-color: white;
+
+      &:focus {
+        color: black;
+        border: none;
+        box-shadow: @inputShadow;
+      }
+    }
   }
 
   &-error {

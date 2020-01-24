@@ -1,6 +1,7 @@
 import React from 'react';
-import { RouteComponentProps, match, NavLink, withRouter } from 'react-router-dom';
+import { RouteComponentProps, Link, withRouter } from 'react-router-dom';
 import { Row, Menu, Dropdown, Icon, Button, Col } from 'antd';
+import qs from 'qs';
 
 import LinkItem from '../link-item/link-item.component';
 import CustomButton from '../custom-button/custom-button.component';
@@ -8,6 +9,7 @@ import CustomButton from '../custom-button/custom-button.component';
 import { firestore } from '../../firebase/firebase.service';
 import { LINKS_PER_PAGE } from '../../utils/index';
 import { ILink } from '../../interfaces/link.interface';
+import { IQueryString, SortByType } from '../../interfaces/quert-string.interface';
 
 import './link-list.styles.less';
 
@@ -15,7 +17,7 @@ import './link-list.styles.less';
 
 interface IProps extends RouteComponentProps<{}> {}
 
-const LinkList: React.FC<IProps> = ({ history, location }) => {
+const LinkList: React.FC<IProps> = ({ history, location, match }) => {
   const [links, setLinks] = React.useState<ILink[]>([]);
   const [error, setError] = React.useState<string>('');
   const [cursor, setCursor] = React.useState<ILink | null>(null);
@@ -23,32 +25,38 @@ const LinkList: React.FC<IProps> = ({ history, location }) => {
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
   const [loadingButton, setLoadingButton] = React.useState<boolean>(false);
 
-  const isTopPage: any = location.pathname.includes('top');
-  const isNewPage: any = location.pathname.includes('new');
   const linkRef: firebase.firestore.CollectionReference = firestore.collection('links');
+
+  const sortByMapping: any = {
+    recent: {
+      text: 'Most recent'
+    },
+    liked: {
+      text: 'Most liked'
+    },
+    oldest: {
+      text: 'Oldest'
+    }
+  };
+
+  let search: IQueryString = qs.parse(location.search, { ignoreQueryPrefix: true });
 
   React.useEffect(() => {
     const unsubscribe = getLinks().onSnapshot(handleSnapshot, handleError);
     return () => unsubscribe();
-  }, [isTopPage, isNewPage]);
+  }, [location.search]);
 
-  const menu = (
+  const menu = () => (
     <Menu>
-      <Menu.Item key="0">
-        <NavLink to="/new" className="header-link">
-          Most recent
-        </NavLink>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <NavLink to="/top" className="header-link">
-          Most liked
-        </NavLink>
-      </Menu.Item>
-      <Menu.Item key="3">
-        <NavLink to="/last" className="header-link">
-          Oldest
-        </NavLink>
-      </Menu.Item>
+      {Object.keys(sortByMapping).map((sortby: any, index: number) => {
+        return (
+          <Menu.Item key={`${index}`}>
+            <Link to={`${match.path}?sortby=${sortby}`} className="header-link">
+              {sortByMapping[sortby].text}
+            </Link>
+          </Menu.Item>
+        );
+      })}
     </Menu>
   );
 
@@ -62,12 +70,12 @@ const LinkList: React.FC<IProps> = ({ history, location }) => {
   };
 
   const getLinks = () => {
-    if (isTopPage) {
+    if (!search.sortby || search.sortby === 'recent') {
+      return linkRef.orderBy('createdAt', 'desc');
+    } else if (search.sortby === 'liked') {
       return linkRef.orderBy('voteCount', 'desc');
-    } else if (isNewPage) {
-      return linkRef.orderBy('created', 'desc').limit(LINKS_PER_PAGE);
     } else {
-      return linkRef;
+      return linkRef.orderBy('createdAt', 'asc');
     }
   };
 
@@ -109,10 +117,6 @@ const LinkList: React.FC<IProps> = ({ history, location }) => {
     }
   };
 
-  let linkList: JSX.Element[] | JSX.Element = links.map((link: ILink, index: number) => (
-    <LinkItem key={link.id} showCount={true} link={link} />
-  ));
-
   let linkListContent: JSX.Element;
 
   if (!isLoaded) {
@@ -123,7 +127,11 @@ const LinkList: React.FC<IProps> = ({ history, location }) => {
     linkListContent = (
       <>
         <Row type="flex" gutter={[16, 16]}>
-          <Col span={6}>{linkList}</Col>
+          {links.map((link: ILink, index: number) => (
+            <Col key={link.id} span={8}>
+              <LinkItem showCount={true} link={link} />
+            </Col>
+          ))}
         </Row>
         <CustomButton
           buttonType="secondary"
@@ -144,7 +152,8 @@ const LinkList: React.FC<IProps> = ({ history, location }) => {
       <div className="link-list-top">
         <Dropdown overlay={menu} trigger={['click']}>
           <Button type="link">
-            Sort by <Icon type="down" />
+            Sort by{search.sortby && <span className="selected-filter">{`: ${sortByMapping[search.sortby].text}`}</span>}
+            <Icon type="down" />
           </Button>
         </Dropdown>
         <CustomButton text="Add a link" buttonType="primary" hasIcon iconType="plus" onClick={() => history.push('add')} />
