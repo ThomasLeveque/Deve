@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps, Link, withRouter } from 'react-router-dom';
 import { Row, Menu, Dropdown, Icon, Button, Col } from 'antd';
-import qs from 'qs';
+import { useQueryParam, StringParam } from 'use-query-params';
 
 import LinkItem from '../link-item/link-item.component';
 import CustomButton from '../custom-button/custom-button.component';
@@ -9,11 +9,8 @@ import CustomButton from '../custom-button/custom-button.component';
 import { firestore } from '../../firebase/firebase.service';
 import { LINKS_PER_PAGE } from '../../utils/index';
 import { ILink } from '../../interfaces/link.interface';
-import { IQueryString, SortByType } from '../../interfaces/quert-string.interface';
 
 import './link-list.styles.less';
-
-// type Params = { page: string };
 
 interface IProps extends RouteComponentProps<{}> {}
 
@@ -24,8 +21,6 @@ const LinkList: React.FC<IProps> = ({ history, location, match }) => {
   const [totalLinks, setTotalLinks] = React.useState<number>();
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
   const [loadingButton, setLoadingButton] = React.useState<boolean>(false);
-
-  const linkRef: firebase.firestore.CollectionReference = firestore.collection('links');
 
   const sortByMapping: any = {
     recent: {
@@ -39,52 +34,59 @@ const LinkList: React.FC<IProps> = ({ history, location, match }) => {
     }
   };
 
-  let search: IQueryString = qs.parse(location.search, { ignoreQueryPrefix: true });
+  const [qsSortby, setQsSortby] = useQueryParam('sortby', StringParam);
+  const [qsSearch] = useQueryParam('q', StringParam);
+  const [qsCategory] = useQueryParam('category', StringParam);
 
   React.useEffect(() => {
-    const unsubscribe = getLinks().onSnapshot(handleSnapshot, handleError);
+    const unsubscribe = getQuery().onSnapshot(handleSnapshot, handleError);
     return () => unsubscribe();
   }, [location.search]);
 
   const menu = () => (
     <Menu>
-      {Object.keys(sortByMapping).map((sortby: any, index: number) => {
+      {Object.keys(sortByMapping).map((sortby: string, index: number) => {
         return (
-          <Menu.Item key={`${index}`}>
-            <Link to={`${match.path}?sortby=${sortby}`} className="header-link">
-              {sortByMapping[sortby].text}
-            </Link>
+          <Menu.Item key={`${index}`} onClick={() => setQsSortby(sortby)}>
+            {sortByMapping[sortby].text}
           </Menu.Item>
         );
       })}
     </Menu>
   );
 
-  const getTotalLinks = async () => {
-    const snap: firebase.firestore.QuerySnapshot = await linkRef.get();
-    setTotalLinks(snap.size);
-  };
-
   const isLastPage = (): boolean => {
     return totalLinks === links.length;
   };
 
-  const getLinks = () => {
-    if (!search.sortby || search.sortby === 'recent') {
-      return linkRef.orderBy('createdAt', 'desc');
-    } else if (search.sortby === 'liked') {
-      return linkRef.orderBy('voteCount', 'desc');
-    } else {
-      return linkRef.orderBy('createdAt', 'asc');
+  const getQuery = (): firebase.firestore.Query => {
+    let linkRef: firebase.firestore.Query = firestore.collection('links');
+
+    if (qsSearch) {
+      linkRef = linkRef.where('description', '==', qsSearch);
     }
+
+    if (qsCategory) {
+      linkRef = linkRef.where('category', '==', qsCategory);
+    }
+
+    if (!qsSortby || qsSortby === 'recent') {
+      linkRef = linkRef.orderBy('createdAt', 'desc');
+    } else if (qsSortby === 'liked') {
+      linkRef = linkRef.orderBy('voteCount', 'desc');
+    } else {
+      linkRef = linkRef.orderBy('createdAt', 'asc');
+    }
+
+    return linkRef;
   };
 
   const handleSnapshot = async (snapshot: firebase.firestore.QuerySnapshot) => {
-    await getTotalLinks();
     setData(snapshot);
   };
 
   const setData = (snapshot: firebase.firestore.QuerySnapshot, isLoadMore = false): void => {
+    setTotalLinks(snapshot.size);
     const links: ILink[] | any = snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => {
       return {
         id: doc.id,
@@ -99,6 +101,7 @@ const LinkList: React.FC<IProps> = ({ history, location, match }) => {
   };
 
   const handleError = (err: any) => {
+    console.log(err.message || err.toString());
     setError(err.message || err.toString());
     setIsLoaded(true);
     setLoadingButton(false);
@@ -107,8 +110,7 @@ const LinkList: React.FC<IProps> = ({ history, location, match }) => {
   const loadMoreLinks = async (): Promise<any> => {
     if (cursor) {
       setLoadingButton(true);
-      const snapshot: firebase.firestore.QuerySnapshot = await linkRef
-        .orderBy('created', 'desc')
+      const snapshot: firebase.firestore.QuerySnapshot = await getQuery()
         .startAfter(cursor.createdAt)
         .limit(LINKS_PER_PAGE)
         .get();
@@ -152,7 +154,7 @@ const LinkList: React.FC<IProps> = ({ history, location, match }) => {
       <div className="link-list-top">
         <Dropdown overlay={menu} trigger={['click']}>
           <Button type="link">
-            Sort by{search.sortby && <span className="selected-filter">{`: ${sortByMapping[search.sortby].text}`}</span>}
+            Sort by{qsSortby && <span className="selected-filter">{`: ${sortByMapping[qsSortby].text}`}</span>}
             <Icon type="down" />
           </Button>
         </Dropdown>
