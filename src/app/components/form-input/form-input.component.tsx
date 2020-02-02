@@ -44,15 +44,4 @@ const FormInput: React.FC<IProps> = ({ field, form: { errors, touched, setFieldV
   );
 };
 
-const SearchInput: React.FC<IProps> = ({ field, form: { submitForm }, ...props }) => {
-  return (
-    <div className="form-input">
-      <div className="form-input-container">
-        <input {...field} {...props} id={field.name} className="form-input-item search" />
-        <Icon type="search" theme="outlined" className="form-input-icon form-input-icon-green pointer" onClick={submitForm} />
-      </div>
-    </div>
-  );
-};
-
-export { FormInput, SearchInput };
+export { FormInput };

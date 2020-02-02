@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Icon, Row, Col, Typography, Tooltip } from 'antd';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
+import { Highlight } from 'react-instantsearch-dom';
 
 import NotifContext from '../../contexts/notif/notif.context';
 import { firestore } from '../../firebase/firebase.service';
@@ -18,7 +19,7 @@ import './link-item.styles.less';
 
 interface IProps extends RouteComponentProps<{}> {
   link: ILink;
-  showCount: boolean;
+  showCount?: boolean;
 }
 
 const LinkItem: React.FC<IProps> = ({ link, showCount = false, history }) => {
@@ -35,7 +36,7 @@ const LinkItem: React.FC<IProps> = ({ link, showCount = false, history }) => {
     } else if (alreadyLiked) {
       openNotification('You already liked it !', '', 'info');
     } else {
-      const voteRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(link.id);
+      const voteRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(link.objectID);
 
       const doc: firebase.firestore.DocumentSnapshot = await voteRef.get();
       if (doc.exists) {
@@ -51,15 +52,6 @@ const LinkItem: React.FC<IProps> = ({ link, showCount = false, history }) => {
     }
   };
 
-  // const handleDeleteLink = async (): Promise<void> => {
-  //   const linkRef: firebase.firestore.DocumentReference = firebase.db.collection('links').doc(link.id);
-  //   try {
-  //     await linkRef.delete();
-  //   } catch (err) {
-  //     console.error('Error deleting document', err);
-  //   }
-  // };
-
   return (
     <div className="link-item">
       <div className="link-item-data">
@@ -67,7 +59,7 @@ const LinkItem: React.FC<IProps> = ({ link, showCount = false, history }) => {
           {link.category && <Tag text={link.category} color="green" />}
           <Tooltip title={link.description}>
             <Title ellipsis={{ rows: 3 }} level={4}>
-              {link.description}
+              <Highlight tagName="span" hit={link} attribute="description" />
             </Title>
           </Tooltip>
           <UnderlineLink type="external" href={link.url}>
@@ -88,7 +80,7 @@ const LinkItem: React.FC<IProps> = ({ link, showCount = false, history }) => {
           <Icon type="fire" theme={alreadyLiked ? 'filled' : 'outlined'} className="icon" />
           <span className="count">{link.voteCount === 0 ? 'like' : link.voteCount}</span>
         </div>
-        <div className="comment pointer" onClick={() => history.push(`/links/${link.id}`)}>
+        <div className="comment pointer" onClick={() => history.push(`/links/${link.objectID}`)}>
           <Icon type="message" className="icon" />
           <span className="count">{link.comments.length} comments</span>
         </div>

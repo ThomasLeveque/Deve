@@ -1,0 +1,42 @@
+import React, { useState } from 'react';
+import { Icon } from 'antd';
+import { connectSearchBox } from 'react-instantsearch-dom';
+import { SearchBoxProvided } from 'react-instantsearch-core';
+
+import './search-input.styles.less';
+
+const SearchInput: React.FC<SearchBoxProvided> = ({ currentRefinement, isSearchStalled, refine }) => {
+  const [value, setValue] = useState<string>('');
+
+  const handleSearchSubmit = (event: any) => {
+    if (event.key && event.key !== 'Enter') {
+      return;
+    }
+
+    refine(value);
+  };
+
+  const handleSearchReset = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    setValue('');
+    refine('');
+  };
+
+  return (
+    <div className="search-input">
+      <input
+        className="search-input-item"
+        type="search"
+        value={value}
+        placeholder="Type something..."
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
+        onKeyPress={handleSearchSubmit}
+      />
+      <Icon type="search" theme="outlined" className="search-input-icon green submit" onClick={handleSearchSubmit} />
+      {value.length !== 0 && (
+        <Icon type="close-circle" theme="filled" className="search-input-icon gray reset" onClick={handleSearchReset} />
+      )}
+    </div>
+  );
+};
+
+export default connectSearchBox(SearchInput);

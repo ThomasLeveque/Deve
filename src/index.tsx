@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route } from 'react-router-dom';
-import { QueryParamProvider } from 'use-query-params';
+import { BrowserRouter } from 'react-router-dom';
 
 import App from './app/app';
 import CategoriesProvider from './app/providers/categories/categories.provider';
@@ -13,9 +12,7 @@ ReactDOM.render(
   <CategoriesProvider>
     <CurrentUserProvider>
       <BrowserRouter>
-        <QueryParamProvider ReactRouterRoute={Route}>
-          <App />
-        </QueryParamProvider>
+        <App />
       </BrowserRouter>
     </CurrentUserProvider>
   </CategoriesProvider>,

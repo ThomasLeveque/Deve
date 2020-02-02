@@ -3,6 +3,7 @@ import { IVote } from './vote.interface';
 import { IComment } from './comment.interface';
 
 export interface ILink {
+  objectID?: string;
   id?: string;
   url: string;
   description: string;
