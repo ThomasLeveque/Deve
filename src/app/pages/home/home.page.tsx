@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { InstantSearch } from 'react-instantsearch-dom';
+import { InstantSearch, Stats } from 'react-instantsearch-dom';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { urlToSearchState, searchStateToUrl, searchClient, indexName, createURL } from '../../algolia/algolia.service';
@@ -7,6 +7,7 @@ import LinkList from '../../components/link-list/link-list.component';
 import FilterBar from '../../components/filter-bar/filter-bar.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
 import SortBy from '../../components/sort-by/sort-by.component';
+import LinkPagination from '../../components/link-pagination/link-pagination.component';
 
 import './home.styles.less';
 
@@ -38,9 +39,11 @@ const HomePage: React.FC<RouteComponentProps> = ({ history, location }) => {
             ]}
             defaultRefinement={indexName}
           />
+          <Stats />
           <CustomButton text="Add a link" buttonType="primary" hasIcon iconType="plus" onClick={() => history.push('add')} />
         </div>
         <LinkList />
+        <LinkPagination defaultRefinement={1} />
       </InstantSearch>
     </div>
   );
