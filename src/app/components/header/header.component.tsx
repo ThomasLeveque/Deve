@@ -25,17 +25,19 @@ const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
       <h2 className="header-title pointer" onClick={() => history.push('/')}>
         Hooks News
       </h2>
-      {currentUser ? (
-        <Dropdown placement="bottomRight" overlay={menu} trigger={['click']}>
-          <Button type="link">
-            {currentUser.displayName} <Icon type="down" />
+      <div className="header-button">
+        {currentUser ? (
+          <Dropdown placement="bottomRight" overlay={menu} trigger={['click']}>
+            <Button type="link">
+              {currentUser.displayName} <Icon type="down" />
+            </Button>
+          </Dropdown>
+        ) : (
+          <Button type="link" onClick={() => history.push('/signin')}>
+            Sign in <Icon type="login" />
           </Button>
-        </Dropdown>
-      ) : (
-        <Button type="link" onClick={() => history.push('/signin')}>
-          Sign in <Icon type="login" />
-        </Button>
-      )}
+        )}
+      </div>
     </header>
   );
 };

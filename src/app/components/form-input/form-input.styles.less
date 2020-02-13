@@ -1,9 +1,6 @@
 @import '../../../assets/styles/colors.less';
 @import '../../../assets/styles/vars.less';
 
-@inputHorizontalPadding: 16px;
-@resetIconSize: 18px;
-
 .form-input {
   margin-bottom: 20px;
   width: 100%;
@@ -11,7 +8,7 @@
   label {
     display: block;
     color: black;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 13px;
     margin-bottom: 5px;
     align-self: flex-start;
@@ -44,9 +41,10 @@
     border-radius: 3px;
     background-color: @light-gray-2;
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 400;
     border: none;
     padding: 0 calc(@resetIconSize + @inputHorizontalPadding + 10px) 0 @inputHorizontalPadding;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), height 0s;
 
     &:focus {
       background-color: white;
@@ -67,7 +65,7 @@
 
     &-text {
       font-size: 12px;
-      font-weight: 300;
+      font-weight: 400;
       color: @my-error-color;
       margin: 0;
     }

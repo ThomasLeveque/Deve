@@ -9,7 +9,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 @globalHorizontalPadding;
+  padding-left: @globalHorizontalPadding;
   height: @headerHeight;
   background-color: @my-primary-color;
   color: white;
@@ -20,13 +20,20 @@
     color: inherit;
   }
 
-  .ant-btn-link {
-    color: inherit;
-    font-weight: 700;
-    padding-right: 0;
+  div.header-button {
+    background-color: @my-dark-mrimary-color;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
 
-    .anticon-login {
-      font-size: 18px;
+    .ant-btn-link {
+      color: inherit;
+      font-weight: 700;
+
+      .anticon-login {
+        font-size: 14px;
+      }
     }
   }
 }

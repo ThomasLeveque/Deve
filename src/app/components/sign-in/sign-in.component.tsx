@@ -3,7 +3,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Formik, Form, Field, FormikHelpers, FormikProps } from 'formik';
 
 import { FormInput } from '../../components/form-input/form-input.component';
-import Button from '../../components/custom-button/custom-button.component';
+import CustomButton from '../../components/custom-button/custom-button.component';
 import UnderlineLink from '../../components/underline-link/underline-link.component';
 
 import { login, signInWithGoole } from '../../firebase/firebase.service';
@@ -65,7 +65,7 @@ const SignIn: React.FC<RouteComponentProps<{}>> = ({ history }) => {
             component={FormInput}
           />
           {firebaseError && <p className="error-text text-align-center">{firebaseError}</p>}
-          <Button
+          <CustomButton
             text="Sign in"
             buttonType="primary"
             type="submit"
@@ -75,7 +75,7 @@ const SignIn: React.FC<RouteComponentProps<{}>> = ({ history }) => {
           <UnderlineLink type="insider" to="/forgot">
             Forgot password ?
           </UnderlineLink>
-          <Button
+          <CustomButton
             text="Sign in with"
             type="button"
             buttonType="with-google"
