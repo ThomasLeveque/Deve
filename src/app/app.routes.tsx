@@ -8,6 +8,7 @@ const AddLinkPage = lazy(() => import('./pages/add-link/add-link.page'));
 const SignInAndSignUpPage = lazy(() => import('./pages/sign-in-and-sign-up/sign-in-and-sign-up.page'));
 const ForgotPasswordPage = lazy(() => import('./pages/forgot-password/forgot-password.page'));
 const LinkDetailPage = lazy(() => import('./pages/link-detail/link-detail.page'));
+import Loading from './components/loading/loading.component';
 
 const AppRoutes = () => {
   const { currentUser } = useContext(CurrentUserContext);
@@ -15,7 +16,7 @@ const AppRoutes = () => {
   return (
     <Switch>
       <Route path="/" exact render={() => <Redirect to="/links" />} />
-      <Suspense fallback={<div>Loading Component...</div>}>
+      <Suspense fallback={<Loading />}>
         <Route exact path="/add" render={() => (currentUser ? <AddLinkPage /> : <Redirect to="/signin" />)} />
         <Route exact path="/signin" render={() => (currentUser ? <Redirect to="/" /> : <SignInAndSignUpPage />)} />
         <Route exact path="/forgot" render={() => (currentUser ? <Redirect to="/" /> : <ForgotPasswordPage />)} />
