@@ -1,15 +1,18 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/messaging';
 
 import { firebaseRoutes, firebaseConfigDev } from './firebase.config';
-import { IfirebaseConfig } from '../interfaces/firebase-config.interface';
+import { IfirebaseConfig } from './firebase.interface';
 
 const firebaseConfig = ((domain: string): IfirebaseConfig => firebaseRoutes[domain] || firebaseConfigDev)(window.document.domain);
 firebase.initializeApp(firebaseConfig);
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
+export const messaging = firebase.messaging();
+messaging.usePublicVapidKey('BKIOd24GGXjI3iGwwace7sQOLxSsXsJVQ6TwofkLRmsiSj3ublr8f-M81ciyja5ZUQL2MS7naVr48uBr10sauXQ');
 
 export const register = async (email: string, password: string): Promise<firebase.auth.UserCredential> => {
   return await auth.createUserWithEmailAndPassword(email, password);

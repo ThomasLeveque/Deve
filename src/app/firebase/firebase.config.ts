@@ -1,4 +1,4 @@
-import { IfirebaseConfig } from '../interfaces/firebase-config.interface';
+import { IfirebaseConfig } from './firebase.interface';
 
 export const firebaseConfigDev: IfirebaseConfig = {
   apiKey: 'AIzaSyACKzmyQVwDpckw9qd0BRdXR8u0VN_pfJY',
