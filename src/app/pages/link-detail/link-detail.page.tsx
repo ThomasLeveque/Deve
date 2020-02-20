@@ -74,7 +74,7 @@ const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
 
   return (
     <div className="link-detail-page">
-      <LinkItem showCount={false} link={link} />
+      <LinkItem showCount={false} link={link} animationDelay={0} />
       <textarea
         rows={6}
         cols={60}

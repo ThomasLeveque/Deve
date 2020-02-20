@@ -17,7 +17,7 @@ const LinkList: React.FC<IProps> = ({ hits }) => {
     <Row className="link-list" type="flex" gutter={[16, 16]}>
       {hits.map((link: ILink, index: number) => (
         <Col key={link.objectID} span={8}>
-          <LinkItem showCount={true} link={link} />
+          <LinkItem showCount={true} link={link} animationDelay={index} />
         </Col>
       ))}
     </Row>

@@ -10,7 +10,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.3s @bezier;
+  opacity: 0;
+  transform: translateY(20px);
+
+  &.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   &:hover {
     box-shadow: @cardShadow;

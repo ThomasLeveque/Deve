@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Formik, FormikHelpers, Form, Field, ErrorMessage, FormikProps } from 'formik';
-import { Row, Col, AutoComplete, Icon } from 'antd';
+import { Row, Col, AutoComplete, Icon, PageHeader } from 'antd';
 
 import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
 import { CategoriesContext } from '../../providers/categories/categories.provider';
@@ -9,10 +9,11 @@ import { firestore } from '../../firebase/firebase.service';
 import { FormInput } from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
 
-import { ILink, ICategory } from '../../interfaces/link.interface';
+import { ILink } from '../../interfaces/link.interface';
 import { ICreateLinkInitialState } from '../../interfaces/initial-states.type';
-import { linkSchema, categorySchema } from '../../schemas/link.schema';
+import { linkSchema } from '../../schemas/link.schema';
 import { isError, isValid as isValidCategory } from '../../utils';
+import { ICategory } from '../../interfaces/category.interface';
 
 import './add-link.styles.less';
 
@@ -70,6 +71,7 @@ const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
 
   return (
     <div className="add-link-page">
+      <PageHeader onBack={history.goBack} title={<h1 className="H2">Create a new link</h1>} />
       <Formik
         enableReinitialize
         initialValues={INITIAL_STATE}
@@ -174,7 +176,7 @@ const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
                   hasIcon
                   iconType="plus"
                   loading={isSubmitting || createLinkLoading}
-                  disabled={createLinkLoading || isSubmitting || !isValid || !isCategorieExist(values.category)}
+                  disabled={createLinkLoading || isSubmitting || !isValid}
                 />
               </div>
             </Form>

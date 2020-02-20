@@ -3,6 +3,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Icon, Row, Col, Typography, Tooltip } from 'antd';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { Highlight } from 'react-instantsearch-dom';
+import { useInView } from 'react-intersection-observer';
 
 import NotifContext from '../../contexts/notif/notif.context';
 import { firestore } from '../../firebase/firebase.service';
@@ -20,9 +21,10 @@ import './link-item.styles.less';
 interface IProps extends RouteComponentProps<{}> {
   link: ILink;
   showCount?: boolean;
+  animationDelay: number;
 }
 
-const LinkItem: React.FC<IProps> = ({ link, showCount = false, history }) => {
+const LinkItem: React.FC<IProps> = ({ link, showCount = false, history, animationDelay }) => {
   const { currentUser } = useContext(CurrentUserContext);
   const { openNotification } = useContext(NotifContext);
 
@@ -52,8 +54,13 @@ const LinkItem: React.FC<IProps> = ({ link, showCount = false, history }) => {
     }
   };
 
+  const [ref, inView, entry] = useInView({
+    threshold: 0.25,
+    triggerOnce: true
+  });
+
   return (
-    <div className="link-item">
+    <div className={`${inView ? 'in-view' : ''} link-item`} ref={ref}>
       <div className="link-item-data">
         <div>
           {link.category && <Tag text={link.category} color="green" />}
