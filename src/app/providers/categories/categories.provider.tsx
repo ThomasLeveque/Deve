@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 
-import { ICategory } from '../../interfaces/link.interface';
 import { firestore } from '../../firebase/firebase.service';
+import { ICategory } from '../../interfaces/category.interface';
 
 interface ICategoriesContext {
   categories: ICategory[];

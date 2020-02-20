@@ -15,8 +15,3 @@ export interface ILink {
   createdAt: Date | number;
   updatedAt: Date | number;
 }
-
-export interface ICategory {
-  id?: string;
-  name: string;
-}
