@@ -1,10 +1,9 @@
 import qs from 'qs';
-import algoliasearch from 'algoliasearch';
 
-export const searchClient = algoliasearch('TTUEP8C6PR', '5c870089e63a662c62a45c974c08d990');
-export const indexName = 'dev_links';
+import { IQueryParameters, IQueryState } from './algolia.interface';
+import { indexName } from './algolia.config';
 
-export const createURL = (state: any) => {
+export const createURL = (state: IQueryParameters): string => {
   const isDefaultRoute =
     !state.query && !state.sortBy && state.page === 1 && state.refinementList && state.refinementList.category.length === 0;
 
@@ -12,7 +11,7 @@ export const createURL = (state: any) => {
     return '';
   }
 
-  const queryParameters: any = {};
+  const queryParameters: Partial<IQueryState> = {};
 
   if (state.sortBy) {
     queryParameters.sortBy = encodeURIComponent(state.sortBy);
@@ -38,10 +37,10 @@ export const createURL = (state: any) => {
   return queryString;
 };
 
-export const searchStateToUrl = (searchState: any) => (searchState ? createURL(searchState) : '');
+export const searchStateToUrl = (searchState: IQueryParameters): string => (searchState ? createURL(searchState) : '');
 
-export const urlToSearchState = (location: any) => {
-  const { query = '', sortBy = indexName, page = 1, category = [] } = qs.parse(location.search.slice(1));
+export const urlToSearchState = (location: any): IQueryParameters => {
+  const { query = '', sortBy = indexName, page = 1, category = [] }: IQueryState = qs.parse(location.search.slice(1));
   // `qs` does not return an array when there's a single value.
   const allCategories = Array.isArray(category) ? category : [category].filter(Boolean);
 
