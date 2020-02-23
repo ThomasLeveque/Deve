@@ -2,15 +2,14 @@ import React, { useContext } from 'react';
 import { RouteComponentProps, match } from 'react-router-dom';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 
-import LinkItem from '../../components/link-item/link-item.component';
-
 import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
 import { firestore } from '../../firebase/firebase.service';
-
 import { ILink } from '../../interfaces/link.interface';
 import { IComment } from '../../interfaces/comment.interface';
 
 import './link-detail.styles.less';
+import Tag from '../../components/tag/tag.component';
+import Loading from '../../components/loading/loading.component';
 
 type Params = { linkId: string };
 
@@ -20,7 +19,7 @@ interface IProps extends RouteComponentProps<{}> {
 
 const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
   const { currentUser } = useContext(CurrentUserContext);
-
+  console.log(match);
   const [link, setLink] = React.useState<ILink>(null);
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>('');
@@ -65,7 +64,7 @@ const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
   };
 
   if (!isLoaded) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   if (error) {
@@ -74,7 +73,10 @@ const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
 
   return (
     <div className="link-detail-page">
-      <LinkItem showCount={false} link={link} animationDelay={0} />
+      <div>
+        <Tag text={link.category} color="green" />
+        <p>{link.description}</p>
+      </div>
       <textarea
         rows={6}
         cols={60}

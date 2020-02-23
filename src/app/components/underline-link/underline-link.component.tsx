@@ -4,7 +4,7 @@ import { Icon } from 'antd';
 
 import './underline-link.styles.less';
 
-type UnderlineLinkType = 'insider' | 'external';
+type UnderlineLinkType = 'insider' | 'external' | 'no-link-external';
 
 interface IProps extends RouteComponentProps<{}> {
   type: UnderlineLinkType;
@@ -18,6 +18,15 @@ const UnderlineLink: React.FC<IProps> = ({ type, to, href, children }) => {
       <Link className="underline-link" to={to}>
         {children}
       </Link>
+    );
+  }
+
+  if (type === 'no-link-external') {
+    return (
+      <span className="underline-link">
+        {children}
+        <Icon className="underline-link-icon" type="export" />
+      </span>
     );
   }
 

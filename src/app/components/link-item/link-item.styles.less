@@ -29,6 +29,17 @@
     flex-direction: column;
     justify-content: space-between;
 
+    &:hover {
+      .underline-link {
+        color: @my-primary-color;
+        text-decoration: none;
+
+        i.underline-link-icon {
+          clip-path: inset(0 0 0 0);
+        }
+      }
+    }
+
     .ais-Highlight-highlighted {
       background-color: @my-primary-color;
       color: white;
@@ -53,6 +64,7 @@
 
     .author {
       margin: 20px 0 10px;
+      color: black;
     }
   }
 

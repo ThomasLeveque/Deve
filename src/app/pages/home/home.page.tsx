@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { InstantSearch, Stats } from 'react-instantsearch-dom';
+import React from 'react';
+import { InstantSearch } from 'react-instantsearch-dom';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { urlToSearchState, searchStateToUrl, searchClient, indexName, createURL } from '../../algolia/algolia.service';
+import { searchClient, indexName } from '../../algolia/algolia.config';
 import LinkList from '../../components/link-list/link-list.component';
 import FilterBar from '../../components/filter-bar/filter-bar.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
@@ -11,24 +11,10 @@ import LinkPagination from '../../components/link-pagination/link-pagination.com
 
 import './home.styles.less';
 
-const HomePage: React.FC<RouteComponentProps> = ({ history, location }) => {
-  const [searchState, setSearchState] = useState(urlToSearchState(location));
-
-  const onSearchStateChange = (updatedSearchState: any) => {
-    history.push(searchStateToUrl(updatedSearchState), updatedSearchState);
-
-    setSearchState(updatedSearchState);
-  };
-
+const HomePage: React.FC<RouteComponentProps> = ({ history }) => {
   return (
     <div className="home-page">
-      <InstantSearch
-        searchClient={searchClient}
-        indexName={indexName}
-        searchState={searchState}
-        onSearchStateChange={onSearchStateChange}
-        createURL={createURL}
-      >
+      <InstantSearch searchClient={searchClient} indexName={indexName}>
         <FilterBar />
         <div className="home-page-top">
           <SortBy
@@ -39,7 +25,6 @@ const HomePage: React.FC<RouteComponentProps> = ({ history, location }) => {
             ]}
             defaultRefinement={indexName}
           />
-          <Stats />
           <CustomButton text="Add a link" buttonType="primary" hasIcon iconType="plus" onClick={() => history.push('add')} />
         </div>
         <LinkList />

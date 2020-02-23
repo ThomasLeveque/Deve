@@ -61,7 +61,7 @@ const LinkItem: React.FC<IProps> = ({ link, showCount = false, history, animatio
 
   return (
     <div className={`${inView ? 'in-view' : ''} link-item`} ref={ref}>
-      <div className="link-item-data">
+      <a className="link-item-data" href={link.url} target="_blank">
         <div>
           {link.category && <Tag text={link.category} color="green" />}
           <Tooltip title={link.description}>
@@ -69,9 +69,7 @@ const LinkItem: React.FC<IProps> = ({ link, showCount = false, history, animatio
               <Highlight tagName="span" hit={link} attribute="description" />
             </Title>
           </Tooltip>
-          <UnderlineLink type="external" href={link.url}>
-            On {getDomain(link.url)}
-          </UnderlineLink>
+          <UnderlineLink type="no-link-external">On {getDomain(link.url)}</UnderlineLink>
         </div>
         <Row type="flex" align="bottom" className="author light">
           <Col span={12} className="break-word">
@@ -81,7 +79,7 @@ const LinkItem: React.FC<IProps> = ({ link, showCount = false, history, animatio
             {distanceInWordsToNow(link.createdAt)}
           </Col>
         </Row>
-      </div>
+      </a>
       <div className="link-item-actions flex">
         <div className={`${alreadyLiked ? 'liked' : ''} favorite pointer`} onClick={handleVote}>
           <Icon type="fire" theme={alreadyLiked ? 'filled' : 'outlined'} className="icon" />

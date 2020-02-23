@@ -20,19 +20,30 @@
     color: inherit;
   }
 
-  div.header-button {
-    background-color: @my-dark-mrimary-color;
-    height: 100%;
+  > div {
     display: flex;
     align-items: center;
-    padding: 0 10px;
+    height: 100%;
 
-    .ant-btn-link {
-      color: inherit;
-      font-weight: 700;
-
-      .anticon-login {
-        font-size: 14px;
+    .search-icon {
+      margin-right: 25px;
+      cursor: pointer;
+    }
+  
+    div.header-button {
+      background-color: @my-dark-mrimary-color;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+  
+      .ant-btn-link {
+        color: inherit;
+        font-weight: 700;
+  
+        .anticon-login {
+          font-size: 14px;
+        }
       }
     }
   }
