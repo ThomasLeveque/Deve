@@ -1,6 +1,6 @@
-import { IUser } from './user.interface';
 import { IVote } from './vote.interface';
 import { IComment } from './comment.interface';
+import CurrentUser from '../models/current-user.model';
 
 export interface ILink {
   objectID?: string;
@@ -8,7 +8,7 @@ export interface ILink {
   url: string;
   description: string;
   category: string;
-  postedBy: IUser;
+  postedBy: CurrentUser;
   voteCount: number;
   votes: IVote[];
   comments: IComment[];

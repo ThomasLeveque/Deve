@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Formik, FormikHelpers, Form, Field, ErrorMessage, FormikProps } from 'formik';
+import { Formik, FormikHelpers, Form, Field, FormikProps } from 'formik';
 import { Row, Col, AutoComplete, Icon, PageHeader } from 'antd';
 
 import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
@@ -13,7 +13,7 @@ import { ILink } from '../../interfaces/link.interface';
 import { ICreateLinkInitialState } from '../../interfaces/initial-states.type';
 import { linkSchema } from '../../schemas/link.schema';
 import { isError, isValid as isValidCategory } from '../../utils';
-import { ICategory } from '../../interfaces/category.interface';
+import Category from '../../models/category.model';
 
 import './add-link.styles.less';
 
@@ -84,7 +84,7 @@ const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
         {({ isSubmitting, isValid, errors, touched, values, setFieldValue, setFieldTouched }: FormikProps<ICreateLinkInitialState>) => {
           const { Option } = AutoComplete;
           const autoCompleteChildren = categories
-            .map((category: ICategory) => (
+            .map((category: Category) => (
               <Option key={category.id} value={category.name}>
                 {category.name}
               </Option>

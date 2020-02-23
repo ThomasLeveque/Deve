@@ -1,10 +1,10 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useEffect } from 'react';
 
-import { IUser } from '../../interfaces/user.interface';
 import { auth, createUserProfileDocument } from '../../firebase/firebase.service';
+import CurrentUser from '../../models/current-user.model';
 
 interface ICurrentUserContext {
-  currentUser: IUser | null;
+  currentUser: CurrentUser;
   currentUserError: string | null;
   currentUserLoaded: boolean;
 }
@@ -16,7 +16,7 @@ export const CurrentUserContext = createContext<ICurrentUserContext>({
 });
 
 const CurrentUserProvider: React.FC = ({ children }) => {
-  const [currentUser, setCurrentUser] = React.useState<IUser | null>(null);
+  const [currentUser, setCurrentUser] = React.useState<CurrentUser>(null);
   const [currentUserError, setCurrentUserError] = React.useState<string | null>(null);
   const [currentUserLoaded, setCurrentUserLoaded] = React.useState<boolean>(false);
 
@@ -28,14 +28,7 @@ const CurrentUserProvider: React.FC = ({ children }) => {
             const userRef = await createUserProfileDocument(userAuth);
             userRef.onSnapshot(
               (snapshot: firebase.firestore.DocumentSnapshot) => {
-                const { displayName, email, createdAt, updatedAt } = snapshot.data();
-                setCurrentUser({
-                  id: snapshot.id,
-                  displayName,
-                  email,
-                  createdAt,
-                  updatedAt
-                });
+                setCurrentUser(new CurrentUser(snapshot));
                 setCurrentUserLoaded(true);
               },
               (err: any) => {

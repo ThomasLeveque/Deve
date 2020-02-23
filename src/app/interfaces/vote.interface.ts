@@ -1,5 +1,5 @@
-import { IUser } from './user.interface';
+import CurrentUser from '../models/current-user.model';
 
 export interface IVote {
-  voteBy: IUser;
+  voteBy: CurrentUser;
 }

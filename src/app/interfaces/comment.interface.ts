@@ -1,7 +1,7 @@
-import { IUser } from './user.interface';
+import CurrentUser from '../models/current-user.model';
 
 export interface IComment {
-  postedBy: IUser;
+  postedBy: CurrentUser;
   created: Date;
   text: string;
 }

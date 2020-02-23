@@ -1,10 +1,10 @@
 import React, { createContext, useState, useEffect } from 'react';
 
 import { firestore } from '../../firebase/firebase.service';
-import { ICategory } from '../../interfaces/category.interface';
+import Category from '../../models/category.model';
 
 interface ICategoriesContext {
-  categories: ICategory[];
+  categories: Category[];
   categoriesError: string | null;
   categoriesLoaded: boolean;
 }
@@ -16,17 +16,13 @@ export const CategoriesContext = createContext<ICategoriesContext>({
 });
 
 const CategoriesProvider: React.FC = ({ children }) => {
-  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [categoriesError, setCategoriesError] = useState<string | null>(null);
   const [categoriesLoaded, setCategoriesLoaded] = useState<boolean>(false);
 
   const handleSnapshot = (snapshot: firebase.firestore.QuerySnapshot) => {
-    const categories: ICategory[] | any = snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => {
-      return {
-        id: doc.id,
-        ...doc.data()
-      };
-    });
+    const categories: Category[] = snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => new Category(doc));
+    console.log(categories);
     setCategories(categories);
     setCategoriesLoaded(true);
   };
