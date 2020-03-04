@@ -1,5 +1,5 @@
 export default class Category {
-  id: string;
+  id?: string;
   name: string;
   count: number;
 

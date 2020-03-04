@@ -8,12 +8,11 @@ import { CategoriesContext } from '../../providers/categories/categories.provide
 import { firestore } from '../../firebase/firebase.service';
 import { FormInput } from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
-
-import { ILink } from '../../interfaces/link.interface';
 import { ICreateLinkInitialState } from '../../interfaces/initial-states.type';
 import { linkSchema } from '../../schemas/link.schema';
 import { isError, isValid as isValidCategory } from '../../utils';
 import Category from '../../models/category.model';
+import { Link } from '../../models/link.model';
 
 import './add-link.styles.less';
 
@@ -38,8 +37,9 @@ const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
     if (!currentUser) {
       history.push('/signin');
     } else {
+      const newCategory: Category = { name: category, count: 0 };
       setAddCatLoading(true);
-      await firestore.collection('categories').add({ name: category });
+      await firestore.collection('categories').add(newCategory);
       setAddCatLoading(false);
     }
   };
@@ -48,24 +48,38 @@ const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
     if (!currentUser) {
       history.push('/signin');
     } else {
-      const { id, displayName } = currentUser;
-      const newLink: ILink = {
-        url,
-        description,
-        category,
-        postedBy: {
-          id,
-          displayName
-        },
-        voteCount: 0,
-        votes: [],
-        comments: [],
-        createdAt: Date.now(),
-        updatedAt: Date.now()
-      };
-      setCreateLinkLoading(true);
-      await firestore.collection('links').add(newLink);
-      history.push('/');
+      try {
+        const { id, displayName } = currentUser;
+        const newLink: Link = {
+          url,
+          description,
+          category,
+          postedBy: {
+            id,
+            displayName
+          },
+          voteCount: 0,
+          votes: [],
+          comments: [],
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        };
+        setCreateLinkLoading(true);
+        const selectedCategory = categories.find((_category: Category) => _category.name === category);
+        selectedCategory.count += 1;
+        const categoryRef: firebase.firestore.DocumentReference = firestore.doc(`categories/${selectedCategory.id}`);
+        const linksRef: firebase.firestore.DocumentReference = firestore.collection('links').doc();
+        const batch: firebase.firestore.WriteBatch = firestore.batch();
+        batch.set(categoryRef, {
+          name: selectedCategory.name,
+          count: selectedCategory.count
+        });
+        batch.set(linksRef, newLink);
+        await batch.commit();
+        history.push('/');
+      } catch (err) {
+        console.log('Cannot add link:', err.message || err.toString());
+      }
     }
   };
 
