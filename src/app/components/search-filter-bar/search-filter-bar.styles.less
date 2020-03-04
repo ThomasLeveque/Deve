@@ -1,0 +1,20 @@
+@import '../../../assets/styles/colors.less';
+@import '../../../assets/styles/vars.less';
+
+.search-filter-bar {
+  overflow-y: auto;
+  width: @filterBarWidth;
+  height: calc(100% - @searchHeaderHeight - @globalVerticalPadding * 2 - (@searchInputHeight / 2));
+  border-right: 1px solid @light-gray-1;
+  padding: 0 @filterBarGlobalMargin 0 @globalHorizontalPadding;
+  margin: (@globalVerticalPadding + (@searchInputHeight / 2)) 0 @globalVerticalPadding 0;
+  overflow-y: auto;
+
+  .tag {
+    margin: 0 5px 5px 0;
+  }
+
+  h4 {
+    margin-bottom: 10px;
+  }
+}

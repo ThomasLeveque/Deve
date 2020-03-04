@@ -2,7 +2,7 @@ import React from 'react';
 import { connectPagination } from 'react-instantsearch-dom';
 import { Pagination } from 'antd';
 
-import './link-pagination.styles.less';
+import './search-link-pagination.styles.less';
 
 interface IProps {
   currentRefinement: number;
@@ -12,9 +12,9 @@ interface IProps {
 
 const PAGE_SIZE: number = 20;
 
-const LinkPagination: React.FC<IProps> = ({ currentRefinement, nbPages, refine }) => {
+const SearchLinkPagination: React.FC<IProps> = ({ currentRefinement, nbPages, refine }) => {
   return (
-    <div className="link-pagination">
+    <div className="search-link-pagination">
       <Pagination
         current={currentRefinement}
         defaultCurrent={currentRefinement}
@@ -27,4 +27,4 @@ const LinkPagination: React.FC<IProps> = ({ currentRefinement, nbPages, refine }
   );
 };
 
-export default connectPagination(LinkPagination);
+export default connectPagination(SearchLinkPagination);

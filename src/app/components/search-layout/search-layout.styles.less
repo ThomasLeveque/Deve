@@ -1,0 +1,34 @@
+@import '../../../assets/styles/colors.less';
+@import '../../../assets/styles/vars.less';
+
+.search-layout {
+  z-index: 20;
+  position: fixed;
+  height: calc(100% - @headerHeight);
+  top: @headerHeight;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(#000, 0.5);
+  cursor: pointer;
+}
+
+.search-modal {
+  pointer-events: none;
+  z-index: 30;
+  position: fixed;
+  top: @globalVerticalPadding + @headerHeight;
+  height: calc(100% - (@globalVerticalPadding * 2) - @headerHeight);
+  left: @globalHorizontalPadding;
+  right: @globalHorizontalPadding;
+
+  &-container {
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+}

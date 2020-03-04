@@ -1,0 +1,9 @@
+@import '../../../assets/styles/colors.less';
+@import '../../../assets/styles/vars.less';
+
+.search-link-list {
+  width: calc(100% - @filterBarWidth);
+  height: calc(100% - @searchHeaderHeight);
+  overflow-y: auto;
+  padding: (@globalVerticalPadding + (@searchInputHeight / 2)) @globalHorizontalPadding @globalVerticalPadding @filterBarGlobalMargin;
+}

@@ -5,52 +5,58 @@
 @resetIconSize: 18px;
 
 .search-input {
-  margin-bottom: 20px;
+  max-width: 500px;
   width: 100%;
-  position: relative;
+  position: absolute;
+  bottom: -@searchInputHeight / 2;
+  margin: 0 auto;
 
-  i.search-input-icon {
-    font-size: @resetIconSize;
+  &-container {
+    width: 100%;
+    position: relative;
 
-    &.gray {
-      color: @dark-gray-2;
-    }
+    i.search-input-icon {
+      font-size: @resetIconSize;
 
-    &.green {
-      color: @my-primary-color;
-    }
+      &.gray {
+        color: @dark-gray-2;
+      }
 
-    &.reset {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      right: @inputHorizontalPadding;
-      cursor: pointer;
-    }
-  
-    &.submit {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      left: @inputHorizontalPadding;
+      &.green {
+        color: @my-primary-color;
+      }
+
+      &.reset {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: @inputHorizontalPadding;
+        cursor: pointer;
+      }
+
+      &.submit {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: @inputHorizontalPadding;
+      }
     }
   }
-
   &-item {
     width: 100%;
-    height: 42px;
+    height: @searchInputHeight;
     border-radius: 3px;
     background-color: white;
     font-size: 14px;
     font-weight: 400;
     border: none;
     padding: 0 calc(@resetIconSize + @inputHorizontalPadding + 10px);
+    box-shadow: @inputShadow;
 
     &:focus {
       color: black;
       border: none;
       outline: none;
-      box-shadow: @inputShadow;
     }
 
     &::placeholder {
