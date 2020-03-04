@@ -1,25 +1,20 @@
 import React from 'react';
-import { Stats } from 'react-instantsearch-dom';
-
-import { ReactComponent as AlgoliaLogo } from '../../../assets/images/algolia-logo.svg';
-import SearchInput from '../search-input/search-input.component';
-import RefinementCategories from '../refinement-categories/refinement-categories.component';
-import ClearRefinementCategories from '../clear-refinement-categories/clear-refinement-categories.component';
+import { CategoriesContext } from '../../providers/categories/categories.provider';
+import Category from '../../models/category.model';
 
 import './filter-bar.styles.less';
+import Tag from '../tag/tag.component';
 
 const FilterBar: React.FC = () => {
+  const { usedCategories, totalUsedCategories } = React.useContext(CategoriesContext);
+  
   return (
     <div className="filter-bar">
-      <div className="result-logo">
-        <Stats />
-        <AlgoliaLogo />
-      </div>
-      <h4>Filter by search :</h4>
-      <SearchInput />
       <h4>Filter by categories :</h4>
-      <ClearRefinementCategories />
-      <RefinementCategories attribute="category" />
+      <Tag text={`all (${totalUsedCategories})`} color="green" />
+      {usedCategories.map((category: Category) => (
+        <Tag isButton key={category.id} text={`${category.name} (${category.count})`} color="green" />
+      ))}
     </div>
   );
 };

@@ -7,7 +7,12 @@ import { logout } from '../../firebase/firebase.service';
 
 import './header.styles.less';
 
-const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
+interface IProps extends RouteComponentProps<{}> {
+  searchClicked: () => void;
+  searchOpen: boolean;
+}
+
+const Header: React.FC<IProps> = ({ searchOpen, searchClicked, history }) => {
   const { currentUser } = React.useContext(CurrentUserContext);
 
   const menu = (
@@ -26,7 +31,7 @@ const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
         Hooks News
       </h2>
       <div>
-        <Icon type="search" className="search-icon" />
+        <Icon type={searchOpen ? 'close' : 'search'} className="search-icon" onClick={searchClicked} />
         <div className="header-button">
           {currentUser ? (
             <Dropdown placement="bottomRight" overlay={menu} trigger={['click']}>

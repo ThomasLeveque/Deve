@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Icon, Row, Col, Typography, Tooltip } from 'antd';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
-import { Highlight } from 'react-instantsearch-dom';
 import { useInView } from 'react-intersection-observer';
+import { Spring } from 'react-spring/renderprops';
 
 import NotifContext from '../../contexts/notif/notif.context';
 import { firestore } from '../../firebase/firebase.service';
@@ -13,18 +13,18 @@ import UnderlineLink from '../underline-link/underline-link.component';
 
 import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
 import { IVote } from '../../interfaces/vote.interface';
-import { ILink } from '../../interfaces/link.interface';
 import { getDomain } from '../../utils';
+import { ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/index';
+import { Link } from '../../models/link.model';
 
 import './link-item.styles.less';
 
 interface IProps extends RouteComponentProps<{}> {
-  link: ILink;
-  showCount?: boolean;
-  animationDelay: number;
+  link: Link;
+  index: number;
 }
 
-const LinkItem: React.FC<IProps> = ({ link, showCount = false, history, animationDelay }) => {
+const LinkItem: React.FC<IProps> = ({ link, history, index }) => {
   const { currentUser } = useContext(CurrentUserContext);
   const { openNotification } = useContext(NotifContext);
 
@@ -38,7 +38,7 @@ const LinkItem: React.FC<IProps> = ({ link, showCount = false, history, animatio
     } else if (alreadyLiked) {
       openNotification('You already liked it !', '', 'info');
     } else {
-      const voteRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(link.objectID);
+      const voteRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(link.id);
 
       const doc: firebase.firestore.DocumentSnapshot = await voteRef.get();
       if (doc.exists) {
@@ -54,43 +54,53 @@ const LinkItem: React.FC<IProps> = ({ link, showCount = false, history, animatio
     }
   };
 
-  const [ref, inView, entry] = useInView({
+  const [ref, inView] = useInView({
     threshold: 0.25,
     triggerOnce: true
   });
 
   return (
-    <div className={`${inView ? 'in-view' : ''} link-item`} ref={ref}>
-      <a className="link-item-data" href={link.url} target="_blank">
-        <div>
-          {link.category && <Tag text={link.category} color="green" />}
-          <Tooltip title={link.description}>
-            <Title ellipsis={{ rows: 3 }} level={4}>
-              <Highlight tagName="span" hit={link} attribute="description" />
-            </Title>
-          </Tooltip>
-          <UnderlineLink type="no-link-external">On {getDomain(link.url)}</UnderlineLink>
+    <Spring
+      to={{
+        opacity: inView ? 1 : 0,
+        transform: inView ? 'translate3d(0,0,0)' : 'translate3d(20px,0,0)'
+      }}
+      delay={(index % ITEMS_PER_LIGNE) * LINKS_TRANSITION_DElAY}
+    >
+      {props => (
+        <div style={props} className="link-item" ref={ref}>
+          <a className="link-item-data" href={link.url} target="_blank">
+            <div>
+              {link.category && <Tag text={link.category} color="green" />}
+              <Tooltip title={link.description}>
+                <Title ellipsis={{ rows: 3 }} level={4}>
+                  {link.description}
+                </Title>
+              </Tooltip>
+              <UnderlineLink type="no-link-external">On {getDomain(link.url)}</UnderlineLink>
+            </div>
+            <Row type="flex" align="bottom" className="author light">
+              <Col span={12} className="break-word">
+                by {link.postedBy.displayName}
+              </Col>
+              <Col span={12} className="text-align-right">
+                {distanceInWordsToNow(link.createdAt)}
+              </Col>
+            </Row>
+          </a>
+          <div className="link-item-actions flex">
+            <div className={`${alreadyLiked ? 'liked' : ''} favorite pointer`} onClick={handleVote}>
+              <Icon type="fire" theme={alreadyLiked ? 'filled' : 'outlined'} className="icon" />
+              <span className="count">{link.voteCount === 0 ? 'like' : link.voteCount}</span>
+            </div>
+            <div className="comment pointer" onClick={() => history.push(`/links/${link.id}`)}>
+              <Icon type="message" className="icon" />
+              <span className="count">{link.comments.length} comments</span>
+            </div>
+          </div>
         </div>
-        <Row type="flex" align="bottom" className="author light">
-          <Col span={12} className="break-word">
-            by {link.postedBy.displayName}
-          </Col>
-          <Col span={12} className="text-align-right">
-            {distanceInWordsToNow(link.createdAt)}
-          </Col>
-        </Row>
-      </a>
-      <div className="link-item-actions flex">
-        <div className={`${alreadyLiked ? 'liked' : ''} favorite pointer`} onClick={handleVote}>
-          <Icon type="fire" theme={alreadyLiked ? 'filled' : 'outlined'} className="icon" />
-          <span className="count">{link.voteCount === 0 ? 'like' : link.voteCount}</span>
-        </div>
-        <div className="comment pointer" onClick={() => history.push(`/links/${link.objectID}`)}>
-          <Icon type="message" className="icon" />
-          <span className="count">{link.comments.length} comments</span>
-        </div>
-      </div>
-    </div>
+      )}
+    </Spring>
   );
 };
 

@@ -10,13 +10,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  opacity: 0;
-  transform: translateY(20px);
-
-  &.in-view {
-    opacity: 1;
-    transform: translateY(0);
-  }
 
   &:hover {
     box-shadow: @cardShadow;
@@ -38,13 +31,6 @@
           clip-path: inset(0 0 0 0);
         }
       }
-    }
-
-    .ais-Highlight-highlighted {
-      background-color: @my-primary-color;
-      color: white;
-      padding: 0 1px;
-      font-weight: 700;
     }
 
     .tag {
