@@ -4,12 +4,12 @@ import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 
 import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
 import { firestore } from '../../firebase/firebase.service';
-import { ILink } from '../../interfaces/link.interface';
 import { IComment } from '../../interfaces/comment.interface';
-
-import './link-detail.styles.less';
 import Tag from '../../components/tag/tag.component';
 import Loading from '../../components/loading/loading.component';
+import { Link } from '../../models/link.model';
+
+import './link-detail.styles.less';
 
 type Params = { linkId: string };
 
@@ -19,8 +19,8 @@ interface IProps extends RouteComponentProps<{}> {
 
 const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
   const { currentUser } = useContext(CurrentUserContext);
-  console.log(match);
-  const [link, setLink] = React.useState<ILink>(null);
+
+  const [link, setLink] = React.useState<Link>(null);
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>('');
   const [commentText, setCommentText] = React.useState<string>('');
@@ -31,10 +31,10 @@ const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
   React.useEffect(() => {
     const unsubcribe = linkRef.onSnapshot(handleSnapshot, handleError);
     return () => unsubcribe();
-  }, []);
+  }, [linkId]);
 
   const handleSnapshot = (doc: firebase.firestore.DocumentSnapshot) => {
-    const link: ILink | any = { ...doc.data(), id: doc.id };
+    const link: Link = new Link(doc);
     setLink(link);
     setIsLoaded(true);
   };

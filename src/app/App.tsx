@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import AppRoutes from './app.routes';
 import Header from './components/header/header.component';
@@ -6,14 +6,14 @@ import ProgressBar from './components/progress-bar/progress-bar.component';
 import { CurrentUserContext } from './providers/current-user/current-user.provider';
 import { CategoriesContext } from './providers/categories/categories.provider';
 import SearchLayout from './components/search-layout/search-layout.component';
+import { SearchContext } from './providers/search/search.provider';
 
 import './app.styles.less';
 
 const App = () => {
   const { currentUserError, currentUserLoaded } = useContext(CurrentUserContext);
   const { categoriesError, categoriesLoaded } = useContext(CategoriesContext);
-  const [searchOpen, setSearchOpen] = useState<boolean>(false);
-  const [firstSearchOpen, setFirstSearchOpen] = useState<boolean>(false);
+  const { firstSearchOpen } = useContext(SearchContext);
 
   const renderRoutes = () => {
     if (currentUserError) {
@@ -31,25 +31,12 @@ const App = () => {
     return null;
   };
 
-  useEffect(() => {
-    if (searchOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.removeAttribute('style');
-    }
-  }, [searchOpen]);
-
-  const handleSearchClicked = () => {
-    setSearchOpen(prev => !prev);
-    setFirstSearchOpen(true);
-  };
-
   return (
     <div className="app">
-      <Header searchOpen={searchOpen} searchClicked={handleSearchClicked} />
+      <Header />
       <ProgressBar isAnimating={!categoriesLoaded || !currentUserLoaded} />
       <main>{renderRoutes()}</main>
-      {firstSearchOpen && <SearchLayout searchOpen={searchOpen} searchClicked={handleSearchClicked} />}
+      {firstSearchOpen && <SearchLayout />}
     </div>
   );
 };

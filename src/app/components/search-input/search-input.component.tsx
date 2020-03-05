@@ -25,6 +25,7 @@ const SearchInput: React.FC<SearchBoxProvided> = ({ currentRefinement, isSearchS
     <div className="search-input">
       <div className="search-input-container">
         <input
+          autoFocus
           className="search-input-item"
           type="search"
           value={value}

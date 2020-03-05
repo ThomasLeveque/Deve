@@ -25,22 +25,30 @@
     align-items: center;
     height: 100%;
 
-    .search-icon {
+    .search {
       padding: 25px;
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+
       cursor: pointer;
+      &-icon {
+        font-size: 13px;
+        margin-right: 6px;
+      }
     }
-  
+
     div.header-button {
       background-color: @my-dark-mrimary-color;
       height: 100%;
       display: flex;
       align-items: center;
       padding: 0 10px;
-  
+
       .ant-btn-link {
         color: inherit;
         font-weight: 700;
-  
+
         .anticon-login {
           font-size: 14px;
         }

@@ -3,11 +3,9 @@
 
 .search-filter-bar {
   overflow-y: auto;
-  width: @filterBarWidth;
-  height: calc(100% - @searchHeaderHeight - @globalVerticalPadding * 2 - (@searchInputHeight / 2));
-  border-right: 1px solid @light-gray-1;
-  padding: 0 @filterBarGlobalMargin 0 @globalHorizontalPadding;
-  margin: (@globalVerticalPadding + (@searchInputHeight / 2)) 0 @globalVerticalPadding 0;
+  width: calc(@filterBarWidth - 1px);
+  height: 100%;
+  padding: @globalVerticalPadding @filterBarGlobalMargin @globalVerticalPadding @globalHorizontalPadding;
   overflow-y: auto;
 
   .tag {

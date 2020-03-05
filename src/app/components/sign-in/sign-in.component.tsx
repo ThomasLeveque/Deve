@@ -70,7 +70,7 @@ const SignIn: React.FC<RouteComponentProps<{}>> = ({ history }) => {
             buttonType="primary"
             type="submit"
             disabled={isSubmitting || !isValid || withGoogleLoading}
-            loading={isSubmitting}
+            loading={isSubmitting || withGoogleLoading}
           />
           <UnderlineLink type="insider" to="/forgot">
             Forgot password ?
