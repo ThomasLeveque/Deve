@@ -1,6 +1,6 @@
 import { FormikErrors, FormikTouched } from 'formik';
 
-export const LINKS_PER_PAGE = 8;
+export const LINKS_PER_PAGE = 1;
 
 export const ITEMS_PER_LIGNE: number = 3;
 export const SEARCH_ITEMS_PER_LIGNE: number = 1;

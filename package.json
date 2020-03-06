@@ -34,6 +34,7 @@
     "react-spring": "^8.0.27",
     "typescript": "^3.5.3",
     "use-async-effect": "^2.2.1",
+    "use-query-params": "^0.6.0",
     "yup": "^0.27.0"
   },
   "scripts": {
