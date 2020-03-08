@@ -1,2 +1,84 @@
+@import '../../../assets/styles/vars.less';
+@import '../../../assets/styles/colors.less';
+
 .link-detail-page {
+  padding-bottom: @globalVerticalPadding;
+
+  .ant-page-header {
+    padding-left: 0;
+  }
+
+  .link-detail {
+    &-container {
+      background-color: white;
+      border-radius: 5px;
+      padding: 26px 30px 30px 30px;
+    }
+
+    &-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      h1 {
+        margin-right: 20px;
+      }
+    }
+
+    &-comments {
+      margin-top: 25px;
+
+      form {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        margin-bottom: 40px;
+
+        button[type="button"] {
+          margin-right: 15px;
+        }
+      }
+
+      .comment {
+        &-author {
+          margin-bottom: 4px;
+
+          span {
+            margin-left: 3px;
+            font-size: 12px;
+            font-weight: 400;
+            color: @dark-gray-2;
+          }
+        }
+
+        &-text {
+          margin: 0;
+          word-break: break-all;
+        }
+      }
+    }
+  }
+
+  .favorite {
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s @bezier;
+    text-transform: uppercase;
+    color: black;
+    margin-top: 15px;
+
+    &:hover {
+      color: @my-secondary-color;
+    }
+
+    i.icon {
+      margin-right: 4px;
+      font-size: 20px;
+    }
+
+    .count {
+      font-size: 13px;
+      font-weight: 700;
+    }
+  }
 }

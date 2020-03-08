@@ -17,3 +17,7 @@ export const linkSchema = yup.object().shape({
     .required('URL required'),
   category: yup.string().required('Category required')
 });
+
+export const commentSchema = yup.object().shape({
+  commentText: yup.string().required('Comment required')
+});

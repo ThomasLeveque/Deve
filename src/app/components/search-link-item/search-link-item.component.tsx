@@ -62,8 +62,8 @@ const SearchLinkItem: React.FC<IProps> = ({ link, history, index }) => {
               <Col span={12} className="break-word">
                 <UnderlineLink type="no-link-external">On {getDomain(link.url)}</UnderlineLink>
               </Col>
-              <Col span={12} className="text-align-right">
-                by {link.postedBy.displayName} | {distanceInWordsToNow(link.createdAt)}
+              <Col span={12} className="text-align-right P">
+                by {link.postedBy.displayName} | {distanceInWordsToNow(link.createdAt)} ago
               </Col>
             </Row>
           </a>

@@ -1,6 +1,8 @@
 import * as yup from 'yup';
-import { linkSchema } from '../schemas/link.schema';
+import { linkSchema, commentSchema } from '../schemas/link.schema';
 import { registerSchema, loginSchema, resetSchema } from '../schemas/user.schema';
+
+export type IAddCommentInitialState = yup.InferType<typeof commentSchema>;
 
 export type ICreateLinkInitialState = yup.InferType<typeof linkSchema>;
 

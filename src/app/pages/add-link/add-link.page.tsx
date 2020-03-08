@@ -27,7 +27,6 @@ const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   const { categories } = React.useContext(CategoriesContext);
 
   const [addCatLoading, setAddCatLoading] = React.useState<boolean>(false);
-  const [createLinkLoading, setCreateLinkLoading] = React.useState<boolean>(false);
 
   const isCategorieExist = (value: any) => {
     return !!categories.find(categorie => categorie.name === value);
@@ -64,7 +63,6 @@ const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
           createdAt: Date.now(),
           updatedAt: Date.now()
         };
-        setCreateLinkLoading(true);
         const selectedCategory = categories.find((_category: Category) => _category.name === category);
         selectedCategory.count += 1;
         const categoryRef: firebase.firestore.DocumentReference = firestore.doc(`categories/${selectedCategory.id}`);
@@ -184,13 +182,11 @@ const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
               </Row>
               <div className="add-link-buttons">
                 <CustomButton
-                  text={createLinkLoading ? 'Loading...' : 'Submit'}
+                  text="Add new link"
                   type="submit"
                   buttonType="primary"
-                  hasIcon
-                  iconType="plus"
-                  loading={isSubmitting || createLinkLoading}
-                  disabled={createLinkLoading || isSubmitting || !isValid}
+                  loading={isSubmitting}
+                  disabled={isSubmitting || !isValid}
                 />
               </div>
             </Form>

@@ -16,7 +16,7 @@ const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
     <Menu>
       <Menu.Item key="0">
         <div className="pointer" onClick={logout}>
-          Sign out
+          Sign out <Icon type="logout" />
         </div>
       </Menu.Item>
     </Menu>

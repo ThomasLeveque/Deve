@@ -79,12 +79,12 @@ const LinkItem: React.FC<IProps> = ({ link, history, index }) => {
               </Tooltip>
               <UnderlineLink type="no-link-external">On {getDomain(link.url)}</UnderlineLink>
             </div>
-            <Row type="flex" align="bottom" className="author light">
-              <Col span={12} className="break-word">
+            <Row type="flex" align="bottom" className="author light P">
+              <Col span={12} className="break-word P">
                 by {link.postedBy.displayName}
               </Col>
-              <Col span={12} className="text-align-right">
-                {distanceInWordsToNow(link.createdAt)}
+              <Col span={12} className="text-align-right P">
+                {distanceInWordsToNow(link.createdAt)} ago
               </Col>
             </Row>
           </a>
