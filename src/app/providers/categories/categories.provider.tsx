@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, memo } from 'react';
 
 import { firestore } from '../../firebase/firebase.service';
 import Category from '../../models/category.model';
@@ -19,7 +19,7 @@ export const CategoriesContext = createContext<ICategoriesContext>({
   categoriesLoaded: false
 });
 
-const CategoriesProvider: React.FC = ({ children }) => {
+const CategoriesProvider: React.FC = memo(({ children }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [usedCategories, setUsedCategories] = useState<Category[]>([]);
   const [totalUsedCategories, setTotalUsedCategories] = useState<number>(0);
@@ -65,6 +65,6 @@ const CategoriesProvider: React.FC = ({ children }) => {
       {children}
     </CategoriesContext.Provider>
   );
-};
+});
 
 export default CategoriesProvider;

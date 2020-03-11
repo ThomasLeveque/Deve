@@ -9,6 +9,7 @@ import CurrentUserProvider from './app/providers/current-user/current-user.provi
 import SearchProvider from './app/providers/search/search.provider';
 
 import './index.less';
+import LinksProvider from './app/providers/links/links.provider';
 
 ReactDOM.render(
   <CategoriesProvider>
@@ -16,7 +17,9 @@ ReactDOM.render(
       <SearchProvider>
         <BrowserRouter>
           <QueryParamProvider ReactRouterRoute={Route}>
-            <App />
+            <LinksProvider>
+              <App />
+            </LinksProvider>
           </QueryParamProvider>
         </BrowserRouter>
       </SearchProvider>

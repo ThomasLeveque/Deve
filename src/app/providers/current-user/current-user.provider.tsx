@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from 'react';
+import React, { createContext, useEffect, memo } from 'react';
 
 import { auth, createUserProfileDocument } from '../../firebase/firebase.service';
 import CurrentUser from '../../models/current-user.model';
@@ -15,7 +15,7 @@ export const CurrentUserContext = createContext<ICurrentUserContext>({
   currentUserLoaded: false
 });
 
-const CurrentUserProvider: React.FC = ({ children }) => {
+const CurrentUserProvider: React.FC = memo(({ children }) => {
   const [currentUser, setCurrentUser] = React.useState<CurrentUser>(null);
   const [currentUserError, setCurrentUserError] = React.useState<string | null>(null);
   const [currentUserLoaded, setCurrentUserLoaded] = React.useState<boolean>(false);
@@ -65,6 +65,6 @@ const CurrentUserProvider: React.FC = ({ children }) => {
       {children}
     </CurrentUserContext.Provider>
   );
-};
+});
 
 export default CurrentUserProvider;

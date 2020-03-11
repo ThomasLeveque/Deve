@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, memo } from 'react';
 
 interface ISearchContext {
   isSearchOpen: boolean;
@@ -12,7 +12,7 @@ export const SearchContext = createContext<ISearchContext>({
   toggleSearch: null
 });
 
-const SearchProvider: React.FC = ({ children }) => {
+const SearchProvider: React.FC = memo(({ children }) => {
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [firstSearchOpen, setFirstSearchOpen] = useState<boolean>(false);
 
@@ -40,6 +40,6 @@ const SearchProvider: React.FC = ({ children }) => {
       {children}
     </SearchContext.Provider>
   );
-};
+});
 
 export default SearchProvider;
