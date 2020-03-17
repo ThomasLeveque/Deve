@@ -20,3 +20,7 @@ export const isError = (errors: FormikErrors<any>, touched: FormikTouched<any>, 
 export const isValid = (errors: FormikErrors<any>, touched: FormikTouched<any>, name: string): boolean => {
   return !!(!errors[name] && touched[name]);
 };
+
+export const formatError = (err: any): string => {
+  return err.message || err.toString();
+};

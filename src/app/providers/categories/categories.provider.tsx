@@ -1,7 +1,9 @@
-import React, { createContext, useState, useEffect, memo } from 'react';
+import React, { createContext, useState, useEffect, memo, useContext } from 'react';
 
 import { firestore } from '../../firebase/firebase.service';
 import Category from '../../models/category.model';
+import { formatError } from '../../utils';
+import NotifContext from '../../contexts/notif/notif.context';
 
 interface ICategoriesContext {
   categories: Category[];
@@ -26,6 +28,8 @@ const CategoriesProvider: React.FC = memo(({ children }) => {
   const [categoriesError, setCategoriesError] = useState<string | null>(null);
   const [categoriesLoaded, setCategoriesLoaded] = useState<boolean>(false);
 
+  const { openNotification } = useContext(NotifContext);
+
   const handleSnapshot = (snapshot: firebase.firestore.QuerySnapshot) => {
     const categories: Category[] = snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => new Category(doc));
     setCategories(categories);
@@ -34,7 +38,9 @@ const CategoriesProvider: React.FC = memo(({ children }) => {
   };
 
   const handleError = (err: any) => {
-    setCategoriesError(err.message || err.toString());
+    setCategoriesError(formatError(err));
+    console.error(err);
+    openNotification('Cannot get categories', 'Try to reload', 'error');
     setCategoriesLoaded(true);
   };
 

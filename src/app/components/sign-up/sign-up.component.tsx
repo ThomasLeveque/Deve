@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Formik, Form, Field, FormikHelpers, FormikProps } from 'formik';
 
@@ -9,6 +9,8 @@ import UnderlineLink from '../../components/underline-link/underline-link.compon
 import { register, createUserProfileDocument } from '../../firebase/firebase.service';
 import { IRegisterInitialState } from '../../interfaces/initial-states.type';
 import { registerSchema } from '../../schemas/user.schema';
+import NotifContext from '../../contexts/notif/notif.context';
+import { formatError } from '../../utils';
 
 import './sign-up.styles.less';
 
@@ -21,6 +23,8 @@ const INITIAL_REGISTER_STATE: IRegisterInitialState = {
 const SignUp: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   const [firebaseError, setFirebaseError] = React.useState<string | null>(null);
 
+  const { openNotification } = useContext(NotifContext);
+
   const authenticateUser = async (values: IRegisterInitialState): Promise<void> => {
     const { displayName, email, password }: IRegisterInitialState = values;
     try {
@@ -28,7 +32,9 @@ const SignUp: React.FC<RouteComponentProps<{}>> = ({ history }) => {
       await createUserProfileDocument(user, { displayName });
       history.push('/');
     } catch (err) {
-      setFirebaseError(err.message || err.toString());
+      console.error(err);
+      openNotification('Cannot register you', 'Try again', 'error');
+      setFirebaseError(formatError(err));
     }
   };
 

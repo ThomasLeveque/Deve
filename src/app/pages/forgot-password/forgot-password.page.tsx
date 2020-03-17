@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { Formik, FormikHelpers, FormikProps, Form, Field } from 'formik';
 
-import NotifContext from '../../contexts/notif/notif.context';
-import { resetPassword } from '../../firebase/firebase.service';
-
 import { FormInput } from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
 
 import { IResetInitialState } from '../../interfaces/initial-states.type';
 import { resetSchema } from '../../schemas/user.schema';
+import { formatError } from '../../utils';
+import NotifContext from '../../contexts/notif/notif.context';
+import { resetPassword } from '../../firebase/firebase.service';
 
 import './forgot-password.styles.less';
 
@@ -28,9 +28,9 @@ const ForgotPasswordPage: React.FC = () => {
       openNotification('Email send', `to ${email}`, 'success');
       setPasswordResetError(null);
     } catch (err) {
-      openNotification('Error sending email', err.message, 'error');
+      openNotification('Error sending email', '', 'error');
       console.error(err);
-      setPasswordResetError(err.message);
+      setPasswordResetError(formatError(err));
     }
   };
 

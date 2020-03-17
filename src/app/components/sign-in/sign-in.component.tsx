@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Formik, Form, Field, FormikHelpers, FormikProps } from 'formik';
 
@@ -9,6 +9,9 @@ import UnderlineLink from '../../components/underline-link/underline-link.compon
 import { login, signInWithGoole } from '../../firebase/firebase.service';
 import { ILoginInitialState } from '../../interfaces/initial-states.type';
 import { loginSchema } from '../../schemas/user.schema';
+
+import { formatError } from '../../utils';
+import NotifContext from '../../contexts/notif/notif.context';
 
 import './sign-in.styles.less';
 
@@ -21,13 +24,17 @@ const SignIn: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   const [firebaseError, setFirebaseError] = React.useState<string | null>(null);
   const [withGoogleLoading, setWithGoogleLoading] = React.useState<boolean>(false);
 
+  const { openNotification } = useContext(NotifContext);
+
   const authenticateUser = async (values: ILoginInitialState): Promise<void> => {
     const { email, password }: ILoginInitialState = values;
     try {
       await login(email, password);
       history.push('/');
     } catch (err) {
-      setFirebaseError(err.message || err.toString());
+      console.error(err);
+      setFirebaseError(formatError(err));
+      openNotification('Cannot login with email and password', 'Try again', 'error');
     }
   };
 
@@ -37,7 +44,9 @@ const SignIn: React.FC<RouteComponentProps<{}>> = ({ history }) => {
       await signInWithGoole();
       setWithGoogleLoading(false);
     } catch (err) {
-      setFirebaseError(err.message);
+      console.error(err);
+      setFirebaseError(formatError(err));
+      openNotification('Cannot login with google', 'Try again', 'error');
       setWithGoogleLoading(false);
     }
   };

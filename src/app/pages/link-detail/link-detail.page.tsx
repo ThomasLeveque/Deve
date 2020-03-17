@@ -4,19 +4,21 @@ import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { PageHeader, Row, Col, Icon, Divider } from 'antd';
 import { Formik, Form, FormikHelpers, FormikProps, Field } from 'formik';
 
+import Loading from '../../components/loading/loading.component';
+import CustomButton from '../../components/custom-button/custom-button.component';
+import Tag from '../../components/tag/tag.component';
+import { FormInput } from '../../components/form-input/form-input.component';
+
 import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
 import { firestore } from '../../firebase/firebase.service';
 import { IComment } from '../../interfaces/comment.interface';
-import Tag from '../../components/tag/tag.component';
-import Loading from '../../components/loading/loading.component';
 import { Link } from '../../models/link.model';
-import CustomButton from '../../components/custom-button/custom-button.component';
-import { FormInput } from '../../components/form-input/form-input.component';
 import { IAddCommentInitialState } from '../../interfaces/initial-states.type';
 import { commentSchema } from '../../schemas/link.schema';
 import { IVote } from '../../interfaces/vote.interface';
 import NotifContext from '../../contexts/notif/notif.context';
 import { LinksContext } from '../../providers/links/links.provider';
+import { formatError } from '../../utils';
 
 import './link-detail.styles.less';
 
@@ -55,7 +57,9 @@ const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
   };
 
   const handleError = (err: any) => {
-    setError(err.message || err.toString());
+    setError(formatError(err));
+    openNotification(`Cannot load [${linkId}] link`, 'Try to reload', 'error');
+    console.error(err);
     setIsLoaded(true);
   };
 

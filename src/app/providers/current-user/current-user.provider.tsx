@@ -1,7 +1,9 @@
-import React, { createContext, useEffect, memo } from 'react';
+import React, { createContext, useEffect, memo, useContext } from 'react';
 
 import { auth, createUserProfileDocument } from '../../firebase/firebase.service';
 import CurrentUser from '../../models/current-user.model';
+import NotifContext from '../../contexts/notif/notif.context';
+import { formatError } from '../../utils/index';
 
 interface ICurrentUserContext {
   currentUser: CurrentUser;
@@ -20,6 +22,8 @@ const CurrentUserProvider: React.FC = memo(({ children }) => {
   const [currentUserError, setCurrentUserError] = React.useState<string | null>(null);
   const [currentUserLoaded, setCurrentUserLoaded] = React.useState<boolean>(false);
 
+  const { openNotification } = useContext(NotifContext);
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(
       async (userAuth: firebase.User | null) => {
@@ -32,12 +36,16 @@ const CurrentUserProvider: React.FC = memo(({ children }) => {
                 setCurrentUserLoaded(true);
               },
               (err: any) => {
-                setCurrentUserError(err.message || err.toString());
+                setCurrentUserError(formatError(err));
+                console.error(err);
                 setCurrentUserLoaded(true);
+                openNotification('Cannot get currentUser from firestore', '', 'error');
               }
             );
           } catch (err) {
-            setCurrentUserError(err.message || err.toString());
+            setCurrentUserError(formatError(err));
+            console.error(err);
+            openNotification('Cannot create user profil', '', 'error');
             setCurrentUserLoaded(true);
           }
         } else {
@@ -46,7 +54,9 @@ const CurrentUserProvider: React.FC = memo(({ children }) => {
         }
       },
       (err: firebase.auth.Error) => {
-        setCurrentUserError(err.message);
+        openNotification('Cannot check for user auth', '', 'error');
+        setCurrentUserError(formatError(err));
+        console.error(err);
         setCurrentUserLoaded(true);
       }
     );

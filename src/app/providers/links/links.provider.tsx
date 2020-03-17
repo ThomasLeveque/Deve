@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, memo } from 'react';
+import React, { createContext, useState, useEffect, memo, useContext } from 'react';
 import { useQueryParam, StringParam } from 'use-query-params';
 
 import { firestore } from '../../firebase/firebase.service';
@@ -9,6 +9,7 @@ import Category from '../../models/category.model';
 import CurrentUser from '../../models/current-user.model';
 import { IVote } from '../../interfaces/vote.interface';
 import { IComment } from '../../interfaces/comment.interface';
+import NotifContext from '../../contexts/notif/notif.context';
 
 interface ILinks {
   [id: string]: Link;
@@ -48,6 +49,8 @@ const LinksProvider: React.FC = memo(({ children }) => {
   const [qsSortby] = useQueryParam('sortby', StringParam);
   const [qsCategory] = useQueryParam('category', StringParam);
 
+  const { openNotification } = useContext(NotifContext);
+
   const getQuery = (): firebase.firestore.Query => {
     let linkRef: firebase.firestore.Query = firestore.collection('links');
 
@@ -67,19 +70,24 @@ const LinksProvider: React.FC = memo(({ children }) => {
   };
 
   const loadMoreLinks = async (): Promise<any> => {
-    if (cursor) {
-      setLoadingMoreLinks(true);
-      const snapshot: firebase.firestore.QuerySnapshot = await getQuery()
-        .startAfter(cursor)
-        .limit(LINKS_PER_PAGE)
-        .get();
-      let links: { [id: string]: Link } = {};
-      snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => (links[doc.id] = new Link(doc)));
-      const _cursor = snapshot.docs[snapshot.docs.length - 1];
-      setHasMoreLinks(!snapshot.empty);
-      setLoadingMoreLinks(false);
-      setLinks(prevLinks => ({ ...prevLinks, ...links }));
-      setCursor(_cursor);
+    try {
+      if (cursor) {
+        setLoadingMoreLinks(true);
+        const snapshot: firebase.firestore.QuerySnapshot = await getQuery()
+          .startAfter(cursor)
+          .limit(LINKS_PER_PAGE)
+          .get();
+        let links: { [id: string]: Link } = {};
+        snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => (links[doc.id] = new Link(doc)));
+        const _cursor = snapshot.docs[snapshot.docs.length - 1];
+        setHasMoreLinks(!snapshot.empty);
+        setLoadingMoreLinks(false);
+        setLinks(prevLinks => ({ ...prevLinks, ...links }));
+        setCursor(_cursor);
+      }
+    } catch (err) {
+      openNotification('Cannot load more links', 'Try to reload', 'error');
+      console.error(err);
     }
   };
 
@@ -119,84 +127,85 @@ const LinksProvider: React.FC = memo(({ children }) => {
       const linkSnapshot: firebase.firestore.DocumentSnapshot = await linkRef.get();
       const newLinkFromFirestore = new Link(linkSnapshot);
       setLinks(prevLinks => ({ [linkSnapshot.id]: newLinkFromFirestore, ...prevLinks }));
+      openNotification(`Link [${linkSnapshot.id}] have been added`, '', 'success');
     } catch (err) {
-      console.error('Cannot add link:', err.message || err.toString());
+      openNotification('Cannot add this link', '', 'error');
+      console.error(err);
     }
   };
 
   const addCommentLink = async (commentText: string, linkId: string, currentUser: CurrentUser) => {
     const commentRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
 
+    const previousComments: IComment[] = links[linkId].comments;
+    const comment: IComment = {
+      postedBy: { id: currentUser.id, displayName: currentUser.displayName },
+      created: Date.now(),
+      text: commentText
+    };
+    const updatedComments: IComment[] = [...previousComments, comment];
+
+    links[linkId].comments = updatedComments;
+    setLinks({ ...links });
+
     try {
-      const previousComments: IComment[] = links[linkId].comments;
-      const comment: IComment = {
-        postedBy: { id: currentUser.id, displayName: currentUser.displayName },
-        created: Date.now(),
-        text: commentText
-      };
-      const updatedComments: IComment[] = [...previousComments, comment];
-
-      links[linkId].comments = updatedComments;
-      setLinks({ ...links });
-
-      try {
-        commentRef.update({ comments: updatedComments });
-      } catch (err) {
-        links[linkId].comments = previousComments;
-        setLinks({ ...links });
-        console.error(`Cannot update ${linkId} link`, err.message || err.toString());
-      }
+      commentRef.update({ comments: updatedComments });
     } catch (err) {
-      console.error(`Cannot get ${linkId} link`, err.message || err.toString());
+      links[linkId].comments = previousComments;
+      setLinks({ ...links });
+      openNotification(`Cannot add comment for [${linkId}] link`, '', 'error');
+      console.error(err);
     }
   };
 
   const updateVoteLinks = async (linkId: string, currentUser: CurrentUser, type: UpdateVoteLinksType) => {
     const voteRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
 
-    try {
-      const previousVotes: IVote[] = links[linkId].votes;
-      const { id, displayName } = currentUser;
-      const vote: IVote = {
-        voteBy: { id, displayName }
-      };
-      let updatedVotes: IVote[];
-      if (type === 'add') {
-        updatedVotes = [...previousVotes, vote];
-      } else {
-        updatedVotes = previousVotes.filter((vote: IVote) => vote.voteBy.id !== currentUser.id);
-      }
-      const voteCount = updatedVotes.length;
+    const previousVotes: IVote[] = links[linkId].votes;
+    const { id, displayName } = currentUser;
+    const vote: IVote = {
+      voteBy: { id, displayName }
+    };
+    let updatedVotes: IVote[];
+    if (type === 'add') {
+      updatedVotes = [...previousVotes, vote];
+    } else {
+      updatedVotes = previousVotes.filter((vote: IVote) => vote.voteBy.id !== currentUser.id);
+    }
+    const voteCount = updatedVotes.length;
 
-      links[linkId].votes = updatedVotes;
-      links[linkId].voteCount = voteCount;
-      setLinks({ ...links });
-      try {
-        voteRef.update({ votes: updatedVotes, voteCount });
-      } catch (err) {
-        links[linkId].votes = previousVotes;
-        links[linkId].voteCount = previousVotes.length;
-        setLinks({ ...links });
-        console.error(`Cannot update ${linkId} link`, err.message || err.toString());
-      }
+    links[linkId].votes = updatedVotes;
+    links[linkId].voteCount = voteCount;
+    setLinks({ ...links });
+    try {
+      voteRef.update({ votes: updatedVotes, voteCount });
     } catch (err) {
-      console.error(`Cannot get ${linkId} link`, err.message || err.toString());
+      links[linkId].votes = previousVotes;
+      links[linkId].voteCount = previousVotes.length;
+      setLinks({ ...links });
+      openNotification(`Cannot add vote for [${linkId}] link`, '', 'error');
+      console.error(err);
     }
   };
 
   useEffect(() => {
     const asyncEffect = async () => {
-      setLinksLoaded(false);
-      const snapshot: firebase.firestore.QuerySnapshot = await getQuery()
-        .limit(LINKS_PER_PAGE)
-        .get();
-      let links: { [id: string]: Link } = {};
-      snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => (links[doc.id] = new Link(doc)));
-      const _cursor = snapshot.docs[snapshot.docs.length - 1];
-      setHasMoreLinks(!snapshot.empty);
-      setLinksLoaded(true);
-      setCursor(_cursor);
-      setLinks(links);
+      try {
+        setLinksLoaded(false);
+        const snapshot: firebase.firestore.QuerySnapshot = await getQuery()
+          .limit(LINKS_PER_PAGE)
+          .get();
+        let links: { [id: string]: Link } = {};
+        snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => (links[doc.id] = new Link(doc)));
+        const _cursor = snapshot.docs[snapshot.docs.length - 1];
+        setHasMoreLinks(!snapshot.empty);
+        setLinksLoaded(true);
+        setCursor(_cursor);
+        setLinks(links);
+      } catch (err) {
+        openNotification('Cannot load links', 'Try to reload', 'error');
+        console.error(err);
+      }
     };
     asyncEffect();
   }, [qsCategory, qsSortby]);
