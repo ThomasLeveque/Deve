@@ -14,6 +14,9 @@ import CustomButton from '../../components/custom-button/custom-button.component
 import { FormInput } from '../../components/form-input/form-input.component';
 import { IAddCommentInitialState } from '../../interfaces/initial-states.type';
 import { commentSchema } from '../../schemas/link.schema';
+import { IVote } from '../../interfaces/vote.interface';
+import NotifContext from '../../contexts/notif/notif.context';
+import { LinksContext } from '../../providers/links/links.provider';
 
 import './link-detail.styles.less';
 
@@ -29,12 +32,15 @@ const INITIAL_STATE: IAddCommentInitialState = {
 
 const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
   const { currentUser } = useContext(CurrentUserContext);
+  const { openNotification } = useContext(NotifContext);
+  const { updateVoteLinks, addCommentLink } = useContext(LinksContext);
 
   const [link, setLink] = React.useState<Link>(null);
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>('');
 
   const linkId: string = match.params.linkId;
+  const alreadyLiked: boolean = !!(link && link.votes.find((vote: IVote) => currentUser && vote.voteBy.id === currentUser.id));
   const linkRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
 
   React.useEffect(() => {
@@ -53,21 +59,21 @@ const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
     setIsLoaded(true);
   };
 
+  const handleVote = async (): Promise<void> => {
+    if (!currentUser) {
+      history.push('/signin');
+    } else if (alreadyLiked) {
+      updateVoteLinks(link.id, currentUser, 'remove');
+    } else {
+      updateVoteLinks(link.id, currentUser, 'add');
+    }
+  };
+
   const handleAddComment = async ({ commentText }: IAddCommentInitialState) => {
     if (!currentUser) {
       history.push('/signin');
     } else {
-      const doc: firebase.firestore.QueryDocumentSnapshot = await linkRef.get();
-      if (doc.exists) {
-        const previousComments = doc.data().comments;
-        const comment = {
-          postedBy: { id: currentUser.id, displayName: currentUser.displayName },
-          created: Date.now(),
-          text: commentText
-        };
-        const updatedComments = [...previousComments, comment];
-        await linkRef.update({ comments: updatedComments });
-      }
+      addCommentLink(commentText, link.id, currentUser);
     }
   };
 
@@ -95,8 +101,8 @@ const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
             {distanceInWordsToNow(link.createdAt)} ago
           </Col>
         </Row>
-        <div className="favorite pointer">
-          <Icon type="fire" theme="outlined" className="icon" />
+        <div className={`${alreadyLiked ? 'liked' : ''} favorite pointer`} onClick={handleVote}>
+          <Icon type="fire" theme={alreadyLiked ? 'filled' : 'outlined'} className="icon" />
           <span className="count">{link.voteCount === 0 ? 'like' : link.voteCount}</span>
         </div>
 
@@ -114,14 +120,7 @@ const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
             {({ isSubmitting, isValid, setFieldValue }: FormikProps<IAddCommentInitialState>) => {
               return (
                 <Form>
-                  <Field
-                    autoComplete="off"
-                    name="commentText"
-                    placeholder="Add new comment"
-                    type="text"
-                    isTextarea
-                    component={FormInput}
-                  />
+                  <Field autoComplete="off" name="commentText" placeholder="Add new comment" type="text" isTextarea component={FormInput} />
                   <CustomButton
                     type="button"
                     text="Reset"

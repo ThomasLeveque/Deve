@@ -6,11 +6,11 @@ import { useInView } from 'react-intersection-observer';
 import { Spring } from 'react-spring/renderprops';
 
 import NotifContext from '../../contexts/notif/notif.context';
-import { firestore } from '../../firebase/firebase.service';
 
 import Tag from '../tag/tag.component';
 import UnderlineLink from '../underline-link/underline-link.component';
 
+import { LinksContext } from '../../providers/links/links.provider';
 import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
 import { IVote } from '../../interfaces/vote.interface';
 import { getDomain } from '../../utils';
@@ -26,31 +26,19 @@ interface IProps extends RouteComponentProps<{}> {
 
 const LinkItem: React.FC<IProps> = ({ link, history, index }) => {
   const { currentUser } = useContext(CurrentUserContext);
+  const { updateVoteLinks } = useContext(LinksContext);
   const { openNotification } = useContext(NotifContext);
 
   const { Title } = Typography;
-  const postedByAuthUser: boolean = currentUser && currentUser.id === link.postedBy.id;
   const alreadyLiked: boolean = !!link.votes.find((vote: IVote) => currentUser && vote.voteBy.id === currentUser.id);
 
   const handleVote = async (): Promise<void> => {
     if (!currentUser) {
       history.push('/signin');
     } else if (alreadyLiked) {
-      openNotification('You already liked it !', '', 'info');
+      updateVoteLinks(link.id, currentUser, 'remove');
     } else {
-      const voteRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(link.id);
-
-      const doc: firebase.firestore.DocumentSnapshot = await voteRef.get();
-      if (doc.exists) {
-        const previousVotes = doc.data().votes;
-        const { id, displayName } = currentUser;
-        const vote: IVote = {
-          voteBy: { id, displayName }
-        };
-        const updatedVotes: IVote[] = [...previousVotes, vote];
-        const voteCount = updatedVotes.length;
-        voteRef.update({ votes: updatedVotes, voteCount });
-      }
+      updateVoteLinks(link.id, currentUser, 'add');
     }
   };
 

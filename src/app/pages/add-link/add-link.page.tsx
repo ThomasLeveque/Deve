@@ -4,6 +4,7 @@ import { Formik, FormikHelpers, Form, Field, FormikProps } from 'formik';
 import { Row, Col, AutoComplete, Icon, PageHeader } from 'antd';
 
 import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
+import { LinksContext } from '../../providers/links/links.provider';
 import { CategoriesContext } from '../../providers/categories/categories.provider';
 import { firestore } from '../../firebase/firebase.service';
 import { FormInput } from '../../components/form-input/form-input.component';
@@ -12,7 +13,6 @@ import { ICreateLinkInitialState } from '../../interfaces/initial-states.type';
 import { linkSchema } from '../../schemas/link.schema';
 import { isError, isValid as isValidCategory } from '../../utils';
 import Category from '../../models/category.model';
-import { Link } from '../../models/link.model';
 
 import './add-link.styles.less';
 
@@ -25,6 +25,7 @@ const INITIAL_STATE: ICreateLinkInitialState = {
 const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   const { currentUser } = React.useContext(CurrentUserContext);
   const { categories } = React.useContext(CategoriesContext);
+  const { addLink } = React.useContext(LinksContext);
 
   const [addCatLoading, setAddCatLoading] = React.useState<boolean>(false);
 
@@ -43,44 +44,6 @@ const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
     }
   };
 
-  const handleCreateLink = async ({ url, description, category }: ICreateLinkInitialState): Promise<void> => {
-    if (!currentUser) {
-      history.push('/signin');
-    } else {
-      try {
-        const { id, displayName } = currentUser;
-        const newLink: Link = {
-          url,
-          description,
-          category,
-          postedBy: {
-            id,
-            displayName
-          },
-          voteCount: 0,
-          votes: [],
-          comments: [],
-          createdAt: Date.now(),
-          updatedAt: Date.now()
-        };
-        const selectedCategory = categories.find((_category: Category) => _category.name === category);
-        selectedCategory.count += 1;
-        const categoryRef: firebase.firestore.DocumentReference = firestore.doc(`categories/${selectedCategory.id}`);
-        const linksRef: firebase.firestore.DocumentReference = firestore.collection('links').doc();
-        const batch: firebase.firestore.WriteBatch = firestore.batch();
-        batch.set(categoryRef, {
-          name: selectedCategory.name,
-          count: selectedCategory.count
-        });
-        batch.set(linksRef, newLink);
-        await batch.commit();
-        history.push('/');
-      } catch (err) {
-        console.log('Cannot add link:', err.message || err.toString());
-      }
-    }
-  };
-
   return (
     <div className="add-link-page">
       <PageHeader onBack={history.goBack} title={<h1 className="H2">Create a new link</h1>} />
@@ -89,8 +52,13 @@ const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
         initialValues={INITIAL_STATE}
         validationSchema={linkSchema}
         onSubmit={async (values: ICreateLinkInitialState, { setSubmitting }: FormikHelpers<ICreateLinkInitialState>) => {
-          await handleCreateLink(values);
-          setSubmitting(false);
+          if (!currentUser) {
+            history.push('/signin');
+          } else {
+            await addLink(values, categories, currentUser);
+            setSubmitting(false);
+            history.push('/');
+          }
         }}
       >
         {({ isSubmitting, isValid, errors, touched, values, setFieldValue, setFieldTouched }: FormikProps<ICreateLinkInitialState>) => {

@@ -13,15 +13,14 @@ import './link-list.styles.less';
 interface IProps {}
 
 const LinkList: React.FC<IProps> = () => {
-  const { links, linksLoaded, loadMoreLinks, loadingMoreLinks } = useContext(LinksContext)
-
+  const { links, linksLoaded, loadMoreLinks, loadingMoreLinks, hasMoreLinks } = useContext(LinksContext);
   if (!linksLoaded) {
     return <Loading />;
   }
 
   return (
-    <>
-      <Row className="link-list" type="flex" gutter={[16, 16]}>
+    <div className="link-list">
+      <Row type="flex" gutter={[16, 16]}>
         {Object.keys(links).map((linkId: string, index: number) => {
           const link: Link = links[linkId];
           return (
@@ -31,8 +30,18 @@ const LinkList: React.FC<IProps> = () => {
           );
         })}
       </Row>
-      <CustomButton buttonType="secondary" text="Load more" loading={loadingMoreLinks} onClick={loadMoreLinks} style={{ marginTop: 20 }} hasIcon iconType="reload" />
-    </>
+      <div className="load-more">
+        <CustomButton
+          buttonType="secondary"
+          disabled={!hasMoreLinks}
+          text={hasMoreLinks ? 'Load more' : 'No more links'}
+          loading={loadingMoreLinks}
+          onClick={loadMoreLinks}
+          hasIcon
+          iconType={hasMoreLinks ? 'reload' : 'close-circle'}
+        />
+      </div>
+    </div>
   );
 };
 
