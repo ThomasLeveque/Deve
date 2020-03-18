@@ -5,18 +5,17 @@ import { SearchBoxProvided } from 'react-instantsearch-core';
 
 import './search-input.styles.less';
 
-const SearchInput: React.FC<SearchBoxProvided> = ({ currentRefinement, isSearchStalled, refine }) => {
+const SearchInput: React.FC<SearchBoxProvided> = ({ currentRefinement, refine }) => {
   const [value, setValue] = useState<string>(currentRefinement);
 
-  const handleSearchSubmit = (event: any) => {
+  const handleSearchSubmit = (event: any): void => {
     if (event.key && event.key !== 'Enter') {
       return;
     }
-
     refine(value);
   };
 
-  const handleSearchReset = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+  const handleSearchReset = (): void => {
     setValue('');
     refine('');
   };

@@ -5,8 +5,9 @@ import { Divider } from 'antd';
 
 import SearchFilterBar from '../search-filter-bar/search-filter-bar.component';
 import SearchLinkList from '../search-link-list/search-link-list.component';
-import { searchClient, indexName } from '../../algolia/algolia.config';
 import SearchHeader from '../search-header/search-header.component';
+
+import { searchClient, indexName } from '../../algolia/algolia.config';
 import { SearchContext } from '../../providers/search/search.provider';
 
 import './search-layout.styles.less';

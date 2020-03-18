@@ -1,10 +1,12 @@
 import React from 'react';
 import { useQueryParam, ArrayParam } from 'use-query-params';
 
+import Tag from '../tag/tag.component';
+
 import { CategoriesContext } from '../../providers/categories/categories.provider';
 import Category from '../../models/category.model';
+
 import './filter-bar.styles.less';
-import Tag from '../tag/tag.component';
 
 const FilterBar: React.FC = () => {
   const { usedCategories, totalUsedCategories } = React.useContext(CategoriesContext);

@@ -12,8 +12,6 @@ import { registerSchema } from '../../schemas/user.schema';
 import NotifContext from '../../contexts/notif/notif.context';
 import { formatError } from '../../utils';
 
-import './sign-up.styles.less';
-
 const INITIAL_REGISTER_STATE: IRegisterInitialState = {
   displayName: '',
   email: '',

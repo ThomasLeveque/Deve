@@ -1,7 +1,7 @@
 import React from 'react';
+import { Icon } from 'antd';
 
 import './loading.styles.less';
-import { Icon } from 'antd';
 
 const Loading = () => (
   <div className="loading">

@@ -9,11 +9,8 @@ import UnderlineLink from '../../components/underline-link/underline-link.compon
 import { login, signInWithGoole } from '../../firebase/firebase.service';
 import { ILoginInitialState } from '../../interfaces/initial-states.type';
 import { loginSchema } from '../../schemas/user.schema';
-
 import { formatError } from '../../utils';
 import NotifContext from '../../contexts/notif/notif.context';
-
-import './sign-in.styles.less';
 
 const INITIAL_LOGIN_STATE: ILoginInitialState = {
   email: '',

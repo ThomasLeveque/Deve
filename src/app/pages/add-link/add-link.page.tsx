@@ -3,12 +3,13 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Formik, FormikHelpers, Form, Field, FormikProps } from 'formik';
 import { Row, Col, AutoComplete, Icon, PageHeader } from 'antd';
 
+import { FormInput } from '../../components/form-input/form-input.component';
+import CustomButton from '../../components/custom-button/custom-button.component';
+
 import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
 import { LinksContext } from '../../providers/links/links.provider';
 import { CategoriesContext } from '../../providers/categories/categories.provider';
 import { firestore } from '../../firebase/firebase.service';
-import { FormInput } from '../../components/form-input/form-input.component';
-import CustomButton from '../../components/custom-button/custom-button.component';
 import { ICreateLinkInitialState } from '../../interfaces/initial-states.type';
 import { linkSchema } from '../../schemas/link.schema';
 import { isError, isValid as isValidCategory } from '../../utils';

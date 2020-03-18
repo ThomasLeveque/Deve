@@ -2,10 +2,9 @@ import React from 'react';
 import { connectRefinementList } from 'react-instantsearch-dom';
 import { RefinementListProvided, Hit } from 'react-instantsearch-core';
 
-import './refinement-categories.styles.less';
 import Tag from '../tag/tag.component';
 
-const RefinementCategories: React.FC<RefinementListProvided> = ({ items, currentRefinement, refine, createURL }) => {
+const RefinementCategories: React.FC<RefinementListProvided> = ({ items, refine }) => {
   return (
     <>
       {items.map((item: Hit<{ count: number; isRefined: boolean; label: string; value: string[] }>) => (

@@ -5,16 +5,13 @@ import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { useInView } from 'react-intersection-observer';
 import { Spring } from 'react-spring/renderprops';
 
-import NotifContext from '../../contexts/notif/notif.context';
-
 import Tag from '../tag/tag.component';
 import UnderlineLink from '../underline-link/underline-link.component';
 
 import { LinksContext } from '../../providers/links/links.provider';
 import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
 import { IVote } from '../../interfaces/vote.interface';
-import { getDomain } from '../../utils';
-import { ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/index';
+import { getDomain, ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/index';
 import { Link } from '../../models/link.model';
 
 import './link-item.styles.less';

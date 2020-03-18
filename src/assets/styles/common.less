@@ -19,6 +19,11 @@ h2,
   font-size: 26px;
   font-weight: 700;
   color: black;
+
+  &.error-text {
+    margin: 0;
+    color: @my-error-color;
+  }
 }
 
 h3,
@@ -42,6 +47,11 @@ p,
 
   &.bold {
     font-weight: 700;
+  }
+
+  &.error-text {
+    margin: 0;
+    color: @my-error-color;
   }
 }
 
@@ -143,13 +153,6 @@ button {
 
 .break-word {
   word-break: break-word;
-}
-
-.error-text {
-  font-size: 12px;
-  font-weight: 400;
-  color: @my-error-color;
-  margin: 0;
 }
 
 div.ant-notification {

@@ -2,8 +2,9 @@ import React from 'react';
 import { FieldInputProps, FormikProps } from 'formik';
 import { Icon, Input } from 'antd';
 
-import './form-input.styles.less';
 import { isError, isValid } from '../../utils';
+
+import './form-input.styles.less';
 
 interface IProps {
   name: string;

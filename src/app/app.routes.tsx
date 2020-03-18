@@ -1,14 +1,15 @@
 import React, { Suspense, lazy, useContext } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import { CurrentUserContext } from './providers/current-user/current-user.provider';
-
 const HomePage = lazy(() => import('./pages/home/home.page'));
 const AddLinkPage = lazy(() => import('./pages/add-link/add-link.page'));
 const SignInAndSignUpPage = lazy(() => import('./pages/sign-in-and-sign-up/sign-in-and-sign-up.page'));
 const ForgotPasswordPage = lazy(() => import('./pages/forgot-password/forgot-password.page'));
 const LinkDetailPage = lazy(() => import('./pages/link-detail/link-detail.page'));
+
 import Loading from './components/loading/loading.component';
+
+import { CurrentUserContext } from './providers/current-user/current-user.provider';
 
 const AppRoutes = () => {
   const { currentUser } = useContext(CurrentUserContext);

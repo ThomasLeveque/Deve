@@ -6,15 +6,13 @@ import { Highlight } from 'react-instantsearch-dom';
 import { useInView } from 'react-intersection-observer';
 import { Spring } from 'react-spring/renderprops';
 
-import NotifContext from '../../contexts/notif/notif.context';
-
 import Tag from '../tag/tag.component';
 import UnderlineLink from '../underline-link/underline-link.component';
 
+import NotifContext from '../../contexts/notif/notif.context';
 import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
 import { IVote } from '../../interfaces/vote.interface';
-import { getDomain } from '../../utils';
-import { SEARCH_ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/index';
+import { SEARCH_ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY, getDomain } from '../../utils/index';
 import { ALgoliaLink } from '../../models/algolia-link.model';
 import { SearchContext } from '../../providers/search/search.provider';
 

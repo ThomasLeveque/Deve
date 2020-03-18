@@ -5,17 +5,28 @@ import { Icon, Dropdown, Menu, Button } from 'antd';
 import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
 import { SearchContext } from '../../providers/search/search.provider';
 import { logout } from '../../firebase/firebase.service';
+import NotifContext from '../../contexts/notif/notif.context';
 
 import './header.styles.less';
 
 const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   const { currentUser } = useContext(CurrentUserContext);
   const { isSearchOpen, toggleSearch } = useContext(SearchContext);
+  const { openNotification } = useContext(NotifContext);
+
+  const handleLogout = async (): Promise<void> => {
+    try {
+      logout();
+    } catch (err) {
+      console.error(err);
+      openNotification('Cannot logout', 'Try again', 'error');
+    }
+  };
 
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <div className="pointer" onClick={logout}>
+        <div className="pointer" onClick={handleLogout}>
           Sign out <Icon type="logout" />
         </div>
       </Menu.Item>

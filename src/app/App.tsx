@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
 
 import AppRoutes from './app.routes';
+
 import Header from './components/header/header.component';
 import ProgressBar from './components/progress-bar/progress-bar.component';
+import SearchLayout from './components/search-layout/search-layout.component';
+
 import { CurrentUserContext } from './providers/current-user/current-user.provider';
 import { CategoriesContext } from './providers/categories/categories.provider';
-import SearchLayout from './components/search-layout/search-layout.component';
 import { SearchContext } from './providers/search/search.provider';
 
 import './app.styles.less';
@@ -17,11 +19,11 @@ const App = () => {
 
   const renderRoutes = () => {
     if (currentUserError) {
-      return <p className="error-text">{currentUserError}</p>;
+      return <h2 className="error-text text-align-center">{currentUserError}</h2>;
     }
 
     if (categoriesError) {
-      return <p className="error-text">{categoriesError}</p>;
+      return <h2 className="error-text text-align-center">{categoriesError}</h2>;
     }
 
     if (categoriesLoaded && currentUserLoaded) {

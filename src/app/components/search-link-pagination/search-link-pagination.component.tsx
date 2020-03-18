@@ -20,7 +20,7 @@ const SearchLinkPagination: React.FC<IProps> = ({ currentRefinement, nbPages, re
         defaultCurrent={currentRefinement}
         defaultPageSize={PAGE_SIZE}
         total={nbPages * PAGE_SIZE}
-        // hideOnSinglePage
+        hideOnSinglePage
         onChange={(page: number) => refine(page)}
       />
     </div>

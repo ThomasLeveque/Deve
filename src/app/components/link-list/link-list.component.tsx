@@ -2,17 +2,16 @@ import React, { useContext } from 'react';
 import { Row, Col } from 'antd';
 
 import LinkItem from '../link-item/link-item.component';
-import { ITEMS_PER_LIGNE } from '../../utils';
-import { Link } from '../../models/link.model';
 import Loading from '../loading/loading.component';
 import CustomButton from '../custom-button/custom-button.component';
+
+import { ITEMS_PER_LIGNE } from '../../utils';
+import { Link } from '../../models/link.model';
 import { LinksContext } from '../../providers/links/links.provider';
 
 import './link-list.styles.less';
 
-interface IProps {}
-
-const LinkList: React.FC<IProps> = () => {
+const LinkList: React.FC = () => {
   const { links, linksLoaded, loadMoreLinks, loadingMoreLinks, hasMoreLinks } = useContext(LinksContext);
   if (!linksLoaded) {
     return <Loading />;

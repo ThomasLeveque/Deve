@@ -1,6 +1,5 @@
 import React from 'react';
 import { connectCurrentRefinements } from 'react-instantsearch-dom';
-import { CurrentRefinementsProvided } from 'react-instantsearch-core';
 
 import '../tag/tag.styles.less';
 
