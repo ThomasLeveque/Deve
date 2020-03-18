@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, memo, useContext } from 'react';
-import { useQueryParam, StringParam } from 'use-query-params';
+import { useQueryParam, StringParam, ArrayParam } from 'use-query-params';
 
 import { firestore } from '../../firebase/firebase.service';
 import { LINKS_PER_PAGE } from '../../utils';
@@ -46,16 +46,16 @@ const LinksProvider: React.FC = memo(({ children }) => {
   const [hasMoreLinks, setHasMoreLinks] = useState<boolean>(true);
   const [cursor, setCursor] = React.useState<firebase.firestore.DocumentSnapshot>(null);
 
-  const [qsSortby] = useQueryParam('sortby', StringParam);
-  const [qsCategory] = useQueryParam('category', StringParam);
+  const [qsSortby] = useQueryParam<string>('sortby', StringParam);
+  const [qsCategories] = useQueryParam<string[]>('categories', ArrayParam);
 
   const { openNotification } = useContext(NotifContext);
 
   const getQuery = (): firebase.firestore.Query => {
-    let linkRef: firebase.firestore.Query = firestore.collection('links');
+    let linkRef: any = firestore.collection('links');
 
-    if (qsCategory) {
-      linkRef = linkRef.where('category', '==', qsCategory);
+    if (qsCategories?.length) {
+      linkRef = linkRef.where('category', 'in', qsCategories);
     }
 
     if (!qsSortby || qsSortby === 'recent') {
@@ -136,8 +136,8 @@ const LinksProvider: React.FC = memo(({ children }) => {
 
   const addCommentLink = async (commentText: string, linkId: string, currentUser: CurrentUser) => {
     const commentRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
-
-    const previousComments: IComment[] = links[linkId].comments;
+    const doc: firebase.firestore.DocumentSnapshot = await commentRef.get();
+    const previousComments: IComment[] = doc.data().comments;
     const comment: IComment = {
       postedBy: { id: currentUser.id, displayName: currentUser.displayName },
       created: Date.now(),
@@ -145,14 +145,18 @@ const LinksProvider: React.FC = memo(({ children }) => {
     };
     const updatedComments: IComment[] = [...previousComments, comment];
 
-    links[linkId].comments = updatedComments;
-    setLinks({ ...links });
+    if (links[linkId]) {
+      links[linkId].comments = updatedComments;
+      setLinks({ ...links });
+    }
 
     try {
       commentRef.update({ comments: updatedComments });
     } catch (err) {
-      links[linkId].comments = previousComments;
-      setLinks({ ...links });
+      if (links[linkId]) {
+        links[linkId].comments = previousComments;
+        setLinks({ ...links });
+      }
       openNotification(`Cannot add comment for [${linkId}] link`, '', 'error');
       console.error(err);
     }
@@ -160,8 +164,8 @@ const LinksProvider: React.FC = memo(({ children }) => {
 
   const updateVoteLinks = async (linkId: string, currentUser: CurrentUser, type: UpdateVoteLinksType) => {
     const voteRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
-
-    const previousVotes: IVote[] = links[linkId].votes;
+    const doc: firebase.firestore.DocumentSnapshot = await voteRef.get();
+    const previousVotes: IVote[] = doc.data().votes;
     const { id, displayName } = currentUser;
     const vote: IVote = {
       voteBy: { id, displayName }
@@ -174,15 +178,19 @@ const LinksProvider: React.FC = memo(({ children }) => {
     }
     const voteCount = updatedVotes.length;
 
-    links[linkId].votes = updatedVotes;
-    links[linkId].voteCount = voteCount;
-    setLinks({ ...links });
+    if (links[linkId]) {
+      links[linkId].votes = updatedVotes;
+      links[linkId].voteCount = voteCount;
+      setLinks({ ...links });
+    }
     try {
       voteRef.update({ votes: updatedVotes, voteCount });
     } catch (err) {
-      links[linkId].votes = previousVotes;
-      links[linkId].voteCount = previousVotes.length;
-      setLinks({ ...links });
+      if (links[linkId]) {
+        links[linkId].votes = previousVotes;
+        links[linkId].voteCount = previousVotes.length;
+        setLinks({ ...links });
+      }
       openNotification(`Cannot add vote for [${linkId}] link`, '', 'error');
       console.error(err);
     }
@@ -208,7 +216,7 @@ const LinksProvider: React.FC = memo(({ children }) => {
       }
     };
     asyncEffect();
-  }, [qsCategory, qsSortby]);
+  }, [qsCategories, qsSortby]);
 
   return (
     <LinksContext.Provider

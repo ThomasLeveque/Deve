@@ -27,7 +27,6 @@ interface IProps extends RouteComponentProps<{}> {
 const LinkItem: React.FC<IProps> = ({ link, history, index }) => {
   const { currentUser } = useContext(CurrentUserContext);
   const { updateVoteLinks } = useContext(LinksContext);
-  const { openNotification } = useContext(NotifContext);
 
   const { Title } = Typography;
   const alreadyLiked: boolean = !!link.votes.find((vote: IVote) => currentUser && vote.voteBy.id === currentUser.id);
@@ -83,7 +82,7 @@ const LinkItem: React.FC<IProps> = ({ link, history, index }) => {
             </div>
             <div className="comment pointer" onClick={() => history.push(`/links/${link.id}`)}>
               <Icon type="message" className="icon" />
-              <span className="count">{link.comments.length} comments</span>
+              <span className="count">{`${link.comments.length} comment${link.comments.length > 1 ? 's' : ''}`}</span>
             </div>
           </div>
         </div>

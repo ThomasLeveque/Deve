@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQueryParam, StringParam } from 'use-query-params';
+import { useQueryParam, ArrayParam } from 'use-query-params';
 
 import { CategoriesContext } from '../../providers/categories/categories.provider';
 import Category from '../../models/category.model';
@@ -8,19 +8,34 @@ import Tag from '../tag/tag.component';
 
 const FilterBar: React.FC = () => {
   const { usedCategories, totalUsedCategories } = React.useContext(CategoriesContext);
-  const [qsCategory, setQsCategory] = useQueryParam('category', StringParam);
+  const [qsCategories = [], setQsCategories] = useQueryParam<string[]>('categories', ArrayParam);
+
+  const updateQsCategories = (categoryName: string): string[] => {
+    const isCategorySelected = qsCategories.find((qsCategory: string) => qsCategory === categoryName);
+
+    if (!isCategorySelected) {
+      return [...qsCategories, categoryName];
+    } else {
+      return qsCategories.filter((qsCategory: string) => qsCategory !== categoryName);
+    }
+  };
 
   return (
     <div className="filter-bar">
       <h4>Filter by categories :</h4>
-      <Tag isButton text={`all (${totalUsedCategories})`} color={qsCategory ? 'black' : 'green'} onClick={() => setQsCategory('')} />
+      <Tag
+        isButton
+        text={`all (${totalUsedCategories})`}
+        color={qsCategories?.length ? 'black' : 'green'}
+        onClick={() => setQsCategories([])}
+      />
       {usedCategories.map((category: Category) => (
         <Tag
-          onClick={() => setQsCategory(category.name)}
+          onClick={() => setQsCategories(updateQsCategories(category.name))}
           isButton
           key={category.id}
           text={`${category.name} (${category.count})`}
-          color={qsCategory === category.name ? 'green' : 'black'}
+          color={!!qsCategories?.find((_category: string) => _category === category.name) ? 'green' : 'black'}
         />
       ))}
     </div>

@@ -1,4 +1,4 @@
-const { override, fixBabelImports, addLessLoader } = require('customize-cra');
+const { override, fixBabelImports, addLessLoader, useBabelRc } = require('customize-cra');
 const path = require('path');
 
 module.exports = override(
@@ -10,5 +10,6 @@ module.exports = override(
   addLessLoader({
     javascriptEnabled: true,
     modifyVars: { hack: `true; @import "${path.resolve(__dirname, './src/assets/styles/my-antd-theme.less')}";` }
-  })
+  }),
+  useBabelRc()
 );
