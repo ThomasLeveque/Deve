@@ -3,9 +3,10 @@ const algoliasearch = require('algoliasearch');
 
 const APP_ID = functions.config().algolia.app;
 const ADMIN_KEY = functions.config().algolia.key;
+const INDEX = functions.config().algolia.index;
 
 const client = algoliasearch(APP_ID, ADMIN_KEY);
-const index = client.initIndex('dev_links');
+const index = client.initIndex(INDEX);
 
 exports.addToIndex = functions.firestore.document('links/{linkId}').onCreate(snapshot => {
   const data = snapshot.data();
