@@ -26,5 +26,6 @@ export const firebaseRoutes: any = {
   'hooks-news-9c4b2.firebaseapp.com': firebaseConfigDev,
   'hooks-news-9c4b2.web.app': firebaseConfigDev,
   'hooks-news-ba59c.firebaseapp.com': firebaseConfigProd,
-  'hooks-news-ba59c.web.app': firebaseConfigProd
+  'hooks-news-ba59c.web.app': firebaseConfigProd,
+  'eve-app.now.sh': firebaseConfigProd
 };
