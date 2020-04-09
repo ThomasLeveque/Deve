@@ -12,7 +12,7 @@ import { SearchContext } from './providers/search/search.provider';
 
 import './app.styles.less';
 
-const App = () => {
+function App() {
   const { currentUserError, currentUserLoaded } = useContext(CurrentUserContext);
   const { categoriesError, categoriesLoaded } = useContext(CategoriesContext);
   const { firstSearchOpen } = useContext(SearchContext);
@@ -41,6 +41,6 @@ const App = () => {
       {firstSearchOpen && <SearchLayout />}
     </div>
   );
-};
+}
 
 export default App;
