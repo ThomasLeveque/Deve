@@ -1,5 +1,5 @@
 {
-  "name": "hooks-news",
+  "name": "eve",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -44,7 +44,9 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "deploy-dev": "react-app-rewired build && firebase deploy --project hooks-news-9c4b2",
-    "deploy-prod": "react-app-rewired build && firebase deploy --project hooks-news-ba59c"
+    "deploy-prod": "react-app-rewired build && firebase deploy --project hooks-news-ba59c",
+    "functions-dev": "react-app-rewired build && firebase deploy --only functions --project hooks-news-9c4b2",
+    "functions-prod": "react-app-rewired build && firebase deploy --only functions --project hooks-news-ba59c"
   },
   "eslintConfig": {
     "extends": "react-app"
