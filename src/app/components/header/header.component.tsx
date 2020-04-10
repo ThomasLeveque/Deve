@@ -44,7 +44,7 @@ const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
           history.push('/');
         }}
       >
-        Eve
+        Deve
       </h2>
       <div>
         <span className="search" onClick={() => toggleSearch(!isSearchOpen)}>

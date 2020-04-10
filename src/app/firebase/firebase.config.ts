@@ -10,7 +10,7 @@ export const firebaseConfigDev: IfirebaseConfig = {
   appId: '1:1064362918401:web:08d63baba9e2f8e2'
 };
 
-const firebaseConfigProd: IfirebaseConfig = {
+export const firebaseConfigProd: IfirebaseConfig = {
   apiKey: 'AIzaSyD13IKSZIl7OwD9RE9pJUECq258pX4i_Z4',
   authDomain: 'hooks-news-ba59c.firebaseapp.com',
   databaseURL: 'https://hooks-news-ba59c.firebaseio.com',
@@ -25,8 +25,8 @@ export const firebaseRoutes: any = {
   localhost: firebaseConfigDev,
   'hooks-news-9c4b2.firebaseapp.com': firebaseConfigDev,
   'hooks-news-9c4b2.web.app': firebaseConfigDev,
-  'eve-app-dev.now.sh': firebaseConfigDev,
+  'deve-dev.now.sh': firebaseConfigDev,
   'hooks-news-ba59c.firebaseapp.com': firebaseConfigProd,
   'hooks-news-ba59c.web.app': firebaseConfigProd,
-  'eve-app.now.sh': firebaseConfigProd
+  'deve.now.sh': firebaseConfigProd
 };
