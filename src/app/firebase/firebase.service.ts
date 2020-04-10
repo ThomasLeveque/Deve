@@ -2,10 +2,10 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-import { firebaseRoutes, firebaseConfigDev } from './firebase.config';
+import { firebaseRoutes, firebaseConfigProd } from './firebase.config';
 import { IfirebaseConfig } from './firebase.interface';
 
-const firebaseConfig = ((domain: string): IfirebaseConfig => firebaseRoutes[domain] || firebaseConfigDev)(window.document.domain);
+const firebaseConfig = ((domain: string): IfirebaseConfig => firebaseRoutes[domain] || firebaseConfigProd)(window.document.domain);
 firebase.initializeApp(firebaseConfig);
 
 export const auth = firebase.auth();
