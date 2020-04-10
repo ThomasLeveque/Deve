@@ -127,7 +127,7 @@ const LinksProvider: React.FC = memo(({ children }) => {
       const linkSnapshot: firebase.firestore.DocumentSnapshot = await linkRef.get();
       const newLinkFromFirestore = new Link(linkSnapshot);
       setLinks(prevLinks => ({ [linkSnapshot.id]: newLinkFromFirestore, ...prevLinks }));
-      openNotification(`Link [${linkSnapshot.id}] have been added`, '', 'success');
+      openNotification(`Link have been added`, '', 'success');
     } catch (err) {
       openNotification('Cannot add this link', '', 'error');
       console.error(err);
@@ -157,7 +157,7 @@ const LinksProvider: React.FC = memo(({ children }) => {
         links[linkId].comments = previousComments;
         setLinks({ ...links });
       }
-      openNotification(`Cannot add comment for [${linkId}] link`, '', 'error');
+      openNotification(`Cannot add comment for this link`, '', 'error');
       console.error(err);
     }
   };
@@ -191,7 +191,7 @@ const LinksProvider: React.FC = memo(({ children }) => {
         links[linkId].voteCount = previousVotes.length;
         setLinks({ ...links });
       }
-      openNotification(`Cannot add vote for [${linkId}] link`, '', 'error');
+      openNotification(`Cannot add vote for this link`, '', 'error');
       console.error(err);
     }
   };

@@ -58,7 +58,7 @@ const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
 
   const handleError = (err: any) => {
     setError(formatError(err));
-    openNotification(`Cannot load [${linkId}] link`, 'Try to reload', 'error');
+    openNotification(`Cannot load this link`, 'Try to reload', 'error');
     console.error(err);
     setIsLoaded(true);
   };
