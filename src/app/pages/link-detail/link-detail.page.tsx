@@ -17,7 +17,7 @@ import { IAddCommentInitialState } from '../../interfaces/initial-states.type';
 import { commentSchema } from '../../schemas/link.schema';
 import { IVote } from '../../interfaces/vote.interface';
 import { useLinks } from '../../providers/links/links.provider';
-import { formatError } from '../../utils';
+import { formatError } from '../../utils/format-string.util';
 
 import './link-detail.styles.less';
 import { useNotification } from '../../contexts/notif/notif.context';

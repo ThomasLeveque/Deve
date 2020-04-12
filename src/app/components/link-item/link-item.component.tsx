@@ -11,10 +11,11 @@ import UnderlineLink from '../underline-link/underline-link.component';
 import { useLinks } from '../../providers/links/links.provider';
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { IVote } from '../../interfaces/vote.interface';
-import { getDomain, ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/index';
+import { ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/constants.util';
 import { Link } from '../../models/link.model';
 
 import './link-item.styles.less';
+import { getDomain } from '../../utils/format-string.util';
 
 interface IProps extends RouteComponentProps<{}> {
   link: Link;

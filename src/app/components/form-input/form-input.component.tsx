@@ -2,7 +2,7 @@ import React from 'react';
 import { FieldInputProps, FormikProps } from 'formik';
 import { Icon, Input } from 'antd';
 
-import { isError, isValid } from '../../utils';
+import { isError, isValid } from '../../utils/form.util';
 
 import './form-input.styles.less';
 

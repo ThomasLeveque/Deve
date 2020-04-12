@@ -6,7 +6,7 @@ import { Hit } from 'react-instantsearch-core';
 import SearchLinkPagination from '../search-link-pagination/search-link-pagination.component';
 import SearchLinkItem from '../search-link-item/search-link-item.component';
 
-import { SEARCH_ITEMS_PER_LIGNE } from '../../utils';
+import { SEARCH_ITEMS_PER_LIGNE } from '../../utils/constants.util';
 import { ALgoliaLink } from '../../models/algolia-link.model';
 
 import './search-link-list.styles.less';

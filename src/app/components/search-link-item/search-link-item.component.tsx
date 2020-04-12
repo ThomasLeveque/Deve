@@ -9,9 +9,10 @@ import { Spring } from 'react-spring/renderprops';
 import Tag from '../tag/tag.component';
 import UnderlineLink from '../underline-link/underline-link.component';
 
-import { SEARCH_ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY, getDomain } from '../../utils/index';
+import { SEARCH_ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/constants.util';
 import { ALgoliaLink } from '../../models/algolia-link.model';
 import { useSearch } from '../../providers/search/search.provider';
+import { getDomain } from '../../utils/format-string.util';
 
 import './search-link-item.styles.less';
 

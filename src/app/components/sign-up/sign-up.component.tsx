@@ -9,7 +9,7 @@ import UnderlineLink from '../../components/underline-link/underline-link.compon
 import { register, createUserProfileDocument } from '../../firebase/firebase.service';
 import { IRegisterInitialState } from '../../interfaces/initial-states.type';
 import { registerSchema } from '../../schemas/user.schema';
-import { formatError } from '../../utils';
+import { formatError } from '../../utils/format-string.util';
 import { useNotification } from '../../contexts/notif/notif.context';
 
 const INITIAL_REGISTER_STATE: IRegisterInitialState = {

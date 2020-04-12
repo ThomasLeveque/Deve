@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, memo, useContext } from 'rea
 
 import { firestore } from '../../firebase/firebase.service';
 import Category from '../../models/category.model';
-import { formatError } from '../../utils';
+import { formatError } from '../../utils/format-string.util';
 import NotifContext from '../../contexts/notif/notif.context';
 
 interface ICategoriesContext {

@@ -5,7 +5,7 @@ import LinkItem from '../link-item/link-item.component';
 import Loading from '../loading/loading.component';
 import CustomButton from '../custom-button/custom-button.component';
 
-import { ITEMS_PER_LIGNE } from '../../utils';
+import { ITEMS_PER_LIGNE } from '../../utils/constants.util';
 import { Link } from '../../models/link.model';
 import { useLinks } from '../../providers/links/links.provider';
 

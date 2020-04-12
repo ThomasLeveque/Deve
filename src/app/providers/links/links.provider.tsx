@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, memo, useContext } from 'rea
 import { useQueryParam, StringParam, ArrayParam } from 'use-query-params';
 
 import { firestore } from '../../firebase/firebase.service';
-import { LINKS_PER_PAGE } from '../../utils';
+import { LINKS_PER_PAGE } from '../../utils/constants.util';
 import { Link } from '../../models/link.model';
 import { ICreateLinkInitialState } from '../../interfaces/initial-states.type';
 import Category from '../../models/category.model';

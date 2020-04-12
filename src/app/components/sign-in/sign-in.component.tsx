@@ -9,7 +9,7 @@ import UnderlineLink from '../../components/underline-link/underline-link.compon
 import { login, signInWithGoole } from '../../firebase/firebase.service';
 import { ILoginInitialState } from '../../interfaces/initial-states.type';
 import { loginSchema } from '../../schemas/user.schema';
-import { formatError } from '../../utils';
+import { formatError } from '../../utils/format-string.util';
 import { useNotification } from '../../contexts/notif/notif.context';
 
 const INITIAL_LOGIN_STATE: ILoginInitialState = {

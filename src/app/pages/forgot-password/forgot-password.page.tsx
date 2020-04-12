@@ -6,7 +6,7 @@ import CustomButton from '../../components/custom-button/custom-button.component
 
 import { IResetInitialState } from '../../interfaces/initial-states.type';
 import { resetSchema } from '../../schemas/user.schema';
-import { formatError } from '../../utils';
+import { formatError } from '../../utils/format-string.util';
 import { resetPassword } from '../../firebase/firebase.service';
 import { useNotification } from '../../contexts/notif/notif.context';
 

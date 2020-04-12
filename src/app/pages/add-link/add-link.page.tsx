@@ -12,7 +12,7 @@ import { useCategories } from '../../providers/categories/categories.provider';
 import { firestore } from '../../firebase/firebase.service';
 import { ICreateLinkInitialState } from '../../interfaces/initial-states.type';
 import { linkSchema } from '../../schemas/link.schema';
-import { isError, isValid as isValidCategory } from '../../utils';
+import { isError, isValid as isValidCategory } from '../../utils/form.util';
 import Category from '../../models/category.model';
 
 import './add-link.styles.less';

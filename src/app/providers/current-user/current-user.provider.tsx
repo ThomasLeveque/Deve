@@ -3,7 +3,7 @@ import React, { createContext, useEffect, memo, useContext } from 'react';
 import { auth, createUserProfileDocument } from '../../firebase/firebase.service';
 import CurrentUser from '../../models/current-user.model';
 import NotifContext from '../../contexts/notif/notif.context';
-import { formatError } from '../../utils/index';
+import { formatError } from '../../utils/format-string.util';
 
 interface ICurrentUserContext {
   currentUser: CurrentUser;
