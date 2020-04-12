@@ -6,9 +6,9 @@ import { Row, Col, AutoComplete, Icon, PageHeader } from 'antd';
 import { FormInput } from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
 
-import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
-import { LinksContext } from '../../providers/links/links.provider';
-import { CategoriesContext } from '../../providers/categories/categories.provider';
+import { useCurrentUser } from '../../providers/current-user/current-user.provider';
+import { useLinks } from '../../providers/links/links.provider';
+import { useCategories } from '../../providers/categories/categories.provider';
 import { firestore } from '../../firebase/firebase.service';
 import { ICreateLinkInitialState } from '../../interfaces/initial-states.type';
 import { linkSchema } from '../../schemas/link.schema';
@@ -24,9 +24,9 @@ const INITIAL_STATE: ICreateLinkInitialState = {
 };
 
 const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
-  const { currentUser } = React.useContext(CurrentUserContext);
-  const { categories } = React.useContext(CategoriesContext);
-  const { addLink } = React.useContext(LinksContext);
+  const { currentUser } = useCurrentUser();
+  const { categories } = useCategories();
+  const { addLink } = useLinks();
 
   const [addCatLoading, setAddCatLoading] = React.useState<boolean>(false);
 

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useContext } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 const HomePage = lazy(() => import('./pages/home/home.page'));
@@ -9,10 +9,10 @@ const LinkDetailPage = lazy(() => import('./pages/link-detail/link-detail.page')
 
 import Loading from './components/loading/loading.component';
 
-import { CurrentUserContext } from './providers/current-user/current-user.provider';
+import { useCurrentUser } from './providers/current-user/current-user.provider';
 
 const AppRoutes = () => {
-  const { currentUser } = useContext(CurrentUserContext);
+  const { currentUser } = useCurrentUser();
 
   return (
     <Switch>

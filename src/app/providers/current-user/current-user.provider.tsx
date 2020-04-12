@@ -17,6 +17,8 @@ export const CurrentUserContext = createContext<ICurrentUserContext>({
   currentUserLoaded: false
 });
 
+export const useCurrentUser = () => useContext(CurrentUserContext);
+
 const CurrentUserProvider: React.FC = memo(({ children }) => {
   const [currentUser, setCurrentUser] = React.useState<CurrentUser>(null);
   const [currentUserError, setCurrentUserError] = React.useState<string | null>(null);

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Icon, Row, Col, Typography, Tooltip, Badge } from 'antd';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
@@ -9,12 +9,9 @@ import { Spring } from 'react-spring/renderprops';
 import Tag from '../tag/tag.component';
 import UnderlineLink from '../underline-link/underline-link.component';
 
-import NotifContext from '../../contexts/notif/notif.context';
-import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
-import { IVote } from '../../interfaces/vote.interface';
 import { SEARCH_ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY, getDomain } from '../../utils/index';
 import { ALgoliaLink } from '../../models/algolia-link.model';
-import { SearchContext } from '../../providers/search/search.provider';
+import { useSearch } from '../../providers/search/search.provider';
 
 import './search-link-item.styles.less';
 
@@ -24,13 +21,9 @@ interface IProps extends RouteComponentProps<{}> {
 }
 
 const SearchLinkItem: React.FC<IProps> = ({ link, history, index }) => {
-  const { currentUser } = useContext(CurrentUserContext);
-  const { toggleSearch } = useContext(SearchContext);
-  const { openNotification } = useContext(NotifContext);
+  const { toggleSearch } = useSearch();
 
   const { Title } = Typography;
-  const postedByAuthUser: boolean = currentUser && currentUser.id === link.postedBy.id;
-  const alreadyLiked: boolean = !!link.votes.find((vote: IVote) => currentUser && vote.voteBy.id === currentUser.id);
 
   const [ref, inView] = useInView({
     threshold: 0.25,

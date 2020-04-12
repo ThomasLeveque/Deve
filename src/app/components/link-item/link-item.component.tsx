@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Icon, Row, Col, Typography, Tooltip } from 'antd';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
@@ -8,8 +8,8 @@ import { Spring } from 'react-spring/renderprops';
 import Tag from '../tag/tag.component';
 import UnderlineLink from '../underline-link/underline-link.component';
 
-import { LinksContext } from '../../providers/links/links.provider';
-import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
+import { useLinks } from '../../providers/links/links.provider';
+import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { IVote } from '../../interfaces/vote.interface';
 import { getDomain, ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/index';
 import { Link } from '../../models/link.model';
@@ -22,8 +22,8 @@ interface IProps extends RouteComponentProps<{}> {
 }
 
 const LinkItem: React.FC<IProps> = ({ link, history, index }) => {
-  const { currentUser } = useContext(CurrentUserContext);
-  const { updateVoteLinks } = useContext(LinksContext);
+  const { currentUser } = useCurrentUser();
+  const { updateVoteLinks } = useLinks();
 
   const { Title } = Typography;
   const alreadyLiked: boolean = !!link.votes.find((vote: IVote) => currentUser && vote.voteBy.id === currentUser.id);

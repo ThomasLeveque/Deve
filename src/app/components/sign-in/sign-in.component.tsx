@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Formik, Form, Field, FormikHelpers, FormikProps } from 'formik';
 
@@ -10,7 +10,7 @@ import { login, signInWithGoole } from '../../firebase/firebase.service';
 import { ILoginInitialState } from '../../interfaces/initial-states.type';
 import { loginSchema } from '../../schemas/user.schema';
 import { formatError } from '../../utils';
-import NotifContext from '../../contexts/notif/notif.context';
+import { useNotification } from '../../contexts/notif/notif.context';
 
 const INITIAL_LOGIN_STATE: ILoginInitialState = {
   email: '',
@@ -21,7 +21,7 @@ const SignIn: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   const [firebaseError, setFirebaseError] = React.useState<string | null>(null);
   const [withGoogleLoading, setWithGoogleLoading] = React.useState<boolean>(false);
 
-  const { openNotification } = useContext(NotifContext);
+  const { openNotification } = useNotification();
 
   const authenticateUser = async (values: ILoginInitialState): Promise<void> => {
     const { email, password }: ILoginInitialState = values;

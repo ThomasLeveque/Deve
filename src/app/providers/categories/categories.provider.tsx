@@ -21,6 +21,8 @@ export const CategoriesContext = createContext<ICategoriesContext>({
   categoriesLoaded: false
 });
 
+export const useCategories = () => useContext(CategoriesContext);
+
 const CategoriesProvider: React.FC = memo(({ children }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [usedCategories, setUsedCategories] = useState<Category[]>([]);

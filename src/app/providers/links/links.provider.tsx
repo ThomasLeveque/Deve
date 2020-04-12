@@ -39,6 +39,8 @@ export const LinksContext = createContext<ILinksContext>({
   hasMoreLinks: true
 });
 
+export const useLinks = () => useContext(LinksContext);
+
 const LinksProvider: React.FC = memo(({ children }) => {
   const [links, setLinks] = useState<ILinks>({});
   const [linksLoaded, setLinksLoaded] = useState<boolean>(false);

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Row, Col } from 'antd';
 
 import LinkItem from '../link-item/link-item.component';
@@ -7,12 +7,12 @@ import CustomButton from '../custom-button/custom-button.component';
 
 import { ITEMS_PER_LIGNE } from '../../utils';
 import { Link } from '../../models/link.model';
-import { LinksContext } from '../../providers/links/links.provider';
+import { useLinks } from '../../providers/links/links.provider';
 
 import './link-list.styles.less';
 
 const LinkList: React.FC = () => {
-  const { links, linksLoaded, loadMoreLinks, loadingMoreLinks, hasMoreLinks } = useContext(LinksContext);
+  const { links, linksLoaded, loadMoreLinks, loadingMoreLinks, hasMoreLinks } = useLinks();
   if (!linksLoaded) {
     return <Loading />;
   }

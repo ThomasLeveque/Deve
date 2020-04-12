@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { RouteComponentProps, match } from 'react-router-dom';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { PageHeader, Row, Col, Icon, Divider } from 'antd';
@@ -9,18 +9,18 @@ import CustomButton from '../../components/custom-button/custom-button.component
 import Tag from '../../components/tag/tag.component';
 import { FormInput } from '../../components/form-input/form-input.component';
 
-import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
+import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { firestore } from '../../firebase/firebase.service';
 import { IComment } from '../../interfaces/comment.interface';
 import { Link } from '../../models/link.model';
 import { IAddCommentInitialState } from '../../interfaces/initial-states.type';
 import { commentSchema } from '../../schemas/link.schema';
 import { IVote } from '../../interfaces/vote.interface';
-import NotifContext from '../../contexts/notif/notif.context';
-import { LinksContext } from '../../providers/links/links.provider';
+import { useLinks } from '../../providers/links/links.provider';
 import { formatError } from '../../utils';
 
 import './link-detail.styles.less';
+import { useNotification } from '../../contexts/notif/notif.context';
 
 type Params = { linkId: string };
 
@@ -33,9 +33,9 @@ const INITIAL_STATE: IAddCommentInitialState = {
 };
 
 const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
-  const { currentUser } = useContext(CurrentUserContext);
-  const { openNotification } = useContext(NotifContext);
-  const { updateVoteLinks, addCommentLink } = useContext(LinksContext);
+  const { currentUser } = useCurrentUser();
+  const { openNotification } = useNotification();
+  const { updateVoteLinks, addCommentLink } = useLinks();
 
   const [link, setLink] = React.useState<Link>(null);
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);

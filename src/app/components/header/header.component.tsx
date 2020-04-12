@@ -1,18 +1,18 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Icon, Dropdown, Menu, Button } from 'antd';
 
-import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
-import { SearchContext } from '../../providers/search/search.provider';
+import { useCurrentUser } from '../../providers/current-user/current-user.provider';
+import { useSearch } from '../../providers/search/search.provider';
 import { logout } from '../../firebase/firebase.service';
-import NotifContext from '../../contexts/notif/notif.context';
+import { useNotification } from '../../contexts/notif/notif.context';
 
 import './header.styles.less';
 
 const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
-  const { currentUser } = useContext(CurrentUserContext);
-  const { isSearchOpen, toggleSearch } = useContext(SearchContext);
-  const { openNotification } = useContext(NotifContext);
+  const { currentUser } = useCurrentUser();
+  const { isSearchOpen, toggleSearch } = useSearch();
+  const { openNotification } = useNotification();
 
   const handleLogout = async (): Promise<void> => {
     try {

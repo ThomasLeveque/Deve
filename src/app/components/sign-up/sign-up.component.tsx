@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Formik, Form, Field, FormikHelpers, FormikProps } from 'formik';
 
@@ -9,8 +9,8 @@ import UnderlineLink from '../../components/underline-link/underline-link.compon
 import { register, createUserProfileDocument } from '../../firebase/firebase.service';
 import { IRegisterInitialState } from '../../interfaces/initial-states.type';
 import { registerSchema } from '../../schemas/user.schema';
-import NotifContext from '../../contexts/notif/notif.context';
 import { formatError } from '../../utils';
+import { useNotification } from '../../contexts/notif/notif.context';
 
 const INITIAL_REGISTER_STATE: IRegisterInitialState = {
   displayName: '',
@@ -21,7 +21,7 @@ const INITIAL_REGISTER_STATE: IRegisterInitialState = {
 const SignUp: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   const [firebaseError, setFirebaseError] = React.useState<string | null>(null);
 
-  const { openNotification } = useContext(NotifContext);
+  const { openNotification } = useNotification();
 
   const authenticateUser = async (values: IRegisterInitialState): Promise<void> => {
     const { displayName, email, password }: IRegisterInitialState = values;
