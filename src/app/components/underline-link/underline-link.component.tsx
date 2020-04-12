@@ -10,13 +10,16 @@ interface IProps extends RouteComponentProps<{}> {
   type: UnderlineLinkType;
   to?: string;
   href?: string;
+  iconType?: string;
+  hasIcon?: boolean;
 }
 
-const UnderlineLink: React.FC<IProps> = ({ type, to, href, children }) => {
+const UnderlineLink: React.FC<IProps> = ({ type, to, href, iconType = 'export', hasIcon = false, children }) => {
   if (type === 'insider') {
     return (
       <Link className="underline-link" to={to}>
         {children}
+        {hasIcon && <Icon className="underline-link-icon" type={iconType} />}
       </Link>
     );
   }
@@ -25,7 +28,7 @@ const UnderlineLink: React.FC<IProps> = ({ type, to, href, children }) => {
     return (
       <span className="underline-link">
         {children}
-        <Icon className="underline-link-icon" type="export" />
+        <Icon className="underline-link-icon" type={iconType} />
       </span>
     );
   }
@@ -33,7 +36,7 @@ const UnderlineLink: React.FC<IProps> = ({ type, to, href, children }) => {
   return (
     <a className="underline-link" target="_blank" href={href}>
       {children}
-      <Icon className="underline-link-icon" type="export" />
+      <Icon className="underline-link-icon" type={iconType} />
     </a>
   );
 };
