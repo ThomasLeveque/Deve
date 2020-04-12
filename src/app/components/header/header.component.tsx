@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Icon, Dropdown, Menu, Button } from 'antd';
 
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
@@ -9,10 +9,11 @@ import { useNotification } from '../../contexts/notif/notif.context';
 
 import './header.styles.less';
 
-const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
+const Header: React.FC = () => {
   const { currentUser } = useCurrentUser();
   const { isSearchOpen, toggleSearch } = useSearch();
   const { openNotification } = useNotification();
+  const history = useHistory();
 
   const handleLogout = async (): Promise<void> => {
     try {
@@ -77,4 +78,4 @@ const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   );
 };
 
-export default withRouter(Header);
+export default Header;

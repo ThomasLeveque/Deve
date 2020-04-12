@@ -1,12 +1,12 @@
 import React from 'react';
-import { withRouter, Link, RouteComponentProps } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Icon } from 'antd';
 
 import './underline-link.styles.less';
 
 type UnderlineLinkType = 'insider' | 'external' | 'no-link-external';
 
-interface IProps extends RouteComponentProps<{}> {
+interface IProps {
   type: UnderlineLinkType;
   to?: string;
   href?: string;
@@ -41,4 +41,4 @@ const UnderlineLink: React.FC<IProps> = ({ type, to, href, iconType = 'export', 
   );
 };
 
-export default withRouter(UnderlineLink);
+export default UnderlineLink;

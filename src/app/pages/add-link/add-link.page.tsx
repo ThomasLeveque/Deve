@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Formik, FormikHelpers, Form, Field, FormikProps } from 'formik';
 import { Row, Col, AutoComplete, Icon, PageHeader } from 'antd';
 
@@ -23,10 +23,11 @@ const INITIAL_STATE: ICreateLinkInitialState = {
   category: ''
 };
 
-const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
+const AddLinkPage: React.FC = () => {
   const { currentUser } = useCurrentUser();
   const { categories } = useCategories();
   const { addLink } = useLinks();
+  const history = useHistory();
 
   const [addCatLoading, setAddCatLoading] = React.useState<boolean>(false);
 
@@ -166,4 +167,4 @@ const AddLinkPage: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   );
 };
 
-export default withRouter(AddLinkPage);
+export default AddLinkPage;

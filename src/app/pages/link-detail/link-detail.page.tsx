@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteComponentProps, match } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { PageHeader, Row, Col, Icon, Divider } from 'antd';
 import { Formik, Form, FormikHelpers, FormikProps, Field } from 'formik';
@@ -22,26 +22,21 @@ import { formatError } from '../../utils/format-string.util';
 import './link-detail.styles.less';
 import { useNotification } from '../../contexts/notif/notif.context';
 
-type Params = { linkId: string };
-
-interface IProps extends RouteComponentProps<{}> {
-  match: match<Params>;
-}
-
 const INITIAL_STATE: IAddCommentInitialState = {
   commentText: ''
 };
 
-const LinkDetailPage: React.FC<IProps> = ({ match, history }) => {
+const LinkDetailPage: React.FC = () => {
   const { currentUser } = useCurrentUser();
   const { openNotification } = useNotification();
   const { updateVoteLinks, addCommentLink } = useLinks();
+  const { linkId } = useParams<{ linkId: string }>();
+  const history = useHistory();
 
   const [link, setLink] = React.useState<Link>(null);
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>('');
 
-  const linkId: string = match.params.linkId;
   const alreadyLiked: boolean = !!(link && link.votes.find((vote: IVote) => currentUser && vote.voteBy.id === currentUser.id));
   const linkRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Typography, Icon } from 'antd';
+import { useLocation } from 'react-router-dom';
+import { Typography } from 'antd';
 
 import UnderlineLink from '../underline-link/underline-link.component';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field, FormikHelpers, FormikProps } from 'formik';
 
 import { FormInput } from '../../components/form-input/form-input.component';
@@ -18,9 +18,9 @@ const INITIAL_REGISTER_STATE: IRegisterInitialState = {
   password: ''
 };
 
-const SignUp: React.FC<RouteComponentProps<{}>> = ({ history }) => {
+const SignUp: React.FC = () => {
   const [firebaseError, setFirebaseError] = React.useState<string | null>(null);
-
+  const history = useHistory();
   const { openNotification } = useNotification();
 
   const authenticateUser = async (values: IRegisterInitialState): Promise<void> => {
@@ -78,4 +78,4 @@ const SignUp: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   );
 };
 
-export default withRouter(SignUp);
+export default SignUp;

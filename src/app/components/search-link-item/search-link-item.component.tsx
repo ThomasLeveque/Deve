@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Icon, Row, Col, Typography, Tooltip, Badge } from 'antd';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { Highlight } from 'react-instantsearch-dom';
@@ -16,14 +16,14 @@ import { getDomain } from '../../utils/format-string.util';
 
 import './search-link-item.styles.less';
 
-interface IProps extends RouteComponentProps<{}> {
+interface IProps {
   link: ALgoliaLink;
   index: number;
 }
 
-const SearchLinkItem: React.FC<IProps> = ({ link, history, index }) => {
+const SearchLinkItem: React.FC<IProps> = ({ link, index }) => {
   const { toggleSearch } = useSearch();
-
+  const history = useHistory();
   const { Title } = Typography;
 
   const [ref, inView] = useInView({
@@ -76,4 +76,4 @@ const SearchLinkItem: React.FC<IProps> = ({ link, history, index }) => {
   );
 };
 
-export default withRouter(SearchLinkItem);
+export default SearchLinkItem;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Icon, Row, Col, Typography, Tooltip } from 'antd';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { useInView } from 'react-intersection-observer';
@@ -17,15 +17,16 @@ import { Link } from '../../models/link.model';
 import './link-item.styles.less';
 import { getDomain } from '../../utils/format-string.util';
 
-interface IProps extends RouteComponentProps<{}> {
+interface IProps {
   link: Link;
   index: number;
 }
 
-const LinkItem: React.FC<IProps> = ({ link, history, index }) => {
+const LinkItem: React.FC<IProps> = ({ link, index }) => {
   const { currentUser } = useCurrentUser();
   const { updateVoteLinks } = useLinks();
 
+  const history = useHistory();
   const { Title } = Typography;
   const alreadyLiked: boolean = !!link.votes.find((vote: IVote) => currentUser && vote.voteBy.id === currentUser.id);
 
@@ -89,4 +90,4 @@ const LinkItem: React.FC<IProps> = ({ link, history, index }) => {
   );
 };
 
-export default withRouter(LinkItem);
+export default LinkItem;

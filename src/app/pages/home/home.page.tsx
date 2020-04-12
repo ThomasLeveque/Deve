@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Dropdown, Button, Icon, Menu } from 'antd';
 import { useQueryParam, StringParam } from 'use-query-params';
 
@@ -9,8 +9,9 @@ import CustomButton from '../../components/custom-button/custom-button.component
 
 import './home.styles.less';
 
-const HomePage: React.FC<RouteComponentProps> = ({ history }) => {
+const HomePage: React.FC = () => {
   const [qsSortby, setQsSortby] = useQueryParam('sortby', StringParam);
+  const history = useHistory();
 
   const sortByMapping: { [key: string]: { text: string } } = {
     recent: {
