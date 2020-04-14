@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik, FormikHelpers, Form, Field, FormikProps } from 'formik';
-import { Row, Col, AutoComplete, PageHeader } from 'antd';
+import { Row, Col, AutoComplete, PageHeader, Space } from 'antd';
 import { LoadingOutlined, PlusOutlined, CloseCircleOutlined, SmileOutlined } from '@ant-design/icons';
 
 import { FormInput } from '../../components/form-input/form-input.component';
@@ -64,7 +64,16 @@ const AddLinkPage: React.FC = () => {
           }
         }}
       >
-        {({ isSubmitting, isValid, errors, touched, values, setFieldValue, setFieldTouched }: FormikProps<ICreateLinkInitialState>) => {
+        {({
+          isSubmitting,
+          isValid,
+          errors,
+          touched,
+          values,
+          setFieldValue,
+          setFieldTouched,
+          resetForm
+        }: FormikProps<ICreateLinkInitialState>) => {
           const { Option } = AutoComplete;
           const autoCompleteChildren = categories
             .map((category: Category) => (
@@ -150,13 +159,23 @@ const AddLinkPage: React.FC = () => {
                 </Col>
               </Row>
               <div className="add-link-buttons">
-                <CustomButton
-                  text="Add new link"
-                  type="submit"
-                  buttonType="primary"
-                  loading={isSubmitting}
-                  disabled={isSubmitting || !isValid}
-                />
+                <Space size="middle">
+                  <CustomButton
+                    type="button"
+                    text="Reset"
+                    buttonType="secondary"
+                    hasIcon
+                    Icon={CloseCircleOutlined}
+                    onClick={() => resetForm()}
+                  />
+                  <CustomButton
+                    text="Add new link"
+                    type="submit"
+                    buttonType="primary"
+                    loading={isSubmitting}
+                    disabled={isSubmitting || !isValid}
+                  />
+                </Space>
               </div>
             </Form>
           );

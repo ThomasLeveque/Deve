@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
-import { PageHeader, Row, Col, Divider } from 'antd';
+import { PageHeader, Row, Col, Divider, Space } from 'antd';
 import { CloseCircleOutlined, FireFilled, FireOutlined } from '@ant-design/icons';
 import { Formik, Form, FormikHelpers, FormikProps, Field } from 'formik';
 
@@ -117,39 +117,45 @@ const LinkDetailPage: React.FC = () => {
               setSubmitting(false);
             }}
           >
-            {({ isSubmitting, isValid, setFieldValue }: FormikProps<IAddCommentInitialState>) => {
+            {({ isSubmitting, isValid, resetForm }: FormikProps<IAddCommentInitialState>) => {
               return (
                 <Form>
                   <Field autoComplete="off" name="commentText" placeholder="Add new comment" type="text" isTextarea component={FormInput} />
-                  <CustomButton
-                    type="button"
-                    text="Reset"
-                    buttonType="secondary"
-                    hasIcon
-                    Icon={CloseCircleOutlined}
-                    onClick={() => setFieldValue('commentText', '', false)}
-                  />
-                  <CustomButton
-                    type="submit"
-                    text="Add Comment"
-                    buttonType="primary"
-                    loading={isSubmitting}
-                    disabled={isSubmitting || !isValid}
-                  />
+                  <Space size="middle">
+                    <CustomButton
+                      type="button"
+                      text="Reset"
+                      buttonType="secondary"
+                      hasIcon
+                      Icon={CloseCircleOutlined}
+                      onClick={() => resetForm()}
+                    />
+                    <CustomButton
+                      type="submit"
+                      text="Add Comment"
+                      buttonType="primary"
+                      loading={isSubmitting}
+                      disabled={isSubmitting || !isValid}
+                    />
+                  </Space>
                 </Form>
               );
             }}
           </Formik>
 
-          {link.comments.map((comment: IComment, index: number) => (
-            <div key={index}>
-              <Divider />
-              <h4 className="comment-author">
-                {comment.postedBy.displayName} <span>{distanceInWordsToNow(comment.created)} ago</span>
-              </h4>
-              <p className="comment-text">{comment.text}</p>
+          {link.comments.length > 0 && (
+            <div className="comment-list">
+              {link.comments.map((comment: IComment, index: number) => (
+                <Fragment key={index}>
+                  <Divider />
+                  <h4 className="comment-author">
+                    {comment.postedBy.displayName} <span>{distanceInWordsToNow(comment.created)} ago</span>
+                  </h4>
+                  <p className="comment-text">{comment.text}</p>
+                </Fragment>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
