@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { HomeOutlined } from '@ant-design/icons';
 import { Typography } from 'antd';
 
 import UnderlineLink from '../underline-link/underline-link.component';
@@ -16,7 +17,7 @@ const NotFound = () => {
         <Title level={1}>
           <code>{location.pathname}</code>Not Found
         </Title>
-        <UnderlineLink type="insider" to="/" hasIcon iconType="home">
+        <UnderlineLink type="insider" to="/" hasIcon Icon={HomeOutlined}>
           Go back to home
         </UnderlineLink>
       </div>

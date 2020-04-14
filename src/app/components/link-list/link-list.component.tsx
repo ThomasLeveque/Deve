@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'antd';
+import { ReloadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 import LinkItem from '../link-item/link-item.component';
 import Loading from '../loading/loading.component';
@@ -19,7 +20,7 @@ const LinkList: React.FC = () => {
 
   return (
     <div className="link-list">
-      <Row type="flex" gutter={[16, 16]}>
+      <Row gutter={[16, 16]}>
         {Object.keys(links).map((linkId: string, index: number) => {
           const link: Link = links[linkId];
           return (
@@ -37,7 +38,7 @@ const LinkList: React.FC = () => {
           loading={loadingMoreLinks}
           onClick={loadMoreLinks}
           hasIcon
-          iconType={hasMoreLinks ? 'reload' : 'close-circle'}
+          Icon={hasMoreLinks ? ReloadOutlined : CloseCircleOutlined}
         />
       </div>
     </div>

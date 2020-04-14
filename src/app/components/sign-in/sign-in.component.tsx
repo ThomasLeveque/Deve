@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field, FormikHelpers, FormikProps } from 'formik';
+import { GoogleOutlined } from '@ant-design/icons';
 
 import { FormInput } from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
@@ -86,7 +87,7 @@ const SignIn: React.FC = () => {
             type="button"
             buttonType="with-google"
             hasIcon
-            iconType="google"
+            Icon={GoogleOutlined}
             loading={withGoogleLoading || isSubmitting}
             disabled={withGoogleLoading}
             onClick={authenticateUserWithGoogle}

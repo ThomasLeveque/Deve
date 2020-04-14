@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Icon, Row, Col, Typography, Tooltip } from 'antd';
+import { Row, Col, Typography, Tooltip } from 'antd';
+import { FireFilled, FireOutlined, MessageOutlined } from '@ant-design/icons';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { useInView } from 'react-intersection-observer';
 import { Spring } from 'react-spring/renderprops';
@@ -13,9 +14,9 @@ import { useCurrentUser } from '../../providers/current-user/current-user.provid
 import { IVote } from '../../interfaces/vote.interface';
 import { ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/constants.util';
 import { Link } from '../../models/link.model';
+import { getDomain } from '../../utils/format-string.util';
 
 import './link-item.styles.less';
-import { getDomain } from '../../utils/format-string.util';
 
 interface IProps {
   link: Link;
@@ -63,9 +64,9 @@ const LinkItem: React.FC<IProps> = ({ link, index }) => {
                   {link.description}
                 </Title>
               </Tooltip>
-              <UnderlineLink type="no-link-external">On {getDomain(link.url)}</UnderlineLink>
+              <UnderlineLink type="not-link-external">On {getDomain(link.url)}</UnderlineLink>
             </div>
-            <Row type="flex" align="bottom" className="author light P">
+            <Row align="bottom" className="author light P">
               <Col span={12} className="break-word P">
                 by {link.postedBy.displayName}
               </Col>
@@ -76,11 +77,11 @@ const LinkItem: React.FC<IProps> = ({ link, index }) => {
           </a>
           <div className="link-item-actions flex">
             <div className={`${alreadyLiked ? 'liked' : ''} favorite pointer`} onClick={handleVote}>
-              <Icon type="fire" theme={alreadyLiked ? 'filled' : 'outlined'} className="icon" />
+              {alreadyLiked ? <FireFilled className="icon" /> : <FireOutlined className="icon" />}
               <span className="count">{link.voteCount === 0 ? 'like' : link.voteCount}</span>
             </div>
             <div className="comment pointer" onClick={() => history.push(`/links/${link.id}`)}>
-              <Icon type="message" className="icon" />
+              <MessageOutlined className="icon" />
               <span className="count">{`${link.comments.length} comment${link.comments.length > 1 ? 's' : ''}`}</span>
             </div>
           </div>

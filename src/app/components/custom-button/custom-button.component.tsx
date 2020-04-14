@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 import './custom-button.styles.less';
 
@@ -10,18 +10,14 @@ interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   buttonType: CustomButtonType;
   loading?: boolean;
   hasIcon?: boolean;
-  iconType?: string;
+  Icon?: any;
 }
 
-const CustomButton: React.FC<IProps> = ({ text, buttonType, loading = false, hasIcon = false, iconType, ...props }) => {
+const CustomButton: React.FC<IProps> = ({ text, buttonType, loading = false, hasIcon = false, Icon, ...props }) => {
   return (
     <button className={`custom-button custom-button-${buttonType}`} {...props}>
       {text}
-      {loading ? (
-        <Icon type="loading" className="custom-button-icon" />
-      ) : (
-        hasIcon && <Icon type={iconType} className="custom-button-icon" />
-      )}
+      {loading ? <LoadingOutlined className="custom-button-icon" /> : hasIcon && <Icon className="custom-button-icon" />}
     </button>
   );
 };

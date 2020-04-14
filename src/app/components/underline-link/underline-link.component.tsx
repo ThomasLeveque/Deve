@@ -1,34 +1,34 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Icon } from 'antd';
+import { ExportOutlined } from '@ant-design/icons';
 
 import './underline-link.styles.less';
 
-type UnderlineLinkType = 'insider' | 'external' | 'no-link-external';
+type UnderlineLinkType = 'insider' | 'external' | 'not-link-external';
 
 interface IProps {
   type: UnderlineLinkType;
   to?: string;
   href?: string;
-  iconType?: string;
+  Icon?: any;
   hasIcon?: boolean;
 }
 
-const UnderlineLink: React.FC<IProps> = ({ type, to, href, iconType = 'export', hasIcon = false, children }) => {
+const UnderlineLink: React.FC<IProps> = ({ type, to, href, Icon = ExportOutlined, hasIcon = false, children }) => {
   if (type === 'insider') {
     return (
       <Link className="underline-link" to={to}>
         {children}
-        {hasIcon && <Icon className="underline-link-icon" type={iconType} />}
+        {hasIcon && <Icon className="underline-link-icon" />}
       </Link>
     );
   }
 
-  if (type === 'no-link-external') {
+  if (type === 'not-link-external') {
     return (
       <span className="underline-link">
         {children}
-        <Icon className="underline-link-icon" type={iconType} />
+        <Icon className="underline-link-icon" />
       </span>
     );
   }
@@ -36,7 +36,7 @@ const UnderlineLink: React.FC<IProps> = ({ type, to, href, iconType = 'export', 
   return (
     <a className="underline-link" target="_blank" href={href}>
       {children}
-      <Icon className="underline-link-icon" type={iconType} />
+      <Icon className="underline-link-icon" />
     </a>
   );
 };

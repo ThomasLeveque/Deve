@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Icon, Dropdown, Menu, Button } from 'antd';
+import { Dropdown, Menu, Button } from 'antd';
+import { LogoutOutlined, CloseOutlined, SearchOutlined, DownOutlined, LoginOutlined } from '@ant-design/icons';
 
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { useSearch } from '../../providers/search/search.provider';
@@ -28,7 +29,7 @@ const Header: React.FC = () => {
     <Menu>
       <Menu.Item key="0">
         <div className="pointer" onClick={handleLogout}>
-          Sign out <Icon type="logout" />
+          Sign out <LogoutOutlined />
         </div>
       </Menu.Item>
     </Menu>
@@ -49,14 +50,14 @@ const Header: React.FC = () => {
       </h2>
       <div>
         <span className="search" onClick={() => toggleSearch(!isSearchOpen)}>
-          <Icon type={isSearchOpen ? 'close' : 'search'} className="search-icon" />
+          {isSearchOpen ? <CloseOutlined className="search-icon" /> : <SearchOutlined className="search-icon" />}
           {isSearchOpen ? 'Close' : 'Search'}
         </span>
         <div className="header-button">
           {currentUser ? (
             <Dropdown placement="bottomRight" overlay={menu} trigger={['click']}>
               <Button type="link">
-                {currentUser.displayName} <Icon type="down" />
+                {currentUser.displayName} <DownOutlined />
               </Button>
             </Dropdown>
           ) : (
@@ -69,7 +70,7 @@ const Header: React.FC = () => {
                 history.push('/signin');
               }}
             >
-              Sign in <Icon type="login" />
+              Sign in <LoginOutlined />
             </Button>
           )}
         </div>

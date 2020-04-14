@@ -1,7 +1,8 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik, FormikHelpers, Form, Field, FormikProps } from 'formik';
-import { Row, Col, AutoComplete, Icon, PageHeader } from 'antd';
+import { Row, Col, AutoComplete, PageHeader } from 'antd';
+import { LoadingOutlined, PlusOutlined, CloseCircleOutlined, SmileOutlined } from '@ant-design/icons';
 
 import { FormInput } from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
@@ -76,7 +77,7 @@ const AddLinkPage: React.FC = () => {
                 ? [
                     <Option value="" key="add" disabled className="add-category">
                       <div onClick={() => handleAddCategory(values.category)}>
-                        Add <span>{values.category}</span> to categories <Icon type={addCatLoading ? 'loading' : 'plus'} />
+                        Add <span>{values.category}</span> to categories {addCatLoading ? <LoadingOutlined /> : <PlusOutlined />}
                       </div>
                     </Option>
                   ]
@@ -85,7 +86,7 @@ const AddLinkPage: React.FC = () => {
 
           return (
             <Form className="add-link-form">
-              <Row type="flex" gutter={[16, 16]} justify="end">
+              <Row gutter={[16, 16]} justify="end">
                 <Col span={24}>
                   <Field
                     autoComplete="off"
@@ -123,8 +124,8 @@ const AddLinkPage: React.FC = () => {
                         onChange={(value: any) => {
                           setFieldValue('category', value);
                         }}
-                        filterOption={(inputValue: any, option: any) =>
-                          option.props.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 || option.props.value.length === 0
+                        filterOption={(inputValue: string, option) =>
+                          option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 || option.value.length === 0
                         }
                         onBlur={() => setFieldTouched('category', true)}
                         value={values.category}
@@ -132,15 +133,13 @@ const AddLinkPage: React.FC = () => {
                         {autoCompleteChildren.reverse()}
                       </AutoComplete>
                       {(isError(errors, touched, 'category') || !isCategorieExist(values.category)) && values.category.length !== 0 && (
-                        <Icon
-                          type="close-circle"
-                          theme="filled"
+                        <CloseCircleOutlined
                           className="custom-autocomplete-icon custom-autocomplete-icon-gray pointer"
                           onClick={() => setFieldValue('category', '', true)}
                         />
                       )}
                       {isValidCategory(errors, touched, 'category') && isCategorieExist(values.category) && (
-                        <Icon type="smile" className="custom-autocomplete-icon custom-autocomplete-icon-green" />
+                        <SmileOutlined className="custom-autocomplete-icon custom-autocomplete-icon-green" />
                       )}
                     </div>
                     {isError(errors, touched, 'category') && <span className="custom-autocomplete-error-text">{errors['category']}</span>}

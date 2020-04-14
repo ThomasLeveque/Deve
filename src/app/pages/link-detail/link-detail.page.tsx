@@ -1,7 +1,8 @@
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
-import { PageHeader, Row, Col, Icon, Divider } from 'antd';
+import { PageHeader, Row, Col, Divider } from 'antd';
+import { CloseCircleOutlined, FireFilled, FireOutlined } from '@ant-design/icons';
 import { Formik, Form, FormikHelpers, FormikProps, Field } from 'formik';
 
 import Loading from '../../components/loading/loading.component';
@@ -92,7 +93,7 @@ const LinkDetailPage: React.FC = () => {
           <h1 className="H3">{link.description}</h1>
           <Tag text={link.category} color="green" />
         </div>
-        <Row type="flex" align="bottom" className="author light P">
+        <Row align="bottom" className="author light P">
           <Col span={12} className="break-word P">
             by {link.postedBy.displayName}
           </Col>
@@ -101,7 +102,7 @@ const LinkDetailPage: React.FC = () => {
           </Col>
         </Row>
         <div className={`${alreadyLiked ? 'liked' : ''} favorite pointer`} onClick={handleVote}>
-          <Icon type="fire" theme={alreadyLiked ? 'filled' : 'outlined'} className="icon" />
+          {alreadyLiked ? <FireFilled className="icon" /> : <FireOutlined className="icon" />}
           <span className="count">{link.voteCount === 0 ? 'like' : link.voteCount}</span>
         </div>
 
@@ -125,7 +126,7 @@ const LinkDetailPage: React.FC = () => {
                     text="Reset"
                     buttonType="secondary"
                     hasIcon
-                    iconType="close-circle"
+                    Icon={CloseCircleOutlined}
                     onClick={() => setFieldValue('commentText', '', false)}
                   />
                   <CustomButton

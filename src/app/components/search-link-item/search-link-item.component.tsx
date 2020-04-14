@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Icon, Row, Col, Typography, Tooltip, Badge } from 'antd';
+import { Row, Col, Typography, Tooltip, Badge } from 'antd';
+import { MessageOutlined } from '@ant-design/icons';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { Highlight } from 'react-instantsearch-dom';
 import { useInView } from 'react-intersection-observer';
@@ -50,9 +51,9 @@ const SearchLinkItem: React.FC<IProps> = ({ link, index }) => {
               </Tooltip>
               {link.category && <Tag text={link.category} color="green" />}
             </div>
-            <Row type="flex" align="bottom" className="author light">
+            <Row align="bottom" className="author light">
               <Col span={12} className="break-word">
-                <UnderlineLink type="no-link-external">On {getDomain(link.url)}</UnderlineLink>
+                <UnderlineLink type="not-link-external">On {getDomain(link.url)}</UnderlineLink>
               </Col>
               <Col span={12} className="text-align-right P">
                 by {link.postedBy.displayName} | {distanceInWordsToNow(link.createdAt)} ago
@@ -67,7 +68,7 @@ const SearchLinkItem: React.FC<IProps> = ({ link, index }) => {
             }}
           >
             <Badge count={link.comments.length} showZero overflowCount={99}>
-              <Icon type="message" className="icon" />
+              <MessageOutlined className="icon" />
             </Badge>
           </div>
         </div>
