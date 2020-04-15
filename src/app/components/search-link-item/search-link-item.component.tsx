@@ -49,7 +49,13 @@ const SearchLinkItem: React.FC<IProps> = ({ link, index }) => {
                   <Highlight tagName="span" hit={link} attribute="description" />
                 </Title>
               </Tooltip>
-              {link.category && <Tag text={link.category} color="green" />}
+              {link.categories.length > 0 && (
+                <div className="tags">
+                  {link.categories.map((category: string, index: number) => (
+                    <Tag key={`${category}${index}`} text={category} color="green" />
+                  ))}
+                </div>
+              )}
             </div>
             <Row align="bottom" className="author light">
               <Col span={12} className="break-word">

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik, FormikHelpers, Form, Field, FormikProps } from 'formik';
-import { Row, Col, AutoComplete, PageHeader, Space } from 'antd';
-import { LoadingOutlined, PlusOutlined, CloseCircleOutlined, SmileOutlined } from '@ant-design/icons';
+import { Row, Col, PageHeader, Space, Select } from 'antd';
+import { LoadingOutlined, PlusOutlined, CloseCircleFilled, CloseCircleOutlined, SmileOutlined } from '@ant-design/icons';
 
 import { FormInput } from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
@@ -15,36 +15,31 @@ import { ICreateLinkInitialState } from '../../interfaces/initial-states.type';
 import { linkSchema } from '../../schemas/link.schema';
 import { isError, isValid as isValidCategory } from '../../utils/form.util';
 import Category from '../../models/category.model';
+import { useNotification } from '../../contexts/notif/notif.context';
+import { formatError } from '../../utils/format-string.util';
 
 import './add-link.styles.less';
+import Tag from '../../components/tag/tag.component';
 
 const INITIAL_STATE: ICreateLinkInitialState = {
   description: '',
   url: '',
-  category: ''
+  categories: []
 };
 
 const AddLinkPage: React.FC = () => {
+  const [categoryToAdd, setCategoryToAdd] = useState<string>('');
   const { currentUser } = useCurrentUser();
   const { categories } = useCategories();
   const { addLink } = useLinks();
+  const { openNotification } = useNotification();
   const history = useHistory();
+  const { Option } = Select;
 
   const [addCatLoading, setAddCatLoading] = React.useState<boolean>(false);
 
-  const isCategorieExist = (value: any) => {
-    return !!categories.find(categorie => categorie.name === value);
-  };
-
-  const handleAddCategory = async (category: string): Promise<void> => {
-    if (!currentUser) {
-      history.push('/signin');
-    } else {
-      const newCategory: Category = { name: category, count: 0 };
-      setAddCatLoading(true);
-      await firestore.collection('categories').add(newCategory);
-      setAddCatLoading(false);
-    }
+  const isCategorieExist = (value: string) => {
+    return !!categories.find(categorie => categorie.name.toUpperCase() === value.toUpperCase());
   };
 
   return (
@@ -71,27 +66,28 @@ const AddLinkPage: React.FC = () => {
           touched,
           values,
           setFieldValue,
-          setFieldTouched,
-          resetForm
+          resetForm,
+          setFieldTouched
         }: FormikProps<ICreateLinkInitialState>) => {
-          const { Option } = AutoComplete;
-          const autoCompleteChildren = categories
-            .map((category: Category) => (
-              <Option key={category.id} value={category.name}>
-                {category.name}
-              </Option>
-            ))
-            .concat(
-              !isCategorieExist(values.category) && values.category.length !== 0
-                ? [
-                    <Option value="" key="add" disabled className="add-category">
-                      <div onClick={() => handleAddCategory(values.category)}>
-                        Add <span>{values.category}</span> to categories {addCatLoading ? <LoadingOutlined /> : <PlusOutlined />}
-                      </div>
-                    </Option>
-                  ]
-                : []
-            );
+          const handleAddCategory = async (categoryToAdd: string): Promise<void> => {
+            try {
+              if (!currentUser) {
+                history.push('/signin');
+              } else {
+                const newCategory: Category = { name: categoryToAdd, count: 0 };
+                setAddCatLoading(true);
+                await firestore.collection('categories').add(newCategory);
+                setAddCatLoading(false);
+                setCategoryToAdd('');
+                setFieldValue('categories', [...values.categories, categoryToAdd]);
+              }
+            } catch (err) {
+              openNotification(`Cannot add ${categoryToAdd} category`, formatError(err), 'error');
+              setAddCatLoading(false);
+              setCategoryToAdd('');
+              console.error(err);
+            }
+          };
 
           return (
             <Form className="add-link-form">
@@ -119,41 +115,73 @@ const AddLinkPage: React.FC = () => {
                   />
                 </Col>
                 <Col span={12}>
-                  <div
-                    className={`${
-                      isError(errors, touched, 'category') || (!isCategorieExist(values.category) && values.category.length !== 0)
-                        ? 'custom-autocomplete-error'
-                        : ''
-                    } custom-autocomplete`}
-                  >
-                    <label htmlFor="category">Category</label>
-                    <div className="custom-autocomplete-container">
-                      <AutoComplete
-                        placeholder="A category for yout link"
-                        onChange={(value: any) => {
-                          setFieldValue('category', value);
+                  <div className="custom-select">
+                    <label htmlFor="categories">Categories</label>
+                    <div className="custom-select-container">
+                      <Select
+                        className={`${
+                          isError(errors, touched, 'categories') && categoryToAdd.length === 0 ? 'custom-select-input-error' : ''
+                        } custom-select-input`}
+                        mode="multiple"
+                        tagRender={({ value, onClose }) => {
+                          return (
+                            <Tag
+                              onClose={onClose}
+                              closable
+                              text={value as string}
+                              color="green"
+                            />
+                          );
                         }}
-                        filterOption={(inputValue: string, option) =>
-                          option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 || option.value.length === 0
-                        }
-                        onBlur={() => setFieldTouched('category', true)}
-                        value={values.category}
+                        placeholder="Categories for the link"
+                        onChange={(selectedCategories: string[]) => {
+                          setCategoryToAdd('');
+                          setFieldValue('categories', selectedCategories);
+                        }}
+                        value={values.categories}
+                        onSearch={(category: string) => {
+                          setCategoryToAdd(category);
+                        }}
+                        onDropdownVisibleChange={(open: boolean) => {
+                          if (!open) {
+                            setCategoryToAdd('');
+                            setFieldTouched('categories', true);
+                          }
+                        }}
+                        dropdownRender={menu => {
+                          return (
+                            <>
+                              {categoryToAdd.length > 0 && !isCategorieExist(categoryToAdd) && (
+                                <div className="add-category-button" onClick={() => handleAddCategory(categoryToAdd)}>
+                                  Add <span>{categoryToAdd}</span> to categories {addCatLoading ? <LoadingOutlined /> : <PlusOutlined />}
+                                </div>
+                              )}
+                              {menu}
+                            </>
+                          );
+                        }}
                       >
-                        {autoCompleteChildren.reverse()}
-                      </AutoComplete>
-                      {(isError(errors, touched, 'category') || !isCategorieExist(values.category)) && values.category.length !== 0 && (
-                        <CloseCircleOutlined
-                          className="custom-autocomplete-icon custom-autocomplete-icon-gray pointer"
-                          onClick={() => setFieldValue('category', '', true)}
+                        {categories.length > 0 &&
+                          categories.map((category: Category) => (
+                            <Option key={category.id} value={category.name}>
+                              {category.name}
+                            </Option>
+                          ))}
+                      </Select>
+                      {categoryToAdd.length > 0 && (
+                        <CloseCircleFilled
+                          className="custom-select-icon custom-select-icon-gray pointer"
+                          onClick={() => {
+                            setCategoryToAdd('');
+                          }}
                         />
                       )}
-                      {isValidCategory(errors, touched, 'category') && isCategorieExist(values.category) && (
-                        <SmileOutlined className="custom-autocomplete-icon custom-autocomplete-icon-green" />
+                      {isValidCategory(errors, touched, 'categories') && categoryToAdd.length === 0 && (
+                        <SmileOutlined className="custom-select-icon custom-select-icon-green" />
                       )}
                     </div>
-                    {isError(errors, touched, 'category') && <span className="custom-autocomplete-error-text">{errors['category']}</span>}
-                    {!isCategorieExist(values.category) && values.category.length !== 0 && (
-                      <span className="custom-autocomplete-error-text">You should add this category</span>
+                    {isError(errors, touched, 'categories') && categoryToAdd.length === 0 && (
+                      <span className="custom-select-error-text">{errors['categories']}</span>
                     )}
                   </div>
                 </Col>

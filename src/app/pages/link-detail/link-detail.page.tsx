@@ -91,7 +91,13 @@ const LinkDetailPage: React.FC = () => {
       <div className="link-detail-container">
         <div className="link-detail-top">
           <h1 className="H3">{link.description}</h1>
-          <Tag text={link.category} color="green" />
+          {link.categories.length > 0 && (
+            <>
+              {link.categories.map((category: string, index: number) => (
+                <Tag key={`${category}${index}`} text={category} color="green" />
+              ))}
+            </>
+          )}
         </div>
         <Row align="bottom" className="author light P">
           <Col span={12} className="break-word P">

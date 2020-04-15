@@ -58,7 +58,13 @@ const LinkItem: React.FC<IProps> = ({ link, index }) => {
         <div style={props} className="link-item" ref={ref}>
           <a className="link-item-data" href={link.url} target="_blank">
             <div>
-              {link.category && <Tag text={link.category} color="green" />}
+              {link.categories.length > 0 && (
+                <div className="tags">
+                  {link.categories.map((category: string, index: number) => (
+                    <Tag key={`${category}${index}`} text={category} color="green" />
+                  ))}
+                </div>
+              )}
               <Tooltip title={link.description}>
                 <Title ellipsis={{ rows: 3 }} level={4}>
                   {link.description}

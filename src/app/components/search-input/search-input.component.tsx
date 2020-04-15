@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SearchOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { SearchOutlined, CloseCircleFilled } from '@ant-design/icons';
 import { connectSearchBox } from 'react-instantsearch-dom';
 import { SearchBoxProvided } from 'react-instantsearch-core';
 
@@ -33,7 +33,7 @@ const SearchInput: React.FC<SearchBoxProvided> = ({ currentRefinement, refine })
           onKeyPress={handleSearchSubmit}
         />
         <SearchOutlined className="search-input-icon green submit" onClick={handleSearchSubmit} />
-        {value.length !== 0 && <CloseCircleOutlined className="search-input-icon gray reset" onClick={handleSearchReset} />}
+        {value.length !== 0 && <CloseCircleFilled className="search-input-icon gray reset" onClick={handleSearchReset} />}
       </div>
     </div>
   );

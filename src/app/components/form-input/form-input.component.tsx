@@ -1,7 +1,7 @@
 import React from 'react';
 import { FieldInputProps, FormikProps } from 'formik';
 import { Input } from 'antd';
-import { CloseCircleOutlined, SmileOutlined } from '@ant-design/icons';
+import { CloseCircleFilled, SmileOutlined } from '@ant-design/icons';
 
 import { isError, isValid } from '../../utils/form.util';
 
@@ -49,10 +49,7 @@ const FormInput: React.FC<IProps> = ({
           />
         )}
         {!isTextarea && isError(errors, touched, field.name) && field.value.length !== 0 && (
-          <CloseCircleOutlined
-            className="form-input-icon form-input-icon-gray pointer"
-            onClick={() => setFieldValue(field.name, '', true)}
-          />
+          <CloseCircleFilled className="form-input-icon form-input-icon-gray pointer" onClick={() => setFieldValue(field.name, '', true)} />
         )}
         {!isTextarea && isValid(errors, touched, field.name) && <SmileOutlined className="form-input-icon form-input-icon-green" />}
       </div>
