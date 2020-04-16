@@ -52,7 +52,7 @@ const SearchLinkItem: React.FC<IProps> = ({ link, index }) => {
               {link.categories.length > 0 && (
                 <div className="tags">
                   {link.categories.map((category: string, index: number) => (
-                    <Tag key={`${category}${index}`} text={category} color="green" />
+                    <Tag isButton key={`${category}${index}`} text={category} color="green" />
                   ))}
                 </div>
               )}
