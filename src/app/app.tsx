@@ -11,6 +11,7 @@ import { useCategories } from './providers/categories/categories.provider';
 import { useSearch } from './providers/search/search.provider';
 
 import './app.styles.less';
+import FirstLoading from './components/first-loading/first-loading.component';
 
 const App = () => {
   const { currentUserError, currentUserLoaded } = useCurrentUser();
@@ -37,6 +38,7 @@ const App = () => {
     <div className="app">
       <Header />
       <ProgressBar isAnimating={!categoriesLoaded || !currentUserLoaded} />
+      {(!categoriesLoaded || !currentUserLoaded) && <FirstLoading />}
       <main>{renderRoutes()}</main>
       {firstSearchOpen && <SearchLayout />}
     </div>
