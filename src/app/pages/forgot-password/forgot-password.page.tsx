@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Formik, FormikHelpers, FormikProps, Form, Field } from 'formik';
 
 import { FormInput } from '../../components/form-input/form-input.component';
@@ -6,9 +6,9 @@ import CustomButton from '../../components/custom-button/custom-button.component
 
 import { IResetInitialState } from '../../interfaces/initial-states.type';
 import { resetSchema } from '../../schemas/user.schema';
-import { formatError } from '../../utils';
-import NotifContext from '../../contexts/notif/notif.context';
+import { formatError } from '../../utils/format-string.util';
 import { resetPassword } from '../../firebase/firebase.service';
+import { useNotification } from '../../contexts/notif/notif.context';
 
 import './forgot-password.styles.less';
 
@@ -17,7 +17,7 @@ const INITIAL_RESET_STATE: IResetInitialState = {
 };
 
 const ForgotPasswordPage: React.FC = () => {
-  const { openNotification } = useContext(NotifContext);
+  const { openNotification } = useNotification();
 
   const [passwordResetError, setPasswordResetError] = React.useState<string | null>(null);
 

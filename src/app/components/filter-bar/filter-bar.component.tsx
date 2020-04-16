@@ -3,13 +3,13 @@ import { useQueryParam, ArrayParam } from 'use-query-params';
 
 import Tag from '../tag/tag.component';
 
-import { CategoriesContext } from '../../providers/categories/categories.provider';
+import { useCategories } from '../../providers/categories/categories.provider';
 import Category from '../../models/category.model';
 
 import './filter-bar.styles.less';
 
 const FilterBar: React.FC = () => {
-  const { usedCategories, totalUsedCategories } = React.useContext(CategoriesContext);
+  const { usedCategories, totalUsedCategories } = useCategories();
   const [qsCategories = [], setQsCategories] = useQueryParam<string[]>('categories', ArrayParam);
 
   const updateQsCategories = (categoryName: string): string[] => {

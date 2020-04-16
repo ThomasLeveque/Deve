@@ -1,25 +1,26 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Row, Col } from 'antd';
+import { ReloadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 import LinkItem from '../link-item/link-item.component';
 import Loading from '../loading/loading.component';
 import CustomButton from '../custom-button/custom-button.component';
 
-import { ITEMS_PER_LIGNE } from '../../utils';
+import { ITEMS_PER_LIGNE } from '../../utils/constants.util';
 import { Link } from '../../models/link.model';
-import { LinksContext } from '../../providers/links/links.provider';
+import { useLinks } from '../../providers/links/links.provider';
 
 import './link-list.styles.less';
 
 const LinkList: React.FC = () => {
-  const { links, linksLoaded, loadMoreLinks, loadingMoreLinks, hasMoreLinks } = useContext(LinksContext);
+  const { links, linksLoaded, loadMoreLinks, loadingMoreLinks, hasMoreLinks } = useLinks();
   if (!linksLoaded) {
     return <Loading />;
   }
 
   return (
     <div className="link-list">
-      <Row type="flex" gutter={[16, 16]}>
+      <Row gutter={[16, 16]}>
         {Object.keys(links).map((linkId: string, index: number) => {
           const link: Link = links[linkId];
           return (
@@ -37,7 +38,7 @@ const LinkList: React.FC = () => {
           loading={loadingMoreLinks}
           onClick={loadMoreLinks}
           hasIcon
-          iconType={hasMoreLinks ? 'reload' : 'close-circle'}
+          Icon={hasMoreLinks ? ReloadOutlined : CloseCircleOutlined}
         />
       </div>
     </div>

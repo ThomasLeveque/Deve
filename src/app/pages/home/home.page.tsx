@@ -1,6 +1,7 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
-import { Dropdown, Button, Icon, Menu } from 'antd';
+import { useHistory } from 'react-router-dom';
+import { Dropdown, Button, Menu } from 'antd';
+import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import { useQueryParam, StringParam } from 'use-query-params';
 
 import LinkList from '../../components/link-list/link-list.component';
@@ -9,8 +10,9 @@ import CustomButton from '../../components/custom-button/custom-button.component
 
 import './home.styles.less';
 
-const HomePage: React.FC<RouteComponentProps> = ({ history }) => {
+const HomePage: React.FC = () => {
   const [qsSortby, setQsSortby] = useQueryParam('sortby', StringParam);
+  const history = useHistory();
 
   const sortByMapping: { [key: string]: { text: string } } = {
     recent: {
@@ -43,10 +45,10 @@ const HomePage: React.FC<RouteComponentProps> = ({ history }) => {
         <Dropdown overlay={menu} trigger={['click']}>
           <Button type="link">
             Sort by{qsSortby && <span className="selected-filter">{`: ${sortByMapping[qsSortby].text}`}</span>}
-            <Icon type="down" />
+            <DownOutlined />
           </Button>
         </Dropdown>
-        <CustomButton text="Add a link" buttonType="primary" hasIcon iconType="plus" onClick={() => history.push('add')} />
+        <CustomButton text="Add a link" buttonType="primary" hasIcon Icon={PlusOutlined} onClick={() => history.push('add')} />
       </div>
       <LinkList />
     </div>

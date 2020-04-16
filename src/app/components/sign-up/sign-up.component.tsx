@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field, FormikHelpers, FormikProps } from 'formik';
 
 import { FormInput } from '../../components/form-input/form-input.component';
@@ -9,8 +9,8 @@ import UnderlineLink from '../../components/underline-link/underline-link.compon
 import { register, createUserProfileDocument } from '../../firebase/firebase.service';
 import { IRegisterInitialState } from '../../interfaces/initial-states.type';
 import { registerSchema } from '../../schemas/user.schema';
-import NotifContext from '../../contexts/notif/notif.context';
-import { formatError } from '../../utils';
+import { formatError } from '../../utils/format-string.util';
+import { useNotification } from '../../contexts/notif/notif.context';
 
 const INITIAL_REGISTER_STATE: IRegisterInitialState = {
   displayName: '',
@@ -18,10 +18,10 @@ const INITIAL_REGISTER_STATE: IRegisterInitialState = {
   password: ''
 };
 
-const SignUp: React.FC<RouteComponentProps<{}>> = ({ history }) => {
+const SignUp: React.FC = () => {
   const [firebaseError, setFirebaseError] = React.useState<string | null>(null);
-
-  const { openNotification } = useContext(NotifContext);
+  const history = useHistory();
+  const { openNotification } = useNotification();
 
   const authenticateUser = async (values: IRegisterInitialState): Promise<void> => {
     const { displayName, email, password }: IRegisterInitialState = values;
@@ -78,4 +78,4 @@ const SignUp: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   );
 };
 
-export default withRouter(SignUp);
+export default SignUp;

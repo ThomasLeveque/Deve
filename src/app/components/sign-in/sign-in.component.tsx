@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field, FormikHelpers, FormikProps } from 'formik';
+import { GoogleOutlined } from '@ant-design/icons';
 
 import { FormInput } from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
@@ -9,19 +10,19 @@ import UnderlineLink from '../../components/underline-link/underline-link.compon
 import { login, signInWithGoole } from '../../firebase/firebase.service';
 import { ILoginInitialState } from '../../interfaces/initial-states.type';
 import { loginSchema } from '../../schemas/user.schema';
-import { formatError } from '../../utils';
-import NotifContext from '../../contexts/notif/notif.context';
+import { formatError } from '../../utils/format-string.util';
+import { useNotification } from '../../contexts/notif/notif.context';
 
 const INITIAL_LOGIN_STATE: ILoginInitialState = {
   email: '',
   password: ''
 };
 
-const SignIn: React.FC<RouteComponentProps<{}>> = ({ history }) => {
+const SignIn: React.FC = () => {
   const [firebaseError, setFirebaseError] = React.useState<string | null>(null);
   const [withGoogleLoading, setWithGoogleLoading] = React.useState<boolean>(false);
-
-  const { openNotification } = useContext(NotifContext);
+  const history = useHistory();
+  const { openNotification } = useNotification();
 
   const authenticateUser = async (values: ILoginInitialState): Promise<void> => {
     const { email, password }: ILoginInitialState = values;
@@ -86,7 +87,7 @@ const SignIn: React.FC<RouteComponentProps<{}>> = ({ history }) => {
             type="button"
             buttonType="with-google"
             hasIcon
-            iconType="google"
+            Icon={GoogleOutlined}
             loading={withGoogleLoading || isSubmitting}
             disabled={withGoogleLoading}
             onClick={authenticateUserWithGoogle}
@@ -97,4 +98,4 @@ const SignIn: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   );
 };
 
-export default withRouter(SignIn);
+export default SignIn;

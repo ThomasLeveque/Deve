@@ -5,7 +5,7 @@ import { IComment } from '../interfaces/comment.interface';
 export class BaseLink {
   url: string;
   description: string;
-  category: string;
+  categories: string[];
   postedBy: CurrentUser;
   voteCount: number;
   votes: IVote[];
@@ -16,7 +16,7 @@ export class BaseLink {
   constructor(json: any) {
     this.url = json.url;
     this.description = json.description;
-    this.category = json.category;
+    this.categories = json.categories || [];
     this.postedBy = json.postedBy;
     this.voteCount = json.voteCount;
     this.votes = json.votes;

@@ -4,8 +4,9 @@ import { connectCurrentRefinements } from 'react-instantsearch-dom';
 import '../tag/tag.styles.less';
 
 const ClearRefinementsCategories: React.FC<any> = ({ items, refine }) => {
+  const itemsLength = items.length;
   const handleClear = () => {
-    if (!items.length) return;
+    if (!itemsLength) return;
     refine(items);
   };
 

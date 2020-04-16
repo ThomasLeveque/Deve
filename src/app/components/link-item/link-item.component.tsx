@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Icon, Row, Col, Typography, Tooltip } from 'antd';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { Row, Col, Typography, Tooltip } from 'antd';
+import { FireFilled, FireOutlined, MessageOutlined } from '@ant-design/icons';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { useInView } from 'react-intersection-observer';
 import { Spring } from 'react-spring/renderprops';
@@ -8,23 +9,25 @@ import { Spring } from 'react-spring/renderprops';
 import Tag from '../tag/tag.component';
 import UnderlineLink from '../underline-link/underline-link.component';
 
-import { LinksContext } from '../../providers/links/links.provider';
-import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
+import { useLinks } from '../../providers/links/links.provider';
+import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { IVote } from '../../interfaces/vote.interface';
-import { getDomain, ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/index';
+import { ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/constants.util';
 import { Link } from '../../models/link.model';
+import { getDomain } from '../../utils/format-string.util';
 
 import './link-item.styles.less';
 
-interface IProps extends RouteComponentProps<{}> {
+interface IProps {
   link: Link;
   index: number;
 }
 
-const LinkItem: React.FC<IProps> = ({ link, history, index }) => {
-  const { currentUser } = useContext(CurrentUserContext);
-  const { updateVoteLinks } = useContext(LinksContext);
+const LinkItem: React.FC<IProps> = ({ link, index }) => {
+  const { currentUser } = useCurrentUser();
+  const { updateVoteLinks } = useLinks();
 
+  const history = useHistory();
   const { Title } = Typography;
   const alreadyLiked: boolean = !!link.votes.find((vote: IVote) => currentUser && vote.voteBy.id === currentUser.id);
 
@@ -55,15 +58,21 @@ const LinkItem: React.FC<IProps> = ({ link, history, index }) => {
         <div style={props} className="link-item" ref={ref}>
           <a className="link-item-data" href={link.url} target="_blank">
             <div>
-              {link.category && <Tag text={link.category} color="green" />}
+              {link.categories.length > 0 && (
+                <div className="tags">
+                  {link.categories.map((category: string, index: number) => (
+                    <Tag isButton key={`${category}${index}`} text={category} color="green" />
+                  ))}
+                </div>
+              )}
               <Tooltip title={link.description}>
                 <Title ellipsis={{ rows: 3 }} level={4}>
                   {link.description}
                 </Title>
               </Tooltip>
-              <UnderlineLink type="no-link-external">On {getDomain(link.url)}</UnderlineLink>
+              <UnderlineLink type="not-link-external">On {getDomain(link.url)}</UnderlineLink>
             </div>
-            <Row type="flex" align="bottom" className="author light P">
+            <Row align="bottom" className="author light P">
               <Col span={12} className="break-word P">
                 by {link.postedBy.displayName}
               </Col>
@@ -74,11 +83,11 @@ const LinkItem: React.FC<IProps> = ({ link, history, index }) => {
           </a>
           <div className="link-item-actions flex">
             <div className={`${alreadyLiked ? 'liked' : ''} favorite pointer`} onClick={handleVote}>
-              <Icon type="fire" theme={alreadyLiked ? 'filled' : 'outlined'} className="icon" />
+              {alreadyLiked ? <FireFilled className="icon" /> : <FireOutlined className="icon" />}
               <span className="count">{link.voteCount === 0 ? 'like' : link.voteCount}</span>
             </div>
             <div className="comment pointer" onClick={() => history.push(`/links/${link.id}`)}>
-              <Icon type="message" className="icon" />
+              <MessageOutlined className="icon" />
               <span className="count">{`${link.comments.length} comment${link.comments.length > 1 ? 's' : ''}`}</span>
             </div>
           </div>
@@ -88,4 +97,4 @@ const LinkItem: React.FC<IProps> = ({ link, history, index }) => {
   );
 };
 
-export default withRouter(LinkItem);
+export default LinkItem;

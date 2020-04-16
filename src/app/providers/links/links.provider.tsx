@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, memo, useContext } from 'rea
 import { useQueryParam, StringParam, ArrayParam } from 'use-query-params';
 
 import { firestore } from '../../firebase/firebase.service';
-import { LINKS_PER_PAGE } from '../../utils';
+import { LINKS_PER_PAGE } from '../../utils/constants.util';
 import { Link } from '../../models/link.model';
 import { ICreateLinkInitialState } from '../../interfaces/initial-states.type';
 import Category from '../../models/category.model';
@@ -39,6 +39,8 @@ export const LinksContext = createContext<ILinksContext>({
   hasMoreLinks: true
 });
 
+export const useLinks = () => useContext(LinksContext);
+
 const LinksProvider: React.FC = memo(({ children }) => {
   const [links, setLinks] = useState<ILinks>({});
   const [linksLoaded, setLinksLoaded] = useState<boolean>(false);
@@ -55,7 +57,7 @@ const LinksProvider: React.FC = memo(({ children }) => {
     let linkRef: any = firestore.collection('links');
 
     if (qsCategories?.length) {
-      linkRef = linkRef.where('category', 'in', qsCategories);
+      linkRef = linkRef.where('categories', 'array-contains-any', qsCategories);
     }
 
     if (!qsSortby || qsSortby === 'recent') {
@@ -92,8 +94,8 @@ const LinksProvider: React.FC = memo(({ children }) => {
   };
 
   const addLink = async (
-    { url, description, category }: ICreateLinkInitialState,
-    categories: Category[],
+    { url, description, categories }: ICreateLinkInitialState,
+    allCategories: Category[],
     currentUser: CurrentUser
   ): Promise<void> => {
     try {
@@ -101,7 +103,7 @@ const LinksProvider: React.FC = memo(({ children }) => {
       const newLink: Link = {
         url,
         description,
-        category,
+        categories,
         postedBy: {
           id,
           displayName
@@ -112,18 +114,16 @@ const LinksProvider: React.FC = memo(({ children }) => {
         createdAt: Date.now(),
         updatedAt: Date.now()
       };
-      const selectedCategory = categories.find((_category: Category) => _category.name === category);
-      selectedCategory.count++;
-      const categoryRef: firebase.firestore.DocumentReference = firestore.doc(`categories/${selectedCategory.id}`);
-      const linksRef: firebase.firestore.CollectionReference = firestore.collection('links');
 
-      const [linkRef] = await Promise.all([
-        linksRef.add(newLink),
-        categoryRef.set({
-          name: selectedCategory.name,
-          count: selectedCategory.count
-        })
-      ]);
+      for (const category of categories) {
+        const selectedCategory = allCategories.find((_category: Category) => _category.name === category);
+        selectedCategory.count++;
+        const categoryRef: firebase.firestore.DocumentReference = firestore.doc(`categories/${selectedCategory.id}`);
+        await categoryRef.update('count', selectedCategory.count);
+      }
+      const linksRef: firebase.firestore.CollectionReference = firestore.collection('links');
+      const linkRef = await linksRef.add(newLink);
+
       const linkSnapshot: firebase.firestore.DocumentSnapshot = await linkRef.get();
       const newLinkFromFirestore = new Link(linkSnapshot);
       setLinks(prevLinks => ({ [linkSnapshot.id]: newLinkFromFirestore, ...prevLinks }));

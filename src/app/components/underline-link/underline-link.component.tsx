@@ -1,31 +1,34 @@
 import React from 'react';
-import { withRouter, Link, RouteComponentProps } from 'react-router-dom';
-import { Icon } from 'antd';
+import { Link } from 'react-router-dom';
+import { ExportOutlined } from '@ant-design/icons';
 
 import './underline-link.styles.less';
 
-type UnderlineLinkType = 'insider' | 'external' | 'no-link-external';
+type UnderlineLinkType = 'insider' | 'external' | 'not-link-external';
 
-interface IProps extends RouteComponentProps<{}> {
+interface IProps {
   type: UnderlineLinkType;
   to?: string;
   href?: string;
+  Icon?: any;
+  hasIcon?: boolean;
 }
 
-const UnderlineLink: React.FC<IProps> = ({ type, to, href, children }) => {
+const UnderlineLink: React.FC<IProps> = ({ type, to, href, Icon = ExportOutlined, hasIcon = false, children }) => {
   if (type === 'insider') {
     return (
       <Link className="underline-link" to={to}>
         {children}
+        {hasIcon && <Icon className="underline-link-icon" />}
       </Link>
     );
   }
 
-  if (type === 'no-link-external') {
+  if (type === 'not-link-external') {
     return (
       <span className="underline-link">
         {children}
-        <Icon className="underline-link-icon" type="export" />
+        <Icon className="underline-link-icon" />
       </span>
     );
   }
@@ -33,9 +36,9 @@ const UnderlineLink: React.FC<IProps> = ({ type, to, href, children }) => {
   return (
     <a className="underline-link" target="_blank" href={href}>
       {children}
-      <Icon className="underline-link-icon" type="export" />
+      <Icon className="underline-link-icon" />
     </a>
   );
 };
 
-export default withRouter(UnderlineLink);
+export default UnderlineLink;

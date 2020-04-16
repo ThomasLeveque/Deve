@@ -10,7 +10,7 @@ const SearchFilterBar: React.FC = () => {
     <div className="search-filter-bar">
       <h4>Search by categories :</h4>
       <ClearRefinementCategories />
-      <RefinementCategories attribute="category" />
+      <RefinementCategories attribute="categories" />
     </div>
   );
 };

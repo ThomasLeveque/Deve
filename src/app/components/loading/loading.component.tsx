@@ -1,11 +1,11 @@
 import React from 'react';
-import { Icon } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 import './loading.styles.less';
 
 const Loading = () => (
   <div className="loading">
-    <Icon type="loading" />
+    <LoadingOutlined />
   </div>
 );
 

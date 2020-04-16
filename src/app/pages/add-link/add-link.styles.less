@@ -11,7 +11,7 @@
     border-radius: 5px;
     padding: 30px;
 
-    .custom-autocomplete {
+    .custom-select {
       margin-bottom: 20px;
       width: 100%;
 
@@ -26,10 +26,66 @@
 
       &-container {
         position: relative;
-        width: 100%;
+
+        .custom-select-input {
+          width: 100%;
+
+          div.ant-select-selector {
+            border: none;
+            box-shadow: none;
+            border-radius: 3px;
+            background-color: @light-gray-2;
+            font-size: 14px;
+            font-weight: 400;
+            padding: 7px calc(@resetIconSize + @inputHorizontalPadding + 10px) 7px @inputHorizontalPadding;
+
+            .tag {
+              margin: 3px 6px 3px 0;
+            }
+
+            &::after {
+              display: none;
+            }
+
+            .ant-select-selection {
+              &-search {
+                input {
+                  margin: 3px 0 3px -1px;
+                }
+              }
+
+              &-placeholder {
+                right: calc(@resetIconSize + @inputHorizontalPadding + 10px);
+                left: @inputHorizontalPadding;
+                color: @dark-gray-2;
+                opacity: 1;
+                transition: none;
+              }
+            }
+          }
+
+          &-error {
+            div.ant-select-selector {
+              box-shadow: 0px 0px 0px 1px @my-error-color inset;
+              background-color: @my-error-bg-color;
+            }
+          }
+        }
+
+        div.ant-select-focused {
+          background-color: white;
+          color: black;
+          border: none;
+          box-shadow: @inputShadow;
+
+          div.ant-select-selector {
+            box-shadow: none;
+            background-color: transparent;
+          }
+        }
       }
 
-      i.custom-autocomplete-icon {
+      span.custom-select-icon {
         z-index: 20;
         font-size: @resetIconSize;
         position: absolute;
@@ -46,53 +102,11 @@
         }
       }
 
-      div.ant-select-auto-complete {
-        width: 100%;
-
-        .ant-select-selection {
-          height: 42px;
-
-          &__placeholder {
-            z-index: 20;
-            margin: 0;
-            transform: translateY(-50%);
-            padding: 0 calc(@resetIconSize + @inputHorizontalPadding + 10px) 0 @inputHorizontalPadding;
-            color: @dark-gray-2;
-            opacity: 1;
-          }
-        }
-
-        input {
-          width: 100%;
-          height: 42px;
-          border-radius: 3px;
-          background-color: @light-gray-2;
-          font-size: 14px;
-          font-weight: 400;
-          border: none;
-          padding: 0 calc(@resetIconSize + @inputHorizontalPadding + 10px) 0 @inputHorizontalPadding;
-
-          &:focus {
-            background-color: white;
-            color: black;
-            border: none;
-            box-shadow: @inputShadow;
-          }
-        }
-      }
-
-      &-error {
-        div.ant-select-auto-complete input {
-          background-color: @my-error-bg-color;
-          border: 1px solid @my-error-color;
-        }
-
-        &-text {
-          font-size: 12px;
-          font-weight: 400;
-          color: @my-error-color;
-          margin: 0;
-        }
+      &-error-text {
+        font-size: 12px;
+        font-weight: 400;
+        color: @my-error-color;
+        margin: 0;
       }
     }
   }
@@ -100,9 +114,5 @@
   .add-link-buttons {
     display: flex;
     justify-content: flex-end;
-
-    button[type='submit'] {
-      margin: 10px 0 0 16px;
-    }
   }
 }

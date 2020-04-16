@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import AppRoutes from './app.routes';
 
@@ -6,16 +6,17 @@ import Header from './components/header/header.component';
 import ProgressBar from './components/progress-bar/progress-bar.component';
 import SearchLayout from './components/search-layout/search-layout.component';
 
-import { CurrentUserContext } from './providers/current-user/current-user.provider';
-import { CategoriesContext } from './providers/categories/categories.provider';
-import { SearchContext } from './providers/search/search.provider';
+import { useCurrentUser } from './providers/current-user/current-user.provider';
+import { useCategories } from './providers/categories/categories.provider';
+import { useSearch } from './providers/search/search.provider';
 
 import './app.styles.less';
+import FirstLoading from './components/first-loading/first-loading.component';
 
 const App = () => {
-  const { currentUserError, currentUserLoaded } = useContext(CurrentUserContext);
-  const { categoriesError, categoriesLoaded } = useContext(CategoriesContext);
-  const { firstSearchOpen } = useContext(SearchContext);
+  const { currentUserError, currentUserLoaded } = useCurrentUser();
+  const { categoriesError, categoriesLoaded } = useCategories();
+  const { firstSearchOpen } = useSearch();
 
   const renderRoutes = () => {
     if (currentUserError) {
@@ -37,6 +38,7 @@ const App = () => {
     <div className="app">
       <Header />
       <ProgressBar isAnimating={!categoriesLoaded || !currentUserLoaded} />
+      {(!categoriesLoaded || !currentUserLoaded) && <FirstLoading />}
       <main>{renderRoutes()}</main>
       {firstSearchOpen && <SearchLayout />}
     </div>

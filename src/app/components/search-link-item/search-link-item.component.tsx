@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Icon, Row, Col, Typography, Tooltip, Badge } from 'antd';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { Row, Col, Typography, Tooltip, Badge } from 'antd';
+import { MessageOutlined } from '@ant-design/icons';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { Highlight } from 'react-instantsearch-dom';
 import { useInView } from 'react-intersection-observer';
@@ -9,28 +10,22 @@ import { Spring } from 'react-spring/renderprops';
 import Tag from '../tag/tag.component';
 import UnderlineLink from '../underline-link/underline-link.component';
 
-import NotifContext from '../../contexts/notif/notif.context';
-import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
-import { IVote } from '../../interfaces/vote.interface';
-import { SEARCH_ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY, getDomain } from '../../utils/index';
+import { SEARCH_ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/constants.util';
 import { ALgoliaLink } from '../../models/algolia-link.model';
-import { SearchContext } from '../../providers/search/search.provider';
+import { useSearch } from '../../providers/search/search.provider';
+import { getDomain } from '../../utils/format-string.util';
 
 import './search-link-item.styles.less';
 
-interface IProps extends RouteComponentProps<{}> {
+interface IProps {
   link: ALgoliaLink;
   index: number;
 }
 
-const SearchLinkItem: React.FC<IProps> = ({ link, history, index }) => {
-  const { currentUser } = useContext(CurrentUserContext);
-  const { toggleSearch } = useContext(SearchContext);
-  const { openNotification } = useContext(NotifContext);
-
+const SearchLinkItem: React.FC<IProps> = ({ link, index }) => {
+  const { toggleSearch } = useSearch();
+  const history = useHistory();
   const { Title } = Typography;
-  const postedByAuthUser: boolean = currentUser && currentUser.id === link.postedBy.id;
-  const alreadyLiked: boolean = !!link.votes.find((vote: IVote) => currentUser && vote.voteBy.id === currentUser.id);
 
   const [ref, inView] = useInView({
     threshold: 0.25,
@@ -54,11 +49,17 @@ const SearchLinkItem: React.FC<IProps> = ({ link, history, index }) => {
                   <Highlight tagName="span" hit={link} attribute="description" />
                 </Title>
               </Tooltip>
-              {link.category && <Tag text={link.category} color="green" />}
+              {link.categories.length > 0 && (
+                <div className="tags">
+                  {link.categories.map((category: string, index: number) => (
+                    <Tag isButton key={`${category}${index}`} text={category} color="green" />
+                  ))}
+                </div>
+              )}
             </div>
-            <Row type="flex" align="bottom" className="author light">
+            <Row align="bottom" className="author light">
               <Col span={12} className="break-word">
-                <UnderlineLink type="no-link-external">On {getDomain(link.url)}</UnderlineLink>
+                <UnderlineLink type="not-link-external">On {getDomain(link.url)}</UnderlineLink>
               </Col>
               <Col span={12} className="text-align-right P">
                 by {link.postedBy.displayName} | {distanceInWordsToNow(link.createdAt)} ago
@@ -73,7 +74,7 @@ const SearchLinkItem: React.FC<IProps> = ({ link, history, index }) => {
             }}
           >
             <Badge count={link.comments.length} showZero overflowCount={99}>
-              <Icon type="message" className="icon" />
+              <MessageOutlined className="icon" />
             </Badge>
           </div>
         </div>
@@ -82,4 +83,4 @@ const SearchLinkItem: React.FC<IProps> = ({ link, history, index }) => {
   );
 };
 
-export default withRouter(SearchLinkItem);
+export default SearchLinkItem;

@@ -211,7 +211,7 @@ div.ant-notification {
   }
 }
 
-li.ant-select-dropdown-menu-item.add-category {
+div.ant-select-item.add-category {
   cursor: pointer;
   color: black;
   padding: 0;
@@ -220,17 +220,19 @@ li.ant-select-dropdown-menu-item.add-category {
     background-color: @primary-1;
   }
 
-  div {
+  div.ant-select-item-option-content {
     display: block;
     padding: 5px 12px;
     margin-right: 4px;
 
-    span {
-      font-weight: 700;
-    }
+    > div {
+      span {
+        font-weight: 700;
+      }
 
-    i {
-      font-size: 10px;
+      span.anticon {
+        font-size: 10px;
+      }
     }
   }
 }
@@ -252,6 +254,19 @@ sup.ant-badge-count {
   }
 }
 
-.ant-dropdown i {
-  padding-left: 3px;
+.add-category-button {
+  padding: 5px 12px;
+  cursor: pointer;
+
+  span {
+    font-weight: 700;
+  }
+
+  span.anticon {
+    padding-left: 1px;
+  }
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
 }

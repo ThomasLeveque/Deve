@@ -3,6 +3,7 @@ import * as yup from 'yup';
 const descMin = 10;
 const descMax = 255;
 const urlMax = 255;
+const categoriesMax = 4;
 
 export const linkSchema = yup.object().shape({
   description: yup
@@ -15,7 +16,10 @@ export const linkSchema = yup.object().shape({
     .max(urlMax, `Url must be shorter than ${urlMax} characters`)
     .matches(/^(ftp|http|https):\/\/[^ "]+$/, 'Url badly formated')
     .required('URL required'),
-  category: yup.string().required('Category required')
+  categories: yup
+    .array<string>()
+    .max(categoriesMax, `A link cannot have more then ${categoriesMax} categories`)
+    .required('At least one category required')
 });
 
 export const commentSchema = yup.object().shape({

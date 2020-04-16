@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 import { notification } from 'antd';
 
 export type NotifType = 'success' | 'error' | 'info' | 'open';
@@ -17,5 +17,7 @@ const openNotification = (message: string, description: string, type: NotifType)
 };
 
 const NotifContext = createContext<INotifContext>({ openNotification });
+
+export const useNotification = () => useContext(NotifContext);
 
 export default NotifContext;

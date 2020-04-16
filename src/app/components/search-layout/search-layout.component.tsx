@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef } from 'react';
 import { InstantSearch } from 'react-instantsearch-dom';
 import { animated, useChain, useSpring } from 'react-spring';
 import { Divider } from 'antd';
@@ -8,12 +8,12 @@ import SearchLinkList from '../search-link-list/search-link-list.component';
 import SearchHeader from '../search-header/search-header.component';
 
 import { searchClient, indexName } from '../../algolia/algolia.config';
-import { SearchContext } from '../../providers/search/search.provider';
+import { useSearch } from '../../providers/search/search.provider';
 
 import './search-layout.styles.less';
 
 const SearchLayout: React.FC = () => {
-  const { isSearchOpen, toggleSearch } = useContext(SearchContext);
+  const { isSearchOpen, toggleSearch } = useSearch();
 
   const layoutRef = useRef();
   const layoutProps = useSpring({

@@ -1,18 +1,20 @@
-import React, { useContext } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Icon, Dropdown, Menu, Button } from 'antd';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { Dropdown, Menu, Button } from 'antd';
+import { LogoutOutlined, CloseOutlined, SearchOutlined, DownOutlined, LoginOutlined } from '@ant-design/icons';
 
-import { CurrentUserContext } from '../../providers/current-user/current-user.provider';
-import { SearchContext } from '../../providers/search/search.provider';
+import { useCurrentUser } from '../../providers/current-user/current-user.provider';
+import { useSearch } from '../../providers/search/search.provider';
 import { logout } from '../../firebase/firebase.service';
-import NotifContext from '../../contexts/notif/notif.context';
+import { useNotification } from '../../contexts/notif/notif.context';
 
 import './header.styles.less';
 
-const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
-  const { currentUser } = useContext(CurrentUserContext);
-  const { isSearchOpen, toggleSearch } = useContext(SearchContext);
-  const { openNotification } = useContext(NotifContext);
+const Header: React.FC = () => {
+  const { currentUser } = useCurrentUser();
+  const { isSearchOpen, toggleSearch } = useSearch();
+  const { openNotification } = useNotification();
+  const history = useHistory();
 
   const handleLogout = async (): Promise<void> => {
     try {
@@ -27,7 +29,7 @@ const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
     <Menu>
       <Menu.Item key="0">
         <div className="pointer" onClick={handleLogout}>
-          Sign out <Icon type="logout" />
+          Sign out <LogoutOutlined />
         </div>
       </Menu.Item>
     </Menu>
@@ -48,14 +50,14 @@ const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
       </h2>
       <div>
         <span className="search" onClick={() => toggleSearch(!isSearchOpen)}>
-          <Icon type={isSearchOpen ? 'close' : 'search'} className="search-icon" />
+          {isSearchOpen ? <CloseOutlined className="search-icon" /> : <SearchOutlined className="search-icon" />}
           {isSearchOpen ? 'Close' : 'Search'}
         </span>
         <div className="header-button">
           {currentUser ? (
             <Dropdown placement="bottomRight" overlay={menu} trigger={['click']}>
               <Button type="link">
-                {currentUser.displayName} <Icon type="down" />
+                {currentUser.displayName} <DownOutlined />
               </Button>
             </Dropdown>
           ) : (
@@ -68,7 +70,7 @@ const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
                 history.push('/signin');
               }}
             >
-              Sign in <Icon type="login" />
+              Sign in <LoginOutlined />
             </Button>
           )}
         </div>
@@ -77,4 +79,4 @@ const Header: React.FC<RouteComponentProps<{}>> = ({ history }) => {
   );
 };
 
-export default withRouter(Header);
+export default Header;
