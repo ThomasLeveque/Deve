@@ -9,7 +9,7 @@ import Category from '../../models/category.model';
 import './filter-bar.styles.less';
 
 const FilterBar: React.FC = () => {
-  const { usedCategories, totalUsedCategories } = useCategories();
+  const { usedCategories } = useCategories();
   const [qsCategories = [], setQsCategories] = useQueryParam<string[]>('categories', ArrayParam);
 
   const updateQsCategories = (categoryName: string): string[] => {
@@ -25,12 +25,7 @@ const FilterBar: React.FC = () => {
   return (
     <div className="filter-bar">
       <h4>Filter by categories :</h4>
-      <Tag
-        isButton
-        text={`all (${totalUsedCategories})`}
-        color={qsCategories?.length ? 'black' : 'green'}
-        onClick={() => setQsCategories([])}
-      />
+      <Tag isButton text="all" color={qsCategories?.length ? 'black' : 'green'} onClick={() => setQsCategories([])} />
       {usedCategories.map((category: Category) => (
         <Tag
           onClick={() => setQsCategories(updateQsCategories(category.name))}
