@@ -7,13 +7,11 @@ import { formatError } from '../../utils/format-string.util';
 
 interface ICurrentUserContext {
   currentUser: CurrentUser;
-  currentUserError: string | null;
   currentUserLoaded: boolean;
 }
 
 export const CurrentUserContext = createContext<ICurrentUserContext>({
   currentUser: null,
-  currentUserError: null,
   currentUserLoaded: false
 });
 
@@ -21,7 +19,6 @@ export const useCurrentUser = () => useContext(CurrentUserContext);
 
 const CurrentUserProvider: React.FC = memo(({ children }) => {
   const [currentUser, setCurrentUser] = React.useState<CurrentUser>(null);
-  const [currentUserError, setCurrentUserError] = React.useState<string | null>(null);
   const [currentUserLoaded, setCurrentUserLoaded] = React.useState<boolean>(false);
 
   const { openNotification } = useContext(NotifContext);
@@ -38,16 +35,14 @@ const CurrentUserProvider: React.FC = memo(({ children }) => {
                 setCurrentUserLoaded(true);
               },
               (err: any) => {
-                setCurrentUserError(formatError(err));
                 console.error(err);
                 setCurrentUserLoaded(true);
-                openNotification('Cannot get currentUser from firestore', '', 'error');
+                openNotification('Cannot get currentUser from firestore', 'Try to reload', 'error');
               }
             );
           } catch (err) {
-            setCurrentUserError(formatError(err));
             console.error(err);
-            openNotification('Cannot create user profil', '', 'error');
+            openNotification('Cannot create user profil', 'Try to reload', 'error');
             setCurrentUserLoaded(true);
           }
         } else {
@@ -56,8 +51,7 @@ const CurrentUserProvider: React.FC = memo(({ children }) => {
         }
       },
       (err: firebase.auth.Error) => {
-        openNotification('Cannot check for user auth', '', 'error');
-        setCurrentUserError(formatError(err));
+        openNotification('Cannot check for user auth', 'Try to reload', 'error');
         console.error(err);
         setCurrentUserLoaded(true);
       }
@@ -70,7 +64,6 @@ const CurrentUserProvider: React.FC = memo(({ children }) => {
     <CurrentUserContext.Provider
       value={{
         currentUser,
-        currentUserError,
         currentUserLoaded
       }}
     >

@@ -23,26 +23,21 @@ const SignUp: React.FC = () => {
   const history = useHistory();
   const { openNotification } = useNotification();
 
-  const authenticateUser = async (values: IRegisterInitialState): Promise<void> => {
-    const { displayName, email, password }: IRegisterInitialState = values;
-    try {
-      const { user } = await register(email, password);
-      await createUserProfileDocument(user, { displayName });
-      history.push('/');
-    } catch (err) {
-      console.error(err);
-      openNotification('Cannot register you', 'Try again', 'error');
-      setFirebaseError(formatError(err));
-    }
-  };
-
   return (
     <Formik
       initialValues={INITIAL_REGISTER_STATE}
       validationSchema={registerSchema}
-      onSubmit={async (values: IRegisterInitialState, { setSubmitting }: FormikHelpers<IRegisterInitialState>) => {
-        await authenticateUser(values);
-        setSubmitting(false);
+      onSubmit={async ({ displayName, email, password }: IRegisterInitialState, { setSubmitting }: FormikHelpers<IRegisterInitialState>) => {
+        try {
+          const { user } = await register(email, password);
+          await createUserProfileDocument(user, { displayName });
+          history.push('/');
+        } catch (err) {
+          console.error(err);
+          openNotification('Cannot register you', 'Try again', 'error');
+          setFirebaseError(formatError(err));
+          setSubmitting(false);
+        }
       }}
       enableReinitialize
     >
@@ -69,9 +64,6 @@ const SignUp: React.FC = () => {
           />
           {firebaseError && <p className="error-text text-align-center">{firebaseError}</p>}
           <CustomButton text="Sign up" buttonType="primary" type="submit" disabled={isSubmitting || !isValid} loading={isSubmitting} />
-          <UnderlineLink type="insider" to="/forgot">
-            Forgot password ?
-          </UnderlineLink>
         </Form>
       )}
     </Formik>

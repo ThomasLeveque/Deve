@@ -12,7 +12,8 @@ const openNotification = (message: string, description: string, type: NotifType)
     message,
     description,
     duration: 4,
-    className: `ant-notification-${type}`
+    className: `ant-notification-${type}`,
+    top: 58
   });
 };
 
