@@ -12,6 +12,7 @@ import { ILoginInitialState } from '../../interfaces/initial-states.type';
 import { loginSchema } from '../../schemas/user.schema';
 import { formatError } from '../../utils/format-string.util';
 import { useNotification } from '../../contexts/notif/notif.context';
+import { Divider } from 'antd';
 
 const INITIAL_LOGIN_STATE: ILoginInitialState = {
   email: '',
@@ -23,18 +24,6 @@ const SignIn: React.FC = () => {
   const [withGoogleLoading, setWithGoogleLoading] = React.useState<boolean>(false);
   const history = useHistory();
   const { openNotification } = useNotification();
-
-  const authenticateUser = async (values: ILoginInitialState): Promise<void> => {
-    const { email, password }: ILoginInitialState = values;
-    try {
-      await login(email, password);
-      history.push('/');
-    } catch (err) {
-      console.error(err);
-      setFirebaseError(formatError(err));
-      openNotification('Cannot login with email and password', 'Try again', 'error');
-    }
-  };
 
   const authenticateUserWithGoogle = async (): Promise<void> => {
     try {
@@ -53,9 +42,16 @@ const SignIn: React.FC = () => {
     <Formik
       initialValues={INITIAL_LOGIN_STATE}
       validationSchema={loginSchema}
-      onSubmit={async (values: ILoginInitialState, { setSubmitting }: FormikHelpers<ILoginInitialState>) => {
-        await authenticateUser(values);
-        setSubmitting(false);
+      onSubmit={async ({ email, password }: ILoginInitialState, { setSubmitting }: FormikHelpers<ILoginInitialState>) => {
+        try {
+          await login(email, password);
+          history.push('/');
+        } catch (err) {
+          console.error(err);
+          setFirebaseError(formatError(err));
+          openNotification('Cannot login with email and password', 'Try again', 'error');
+          setSubmitting(false);
+        }
       }}
       enableReinitialize
     >
@@ -77,19 +73,20 @@ const SignIn: React.FC = () => {
             buttonType="primary"
             type="submit"
             disabled={isSubmitting || !isValid || withGoogleLoading}
-            loading={isSubmitting || withGoogleLoading}
+            loading={isSubmitting}
           />
           <UnderlineLink type="insider" to="/forgot">
             Forgot password ?
           </UnderlineLink>
+          <Divider />
           <CustomButton
             text="Sign in with"
             type="button"
             buttonType="with-google"
             hasIcon
             Icon={GoogleOutlined}
-            loading={withGoogleLoading || isSubmitting}
-            disabled={withGoogleLoading}
+            loading={withGoogleLoading}
+            disabled={withGoogleLoading || isSubmitting}
             onClick={authenticateUserWithGoogle}
           />
         </Form>

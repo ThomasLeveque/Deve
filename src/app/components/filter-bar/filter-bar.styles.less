@@ -4,7 +4,7 @@
 .filter-bar {
   overflow-y: auto;
   position: fixed;
-  width: @filterBarWidth;
+  width: calc(@filterBarWidth + @globalHorizontalPadding);
   height: calc(100% - @headerHeight - @filterBarGlobalMargin * 2);
   top: calc(@headerHeight + @filterBarGlobalMargin);
   left: 0;

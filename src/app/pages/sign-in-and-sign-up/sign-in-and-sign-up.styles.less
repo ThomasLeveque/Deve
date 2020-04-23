@@ -1,5 +1,6 @@
+@additionalDividerMargin: 10px;
+
 .sign-in-and-sign-up-page {
-  padding: 50px 70px;
   background-color: white;
   width: 500px;
   max-width: 100%;
@@ -7,7 +8,7 @@
   border-radius: 5px;
 
   .underline-link {
-    margin-top: 10px;
+    margin: 10px 0 @additionalDividerMargin 0;
   }
 
   button {
@@ -17,11 +18,12 @@
     }
 
     &[type='button'] {
-      margin-top: 20px;
+      margin-top: @additionalDividerMargin;
     }
   }
 
   .ant-tabs {
+    padding: 50px 70px;
     &-bar {
       margin-bottom: 30px;
     }
