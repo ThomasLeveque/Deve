@@ -22,7 +22,7 @@ const SearchLinkList: React.FC<IProps> = memo(({ hits }) => {
         {hits.map((link: Hit<ALgoliaLink>, index: number) => {
           return (
             <Col key={link.objectID} span={24 / SEARCH_ITEMS_PER_LIGNE}>
-              <SearchLinkItem link={link} index={index} />
+              <SearchLinkItem link={link} />
             </Col>
           );
         })}

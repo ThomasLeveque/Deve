@@ -4,6 +4,7 @@ import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { PageHeader, Row, Col, Divider, Space } from 'antd';
 import { CloseCircleOutlined, FireFilled, FireOutlined } from '@ant-design/icons';
 import { Formik, Form, FormikHelpers, FormikProps, Field } from 'formik';
+import { motion } from 'framer-motion';
 
 import Loading from '../../components/loading/loading.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
@@ -19,9 +20,10 @@ import { commentSchema } from '../../schemas/link.schema';
 import { IVote } from '../../interfaces/vote.interface';
 import { useLinks } from '../../providers/links/links.provider';
 import { formatError } from '../../utils/format-string.util';
+import { useNotification } from '../../contexts/notif/notif.context';
+import { SLIDE_ROUTE } from '../../utils/constants.util';
 
 import './link-detail.styles.less';
-import { useNotification } from '../../contexts/notif/notif.context';
 
 const INITIAL_STATE: IAddCommentInitialState = {
   commentText: ''
@@ -86,18 +88,25 @@ const LinkDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="link-detail-page">
+    <motion.div
+      initial={{ opacity: 0, x: SLIDE_ROUTE }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ ease: 'easeOut' }}
+      className="link-detail-page"
+    >
       <PageHeader onBack={history.goBack} title={<h1 className="H2">Link detail</h1>} />
       <div className="link-detail-container">
         <div className="link-detail-top">
           <h1 className="H3">{link.description}</h1>
-          {link.categories.length > 0 && (
-            <>
-              {link.categories.map((category: string, index: number) => (
-                <Tag key={`${category}${index}`} text={category} color="green" />
-              ))}
-            </>
-          )}
+          <div className="tags">
+            {link.categories.length > 0 && (
+              <>
+                {link.categories.map((category: string, index: number) => (
+                  <Tag key={`${category}${index}`} text={category} color="green" />
+                ))}
+              </>
+            )}
+          </div>
         </div>
         <Row align="bottom" className="author light P">
           <Col span={12} className="break-word P">
@@ -164,7 +173,7 @@ const LinkDetailPage: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

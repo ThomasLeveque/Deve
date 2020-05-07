@@ -1,6 +1,7 @@
 import React from 'react';
 
 import AppRoutes from './app.routes';
+import { AnimatePresence } from 'framer-motion';
 
 import Header from './components/header/header.component';
 import ProgressBar from './components/progress-bar/progress-bar.component';
@@ -21,6 +22,7 @@ const App = () => {
       <Header />
       <ProgressBar isAnimating={!categoriesLoaded || !currentUserLoaded} />
       {(!categoriesLoaded || !currentUserLoaded) && <FirstLoading />}
+
       <main>{categoriesLoaded && currentUserLoaded && <AppRoutes />}</main>
       <SearchModal />
     </div>

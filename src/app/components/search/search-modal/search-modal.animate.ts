@@ -7,8 +7,7 @@ export const animateModal = {
     opacity: 0
   },
   exit: {
-    opacity: 0,
-    transition: { delay: 0.1 }
+    opacity: 0
   }
 };
 
@@ -19,8 +18,5 @@ export const animateModalContainer = {
   },
   initial: {
     y: 60
-  },
-  exit: {
-    y: 50
   }
 };

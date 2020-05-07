@@ -4,13 +4,10 @@ import { Row, Col, Typography, Tooltip, Badge } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { Highlight } from 'react-instantsearch-dom';
-import { useInView } from 'react-intersection-observer';
-import { Spring } from 'react-spring/renderprops';
 
 import Tag from '../../tag/tag.component';
 import UnderlineLink from '../../underline-link/underline-link.component';
 
-import { SEARCH_ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../../utils/constants.util';
 import { ALgoliaLink } from '../../../models/algolia-link.model';
 import { useSearch } from '../../../providers/search/search.provider';
 import { getDomain } from '../../../utils/format-string.util';
@@ -19,15 +16,13 @@ import './search-link-item.styles.less';
 
 interface IProps {
   link: ALgoliaLink;
-  index: number;
+  index?: number;
 }
 
-const SearchLinkItem: React.FC<IProps> = ({ link, index }) => {
+const SearchLinkItem: React.FC<IProps> = ({ link }) => {
   const { toggleSearch } = useSearch();
   const history = useHistory();
   const { Title } = Typography;
-
-  const searchItemDelay = (index % SEARCH_ITEMS_PER_LIGNE) * LINKS_TRANSITION_DElAY;
 
   return (
     <div className="search-link-item">
