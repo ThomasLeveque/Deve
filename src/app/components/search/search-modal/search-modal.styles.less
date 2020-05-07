@@ -1,7 +1,7 @@
-@import '../../../assets/styles/colors.less';
-@import '../../../assets/styles/vars.less';
+@import '../../../../assets/styles/colors.less';
+@import '../../../../assets/styles/vars.less';
 
-.search-layout {
+.search-modal {
   z-index: 20;
   position: fixed;
   height: calc(100% - @headerHeight);
@@ -11,18 +11,14 @@
   bottom: 0;
   background-color: rgba(#000, 0.5);
   cursor: pointer;
-}
-
-.search-modal {
-  pointer-events: none;
-  z-index: 30;
-  position: fixed;
-  top: @globalVerticalPadding + @headerHeight;
-  height: calc(100% - (@globalVerticalPadding * 2) - @headerHeight);
-  left: @globalHorizontalPadding;
-  right: @globalHorizontalPadding;
 
   &-container {
+    margin: @globalVerticalPadding auto 0 auto;
+    height: calc(100% - (@globalVerticalPadding * 2));
+    width: calc(100% - (@globalHorizontalPadding * 2));
+  }
+
+  &-content {
     background-color: white;
     height: 100%;
     width: 100%;
