@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { HomeOutlined } from '@ant-design/icons';
 import { Typography } from 'antd';
 
-import UnderlineLink from '../underline-link/underline-link.component';
+import UnderlineLink from '../../components/underline-link/underline-link.component';
 
 import './not-found.styles.less';
 
