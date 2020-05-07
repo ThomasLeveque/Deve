@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { connectRefinementList } from 'react-instantsearch-dom';
 import { RefinementListProvided, Hit } from 'react-instantsearch-core';
 
-import Tag from '../tag/tag.component';
+import Tag from '../../tag/tag.component';
 
 const RefinementCategories: React.FC<RefinementListProvided> = memo(({ items, refine }) => {
   return (

@@ -2,13 +2,11 @@ import React, { createContext, useState, useEffect, memo, useContext } from 'rea
 
 interface ISearchContext {
   isSearchOpen: boolean;
-  firstSearchOpen: boolean;
   toggleSearch: (value: boolean) => void;
 }
 
 export const SearchContext = createContext<ISearchContext>({
   isSearchOpen: false,
-  firstSearchOpen: false,
   toggleSearch: null
 });
 
@@ -16,11 +14,9 @@ export const useSearch = () => useContext(SearchContext);
 
 const SearchProvider: React.FC = memo(({ children }) => {
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
-  const [firstSearchOpen, setFirstSearchOpen] = useState<boolean>(false);
 
   const toggleSearch = (value: boolean): void => {
     setIsSearchOpen(value);
-    setFirstSearchOpen(true);
   };
 
   useEffect(() => {
@@ -35,7 +31,6 @@ const SearchProvider: React.FC = memo(({ children }) => {
     <SearchContext.Provider
       value={{
         isSearchOpen,
-        firstSearchOpen,
         toggleSearch
       }}
     >
