@@ -51,10 +51,10 @@ const LinkDetailPage: React.FC = () => {
 
   const alreadyLiked: boolean = !!(link && link.votes.find((vote: IVote) => currentUser && vote.voteBy.id === currentUser.id));
   const linkRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
-  const commentsRef: firebase.firestore.CollectionReference = firestore
+  const commentsRef: firebase.firestore.Query = firestore
     .collection('links')
     .doc(linkId)
-    .collection('comments');
+    .collection('comments').orderBy('createdAt', 'desc');
 
   useEffect(() => {
     const unsubcribeLink = linkRef.onSnapshot(handleLinkSnapshot, handleLinkError);
