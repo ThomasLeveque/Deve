@@ -38,8 +38,8 @@ export const createUserProfileDocument = async (
 
   if (!snapShot.exists) {
     const { displayName, email }: firebase.User = userAuth;
-    const createdAt: Date | number = Date.now();
-    const updatedAt: Date | number = Date.now();
+    const createdAt: number = Date.now();
+    const updatedAt: number = Date.now();
 
     await userRef.set({
       displayName,

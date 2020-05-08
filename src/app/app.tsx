@@ -1,13 +1,15 @@
 import React from 'react';
 
+// Routes
 import AppRoutes from './app.routes';
-import { AnimatePresence } from 'framer-motion';
 
+// Components
 import Header from './components/header/header.component';
 import ProgressBar from './components/progress-bar/progress-bar.component';
 import SearchModal from './components/search/search-modal/search-modal.component';
 import FirstLoading from './components/first-loading/first-loading.component';
 
+// Others
 import { useCurrentUser } from './providers/current-user/current-user.provider';
 import { useCategories } from './providers/categories/categories.provider';
 

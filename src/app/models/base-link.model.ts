@@ -1,6 +1,5 @@
 import CurrentUser from './current-user.model';
 import { IVote } from '../interfaces/vote.interface';
-import { IComment } from '../interfaces/comment.interface';
 
 export class BaseLink {
   url: string;
@@ -8,20 +7,20 @@ export class BaseLink {
   categories: string[];
   postedBy: CurrentUser;
   voteCount: number;
+  commentCount: number;
   votes: IVote[];
-  comments: IComment[];
-  createdAt: Date | number;
-  updatedAt: Date | number;
+  createdAt: number;
+  updatedAt: number;
 
   constructor(json: any) {
-    this.url = json.url;
-    this.description = json.description;
-    this.categories = json.categories || [];
-    this.postedBy = json.postedBy;
-    this.voteCount = json.voteCount;
-    this.votes = json.votes;
-    this.comments = json.comments;
-    this.createdAt = json.createdAt;
-    this.updatedAt = json.updatedAt;
+    this.url = json?.url;
+    this.description = json?.description;
+    this.categories = json?.categories || [];
+    this.postedBy = json?.postedBy;
+    this.voteCount = json?.voteCount || 0;
+    this.commentCount = json?.commentCount || 0;
+    this.votes = json?.votes || [];
+    this.createdAt = json?.createdAt;
+    this.updatedAt = json?.updatedAt;
   }
 }

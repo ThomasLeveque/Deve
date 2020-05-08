@@ -1,17 +1,17 @@
 import React, { createContext, useState, useEffect, memo, useContext } from 'react';
 import { useQueryParam, StringParam, ArrayParam } from 'use-query-params';
 
-import { firestore } from '../../firebase/firebase.service';
+import firebaseApp, { firestore } from '../../firebase/firebase.service';
 import { LINKS_PER_PAGE } from '../../utils/constants.util';
 import { Link } from '../../models/link.model';
 import { ICreateLinkInitialState } from '../../interfaces/initial-states.type';
 import Category from '../../models/category.model';
 import CurrentUser from '../../models/current-user.model';
 import { IVote } from '../../interfaces/vote.interface';
-import { IComment } from '../../interfaces/comment.interface';
 import NotifContext from '../../contexts/notif/notif.context';
+import { Comment } from '../../models/comment.model';
 
-interface ILinks {
+interface LinksMap {
   [id: string]: Link;
 }
 
@@ -22,7 +22,7 @@ interface ILinksContext {
   addLink: (values: ICreateLinkInitialState, categories: Category[], currentUser: CurrentUser) => Promise<void>;
   updateVoteLinks: (linkId: string, currentUser: CurrentUser, type: UpdateVoteLinksType) => Promise<void>;
   addCommentLink: (commentText: string, linkId: string, currentUser: CurrentUser) => Promise<void>;
-  links: ILinks;
+  links: LinksMap;
   linksLoaded: boolean;
   loadingMoreLinks: boolean;
   hasMoreLinks: boolean;
@@ -42,7 +42,7 @@ export const LinksContext = createContext<ILinksContext>({
 export const useLinks = () => useContext(LinksContext);
 
 const LinksProvider: React.FC = memo(({ children }) => {
-  const [links, setLinks] = useState<ILinks>({});
+  const [links, setLinks] = useState<LinksMap>({});
   const [linksLoaded, setLinksLoaded] = useState<boolean>(false);
   const [loadingMoreLinks, setLoadingMoreLinks] = useState<boolean>(false);
   const [hasMoreLinks, setHasMoreLinks] = useState<boolean>(true);
@@ -109,12 +109,13 @@ const LinksProvider: React.FC = memo(({ children }) => {
           displayName
         },
         voteCount: 0,
+        commentCount: 0,
         votes: [],
-        comments: [],
         createdAt: Date.now(),
         updatedAt: Date.now()
       };
 
+      // update count of every categories used for this link
       for (const category of categories) {
         const selectedCategory = allCategories.find((_category: Category) => _category.name === category);
         selectedCategory.count++;
@@ -135,26 +136,29 @@ const LinksProvider: React.FC = memo(({ children }) => {
   };
 
   const addCommentLink = async (commentText: string, linkId: string, currentUser: CurrentUser) => {
-    const commentRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
-    const doc: firebase.firestore.DocumentSnapshot = await commentRef.get();
-    const previousComments: IComment[] = doc.data().comments;
-    const comment: IComment = {
+    const linkRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
+    const commentsRef: firebase.firestore.CollectionReference = linkRef.collection('comments');
+
+    const increment = 1;
+    const newComment: Comment = {
       postedBy: { id: currentUser.id, displayName: currentUser.displayName },
-      created: Date.now(),
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
       text: commentText
     };
-    const updatedComments: IComment[] = [...previousComments, comment];
+    await commentsRef.add(newComment);
+    const incrementCommentCount = firebaseApp.firestore.FieldValue.increment(increment);
 
     if (links[linkId]) {
-      links[linkId].comments = updatedComments;
+      links[linkId].commentCount += increment;
       setLinks({ ...links });
     }
 
     try {
-      commentRef.update({ comments: updatedComments });
+      linkRef.update({ commentCount: incrementCommentCount });
     } catch (err) {
       if (links[linkId]) {
-        links[linkId].comments = previousComments;
+        links[linkId].commentCount -= increment;
         setLinks({ ...links });
       }
       openNotification(`Cannot add comment for this link`, '', 'error');
@@ -203,7 +207,7 @@ const LinksProvider: React.FC = memo(({ children }) => {
         const snapshot: firebase.firestore.QuerySnapshot = await getQuery()
           .limit(LINKS_PER_PAGE)
           .get();
-        let links: { [id: string]: Link } = {};
+        let links: LinksMap = {};
         snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => (links[doc.id] = new Link(doc)));
         const _cursor = snapshot.docs[snapshot.docs.length - 1];
         setHasMoreLinks(!snapshot.empty);
