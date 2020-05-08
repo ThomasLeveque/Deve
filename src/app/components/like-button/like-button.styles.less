@@ -1,0 +1,30 @@
+@import '../../../assets/styles/colors.less';
+@import '../../../assets/styles/vars.less';
+
+.like-button {
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+  transition: all 0.2s @bezier;
+  margin-right: 15px;
+  text-transform: uppercase;
+  color: black;
+
+  &:hover {
+    color: @my-secondary-color;
+  }
+
+  &.liked {
+    color: @my-secondary-color;
+  }
+
+  span.icon {
+    margin-right: 4px;
+    font-size: 20px;
+  }
+
+  .count {
+    font-size: 13px;
+    font-weight: 700;
+  }
+}

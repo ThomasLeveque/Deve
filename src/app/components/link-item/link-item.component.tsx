@@ -1,14 +1,17 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Row, Col, Typography, Tooltip } from 'antd';
-import { FireFilled, FireOutlined, MessageOutlined } from '@ant-design/icons';
+import { MessageOutlined } from '@ant-design/icons';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 
+// Components
 import Tag from '../tag/tag.component';
 import UnderlineLink from '../underline-link/underline-link.component';
+import LikeButton from '../like-button/like-button.component';
 
+// Others
 import { useLinks } from '../../providers/links/links.provider';
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { IVote } from '../../interfaces/vote.interface';
@@ -83,13 +86,10 @@ const LinkItem: React.FC<IProps> = ({ link, index }) => {
         </Row>
       </a>
       <div className="link-item-actions flex">
-        <motion.div whileTap={{ scale: 0.8 }} className={`${alreadyLiked ? 'liked' : ''} favorite pointer`} onClick={handleVote}>
-          {alreadyLiked ? <FireFilled className="icon" /> : <FireOutlined className="icon" />}
-          <span className="count">{link.voteCount === 0 ? 'like' : link.voteCount}</span>
-        </motion.div>
+        <LikeButton alreadyLiked={alreadyLiked} voteCount={link.voteCount} onVote={handleVote} />
         <div className="comment pointer" onClick={() => history.push(`/links/${link.id}`)}>
           <MessageOutlined className="icon" />
-          <span className="count">{`${link.comments.length} comment${link.comments.length > 1 ? 's' : ''}`}</span>
+          <span className="count">{`${link.commentCount} comment${link.commentCount > 1 ? 's' : ''}`}</span>
         </div>
       </div>
     </motion.div>

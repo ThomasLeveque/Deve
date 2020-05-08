@@ -44,7 +44,7 @@ const AddLinkPage: React.FC = () => {
 
   return (
     <div className="add-link-page">
-      <PageHeader onBack={history.goBack} title={<h1 className="H2">Create a new link</h1>} />
+      <PageHeader onBack={history.goBack} title={<h2>Create a new link</h2>} />
       <Formik
         enableReinitialize
         initialValues={INITIAL_STATE}
@@ -124,14 +124,7 @@ const AddLinkPage: React.FC = () => {
                         } custom-select-input`}
                         mode="multiple"
                         tagRender={({ value, onClose }) => {
-                          return (
-                            <Tag
-                              onClose={onClose}
-                              closable
-                              text={value as string}
-                              color="green"
-                            />
-                          );
+                          return <Tag onClose={onClose} closable text={value as string} color="green" />;
                         }}
                         placeholder="Categories for the link"
                         onChange={(selectedCategories: string[]) => {

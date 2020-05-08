@@ -57,7 +57,7 @@ const SearchLinkItem: React.FC<IProps> = ({ link }) => {
           history.push(`/links/${link.objectID}`);
         }}
       >
-        <Badge count={link.comments.length} showZero overflowCount={99}>
+        <Badge count={link.commentCount} showZero overflowCount={99}>
           <MessageOutlined className="icon" />
         </Badge>
       </div>

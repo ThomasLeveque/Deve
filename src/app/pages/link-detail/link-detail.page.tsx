@@ -1,29 +1,37 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { PageHeader, Row, Col, Divider, Space } from 'antd';
-import { CloseCircleOutlined, FireFilled, FireOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined } from '@ant-design/icons';
 import { Formik, Form, FormikHelpers, FormikProps, Field } from 'formik';
 import { motion } from 'framer-motion';
 
+// Components
 import Loading from '../../components/loading/loading.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
 import Tag from '../../components/tag/tag.component';
 import { FormInput } from '../../components/form-input/form-input.component';
+import LikeButton from '../../components/like-button/like-button.component';
+import UnderlineLink from '../../components/underline-link/underline-link.component';
 
+// Others
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { firestore } from '../../firebase/firebase.service';
-import { IComment } from '../../interfaces/comment.interface';
 import { Link } from '../../models/link.model';
 import { IAddCommentInitialState } from '../../interfaces/initial-states.type';
 import { commentSchema } from '../../schemas/link.schema';
 import { IVote } from '../../interfaces/vote.interface';
 import { useLinks } from '../../providers/links/links.provider';
-import { formatError } from '../../utils/format-string.util';
+import { getDomain } from '../../utils/format-string.util';
 import { useNotification } from '../../contexts/notif/notif.context';
 import { SLIDE_ROUTE } from '../../utils/constants.util';
+import { Comment } from '../../models/comment.model';
 
 import './link-detail.styles.less';
+
+interface CommentsMap {
+  [id: string]: Comment;
+}
 
 const INITIAL_STATE: IAddCommentInitialState = {
   commentText: ''
@@ -37,28 +45,49 @@ const LinkDetailPage: React.FC = () => {
   const history = useHistory();
 
   const [link, setLink] = React.useState<Link>(null);
-  const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string>('');
+  const [comments, setComments] = React.useState<CommentsMap>(null);
+  const [isLinkLoaded, setIsLinkLoaded] = React.useState<boolean>(false);
+  const [isCommentsLoaded, setIsCommentsLoaded] = React.useState<boolean>(false);
 
   const alreadyLiked: boolean = !!(link && link.votes.find((vote: IVote) => currentUser && vote.voteBy.id === currentUser.id));
   const linkRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
+  const commentsRef: firebase.firestore.CollectionReference = firestore
+    .collection('links')
+    .doc(linkId)
+    .collection('comments');
 
-  React.useEffect(() => {
-    const unsubcribe = linkRef.onSnapshot(handleSnapshot, handleError);
-    return () => unsubcribe();
+  useEffect(() => {
+    const unsubcribeLink = linkRef.onSnapshot(handleLinkSnapshot, handleLinkError);
+    const unsubcribeComments = commentsRef.onSnapshot(handleCommentsSnapshot, handleCommentsError);
+    return () => {
+      unsubcribeLink();
+      unsubcribeComments();
+    };
   }, [linkId]);
 
-  const handleSnapshot = (doc: firebase.firestore.DocumentSnapshot) => {
+  const handleLinkSnapshot = (doc: firebase.firestore.DocumentSnapshot) => {
     const link: Link = new Link(doc);
     setLink(link);
-    setIsLoaded(true);
+    setIsLinkLoaded(true);
   };
 
-  const handleError = (err: any) => {
-    setError(formatError(err));
+  const handleLinkError = (err: any) => {
     openNotification(`Cannot load this link`, 'Try to reload', 'error');
     console.error(err);
-    setIsLoaded(true);
+    setIsLinkLoaded(true);
+  };
+
+  const handleCommentsSnapshot = ({ docs }: firebase.firestore.QuerySnapshot) => {
+    const comments: CommentsMap = {};
+    docs.map((doc: firebase.firestore.QueryDocumentSnapshot) => (comments[doc.id] = new Comment(doc)));
+    setComments(comments);
+    setIsCommentsLoaded(true);
+  };
+
+  const handleCommentsError = (err: any) => {
+    openNotification(`Cannot load this comments`, 'Try to reload', 'error');
+    console.error(err);
+    setIsCommentsLoaded(true);
   };
 
   const handleVote = async (): Promise<void> => {
@@ -79,12 +108,8 @@ const LinkDetailPage: React.FC = () => {
     }
   };
 
-  if (!isLoaded) {
+  if (!isLinkLoaded) {
     return <Loading />;
-  }
-
-  if (error) {
-    return <p className="error-text">{error}</p>;
   }
 
   return (
@@ -94,10 +119,13 @@ const LinkDetailPage: React.FC = () => {
       transition={{ ease: 'easeOut' }}
       className="link-detail-page"
     >
-      <PageHeader onBack={history.goBack} title={<h1 className="H2">Link detail</h1>} />
+      <PageHeader onBack={history.goBack} title={<h2>Link detail</h2>} />
       <div className="link-detail-container">
         <div className="link-detail-top">
-          <h1 className="H3">{link.description}</h1>
+          <a className="link-detail-top-link" href={link.url} target="_blank">
+            <h1 className="H3">{link.description}</h1>
+            <UnderlineLink type="not-link-external">On {getDomain(link.url)}</UnderlineLink>
+          </a>
           <div className="tags">
             {link.categories.length > 0 && (
               <>
@@ -116,10 +144,7 @@ const LinkDetailPage: React.FC = () => {
             {distanceInWordsToNow(link.createdAt)} ago
           </Col>
         </Row>
-        <div className={`${alreadyLiked ? 'liked' : ''} favorite pointer`} onClick={handleVote}>
-          {alreadyLiked ? <FireFilled className="icon" /> : <FireOutlined className="icon" />}
-          <span className="count">{link.voteCount === 0 ? 'like' : link.voteCount}</span>
-        </div>
+        <LikeButton alreadyLiked={alreadyLiked} voteCount={link.voteCount} onVote={handleVote} />
 
         <div className="link-detail-comments">
           <Formik
@@ -158,17 +183,20 @@ const LinkDetailPage: React.FC = () => {
             }}
           </Formik>
 
-          {link.comments.length > 0 && (
+          {isCommentsLoaded && (
             <div className="comment-list">
-              {link.comments.map((comment: IComment, index: number) => (
-                <Fragment key={index}>
-                  <Divider />
-                  <h4 className="comment-author">
-                    {comment.postedBy.displayName} <span>{distanceInWordsToNow(comment.created)} ago</span>
-                  </h4>
-                  <p className="comment-text">{comment.text}</p>
-                </Fragment>
-              ))}
+              {Object.keys(comments).map((commentId: string, index: number) => {
+                const comment = comments[commentId];
+                return (
+                  <Fragment key={index}>
+                    <Divider />
+                    <h4 className="comment-author">
+                      {comment.postedBy.displayName} <span>{distanceInWordsToNow(comment.createdAt)} ago</span>
+                    </h4>
+                    <p className="comment-text">{comment.text}</p>
+                  </Fragment>
+                );
+              })}
             </div>
           )}
         </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Dropdown, Button, Menu } from 'antd';
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
@@ -9,6 +9,8 @@ import FilterBar from '../../components/filter-bar/filter-bar.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
 
 import './home.styles.less';
+import firebaseApp, { firestore } from '../../firebase/firebase.service';
+import { Link } from '../../models/link.model';
 
 const HomePage: React.FC = () => {
   const [qsSortby, setQsSortby] = useQueryParam('sortby', StringParam);
