@@ -29,7 +29,13 @@ const CategoriesProvider: React.FC = memo(({ children }) => {
   const handleSnapshot = (snapshot: firebase.firestore.QuerySnapshot) => {
     const categories: Category[] = snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => new Category(doc));
     setCategories(categories);
-    setUsedCategories(categories.filter((category: Category) => category.count !== 0));
+    setUsedCategories(
+      categories
+        .filter((category: Category) => category.count !== 0)
+        .sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        })
+    );
     setCategoriesLoaded(true);
   };
 
@@ -40,10 +46,7 @@ const CategoriesProvider: React.FC = memo(({ children }) => {
   };
 
   useEffect(() => {
-    const unsubcribe = firestore
-      .collection('categories')
-      .orderBy('name', 'asc')
-      .onSnapshot(handleSnapshot, handleError);
+    const unsubcribe = firestore.collection('categories').onSnapshot(handleSnapshot, handleError);
     return () => unsubcribe();
   }, []);
 
