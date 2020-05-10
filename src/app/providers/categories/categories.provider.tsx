@@ -8,14 +8,12 @@ import NotifContext from '../../contexts/notif/notif.context';
 interface ICategoriesContext {
   categories: Category[];
   usedCategories: Category[];
-  categoriesError: string | null;
   categoriesLoaded: boolean;
 }
 
 export const CategoriesContext = createContext<ICategoriesContext>({
   categories: [],
   usedCategories: [],
-  categoriesError: null,
   categoriesLoaded: false
 });
 
@@ -24,7 +22,6 @@ export const useCategories = () => useContext(CategoriesContext);
 const CategoriesProvider: React.FC = memo(({ children }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [usedCategories, setUsedCategories] = useState<Category[]>([]);
-  const [categoriesError, setCategoriesError] = useState<string | null>(null);
   const [categoriesLoaded, setCategoriesLoaded] = useState<boolean>(false);
 
   const { openNotification } = useContext(NotifContext);
@@ -37,14 +34,16 @@ const CategoriesProvider: React.FC = memo(({ children }) => {
   };
 
   const handleError = (err: any) => {
-    setCategoriesError(formatError(err));
     console.error(err);
     openNotification('Cannot get categories', 'Try to reload', 'error');
     setCategoriesLoaded(true);
   };
 
   useEffect(() => {
-    const unsubcribe = firestore.collection('categories').onSnapshot(handleSnapshot, handleError);
+    const unsubcribe = firestore
+      .collection('categories')
+      .orderBy('name', 'asc')
+      .onSnapshot(handleSnapshot, handleError);
     return () => unsubcribe();
   }, []);
 
@@ -53,7 +52,6 @@ const CategoriesProvider: React.FC = memo(({ children }) => {
       value={{
         categories,
         usedCategories,
-        categoriesError,
         categoriesLoaded
       }}
     >
