@@ -39,7 +39,7 @@ const AddLinkPage: React.FC = () => {
   const [addCatLoading, setAddCatLoading] = React.useState<boolean>(false);
 
   const isCategorieExist = (value: string) => {
-    return !!categories.find(categorie => categorie.name.toUpperCase() === value.toUpperCase());
+    return !!categories.find(categorie => categorie.name.toUpperCase() === value.trim().toUpperCase());
   };
 
   return (

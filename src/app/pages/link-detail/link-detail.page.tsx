@@ -54,7 +54,8 @@ const LinkDetailPage: React.FC = () => {
   const commentsRef: firebase.firestore.Query = firestore
     .collection('links')
     .doc(linkId)
-    .collection('comments').orderBy('createdAt', 'desc');
+    .collection('comments')
+    .orderBy('createdAt', 'desc');
 
   useEffect(() => {
     const unsubcribeLink = linkRef.onSnapshot(handleLinkSnapshot, handleLinkError);
@@ -108,6 +109,10 @@ const LinkDetailPage: React.FC = () => {
     }
   };
 
+  const handleSelectedCategory = (category: string): void => {
+    history.push(`/?categories=${category}`);
+  };
+
   if (!isLinkLoaded) {
     return <Loading />;
   }
@@ -130,7 +135,13 @@ const LinkDetailPage: React.FC = () => {
             {link.categories.length > 0 && (
               <>
                 {link.categories.map((category: string, index: number) => (
-                  <Tag key={`${category}${index}`} text={category} color="green" />
+                  <Tag
+                    isButton
+                    onClick={() => handleSelectedCategory(category)}
+                    key={`${category}${index}`}
+                    text={category}
+                    color="green"
+                  />
                 ))}
               </>
             )}
