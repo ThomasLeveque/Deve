@@ -44,6 +44,7 @@ export const createUserProfileDocument = async (
     await userRef.set({
       displayName,
       email,
+      isAdmin: false,
       createdAt,
       updatedAt,
       ...additionalData
