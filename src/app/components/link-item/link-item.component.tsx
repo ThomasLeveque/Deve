@@ -70,19 +70,21 @@ const LinkItem: React.FC<IProps> = ({ link, index }) => {
       <a className="link-item-data" href={link.url} target="_blank">
         <div>
           {link.categories.length > 0 && (
-            <div className="tags">
-              {link.categories.map((category: string, index: number) => (
-                <Tag
-                  onClick={(event: React.MouseEvent<HTMLElement, MouseEvent>) => handleSelectCategory(category, event)}
-                  isButton
-                  key={`${category}${index}`}
-                  text={category}
-                  color="green"
-                />
-              ))}
-            </div>
+            <Tooltip title="You can now filter by categories by clicking those tags" placement="topLeft">
+              <div className="tags">
+                {link.categories.map((category: string, index: number) => (
+                  <Tag
+                    onClick={(event: React.MouseEvent<HTMLElement, MouseEvent>) => handleSelectCategory(category, event)}
+                    isButton
+                    key={`${category}${index}`}
+                    text={category}
+                    color="green"
+                  />
+                ))}
+              </div>
+            </Tooltip>
           )}
-          <Tooltip title={link.description}>
+          <Tooltip title={link.description} placement="topLeft">
             <Title ellipsis={{ rows: 3 }} level={4}>
               {link.description}
             </Title>
