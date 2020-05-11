@@ -28,14 +28,11 @@ const CategoriesProvider: React.FC = memo(({ children }) => {
 
   const handleSnapshot = (snapshot: firebase.firestore.QuerySnapshot) => {
     const categories: Category[] = snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => new Category(doc));
-    setCategories(categories);
-    setUsedCategories(
-      categories
-        .filter((category: Category) => category.count !== 0)
-        .sort((a, b) => {
-          return a.name.localeCompare(b.name);
-        })
-    );
+    const sortByNamesCategories = categories.sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
+    setCategories(sortByNamesCategories);
+    setUsedCategories(sortByNamesCategories.filter((category: Category) => category.count !== 0));
     setCategoriesLoaded(true);
   };
 
