@@ -2,17 +2,19 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field, FormikHelpers, FormikProps } from 'formik';
 import { GoogleOutlined } from '@ant-design/icons';
+import { Divider } from 'antd';
 
+// Components
 import { FormInput } from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
 import UnderlineLink from '../../components/underline-link/underline-link.component';
 
-import { login, signInWithGoole } from '../../firebase/firebase.service';
+// Others
 import { ILoginInitialState } from '../../interfaces/initial-states.type';
 import { loginSchema } from '../../schemas/user.schema';
 import { formatError } from '../../utils/format-string.util';
 import { useNotification } from '../../contexts/notif/notif.context';
-import { Divider } from 'antd';
+import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 
 const INITIAL_LOGIN_STATE: ILoginInitialState = {
   email: '',
@@ -24,12 +26,14 @@ const SignIn: React.FC = () => {
   const [withGoogleLoading, setWithGoogleLoading] = React.useState<boolean>(false);
   const history = useHistory();
   const { openNotification } = useNotification();
+  const { handleLoginWithGoogle, handleLogin } = useCurrentUser();
 
   const authenticateUserWithGoogle = async (): Promise<void> => {
     try {
       setWithGoogleLoading(true);
-      await signInWithGoole();
-      setWithGoogleLoading(false);
+      await handleLoginWithGoogle();
+      // not setting withGoogleLoading to false because this component will unmount
+      history.push('/');
     } catch (err) {
       console.error(err);
       setFirebaseError(formatError(err));
@@ -42,9 +46,10 @@ const SignIn: React.FC = () => {
     <Formik
       initialValues={INITIAL_LOGIN_STATE}
       validationSchema={loginSchema}
-      onSubmit={async ({ email, password }: ILoginInitialState, { setSubmitting }: FormikHelpers<ILoginInitialState>) => {
+      onSubmit={async (values: ILoginInitialState, { setSubmitting }: FormikHelpers<ILoginInitialState>) => {
         try {
-          await login(email, password);
+          await handleLogin(values);
+          // not setting submitting to false because this component will unmount
           history.push('/');
         } catch (err) {
           console.error(err);

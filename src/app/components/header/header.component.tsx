@@ -5,31 +5,20 @@ import { LogoutOutlined, CloseOutlined, SearchOutlined, DownOutlined, LoginOutli
 
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { useSearch } from '../../providers/search/search.provider';
-import { logout } from '../../firebase/firebase.service';
-import { useNotification } from '../../contexts/notif/notif.context';
 
 import './header.styles.less';
 
 const Header: React.FC = () => {
-  const { currentUser } = useCurrentUser();
+  const { currentUser, handleLogout } = useCurrentUser();
   const { isSearchOpen, toggleSearch } = useSearch();
-  const { openNotification } = useNotification();
   const history = useHistory();
 
-  const handleLogout = async (): Promise<void> => {
-    try {
-      logout();
-    } catch (err) {
-      console.error(err);
-      openNotification('Cannot logout', 'Try again', 'error');
-    }
-  };
-
   const menu = (
-    <Menu>
+    <Menu className="user-dropdown">
       <Menu.Item key="0">
         <div className="pointer" onClick={handleLogout}>
-          Sign out <LogoutOutlined />
+          <LogoutOutlined />
+          Sign out
         </div>
       </Menu.Item>
     </Menu>
