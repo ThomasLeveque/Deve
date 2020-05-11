@@ -2,11 +2,14 @@ import React, { useState, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik, FormikHelpers, Form, Field, FormikProps } from 'formik';
 import { Row, Col, PageHeader, Space, Select } from 'antd';
-import { LoadingOutlined, PlusOutlined, CloseCircleFilled, CloseCircleOutlined, SmileOutlined } from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined, CloseCircleFilled, CloseCircleOutlined, SmileOutlined, CloseOutlined } from '@ant-design/icons';
 
+// Components
 import { FormInput } from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
+import Tag from '../../components/tag/tag.component';
 
+// Others
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { useLinks } from '../../providers/links/links.provider';
 import { useCategories } from '../../providers/categories/categories.provider';
@@ -19,7 +22,6 @@ import { useNotification } from '../../contexts/notif/notif.context';
 import { formatError } from '../../utils/format-string.util';
 
 import './add-link.styles.less';
-import Tag from '../../components/tag/tag.component';
 
 const INITIAL_STATE: ICreateLinkInitialState = {
   description: '',
@@ -28,7 +30,6 @@ const INITIAL_STATE: ICreateLinkInitialState = {
 };
 
 const AddLinkPage: React.FC = () => {
-  const [categoryToAdd, setCategoryToAdd] = useState<string>('');
   const { currentUser } = useCurrentUser();
   const { categories } = useCategories();
   const { addLink } = useLinks();
@@ -36,10 +37,28 @@ const AddLinkPage: React.FC = () => {
   const history = useHistory();
   const { Option } = Select;
 
-  const [addCatLoading, setAddCatLoading] = React.useState<boolean>(false);
+  const [categoryToAdd, setCategoryToAdd] = useState<string>('');
+  const [addCategoryLoading, setAddCategoryLoading] = React.useState<boolean>(false);
 
   const isCategorieExist = (value: string) => {
     return !!categories.find(categorie => categorie.name.toUpperCase() === value.trim().toUpperCase());
+  };
+
+  const handleRemoveCategory = async ({ id, name }: Category, event: React.MouseEvent<HTMLSpanElement, MouseEvent>): Promise<void> => {
+    event.stopPropagation();
+    try {
+      if (!currentUser) {
+        history.push('/signin');
+      } else {
+        await firestore
+          .collection('categories')
+          .doc(id)
+          .delete();
+      }
+    } catch (err) {
+      openNotification(`Cannot remove ${name} category`, formatError(err), 'error');
+      console.error(err);
+    }
   };
 
   return (
@@ -75,15 +94,15 @@ const AddLinkPage: React.FC = () => {
                 history.push('/signin');
               } else {
                 const newCategory: Category = { name: categoryToAdd, count: 0 };
-                setAddCatLoading(true);
+                setAddCategoryLoading(true);
                 await firestore.collection('categories').add(newCategory);
-                setAddCatLoading(false);
+                setAddCategoryLoading(false);
                 setCategoryToAdd('');
                 setFieldValue('categories', [...values.categories, categoryToAdd]);
               }
             } catch (err) {
               openNotification(`Cannot add ${categoryToAdd} category`, formatError(err), 'error');
-              setAddCatLoading(false);
+              setAddCategoryLoading(false);
               setCategoryToAdd('');
               console.error(err);
             }
@@ -146,7 +165,8 @@ const AddLinkPage: React.FC = () => {
                             <>
                               {categoryToAdd.length > 0 && !isCategorieExist(categoryToAdd) && (
                                 <div className="add-category-button" onClick={() => handleAddCategory(categoryToAdd)}>
-                                  Add <span>{categoryToAdd}</span> to categories {addCatLoading ? <LoadingOutlined /> : <PlusOutlined />}
+                                  Add <span>{categoryToAdd}</span> to categories{' '}
+                                  {addCategoryLoading ? <LoadingOutlined /> : <PlusOutlined />}
                                 </div>
                               )}
                               {menu}
@@ -158,6 +178,16 @@ const AddLinkPage: React.FC = () => {
                           categories.map((category: Category) => (
                             <Option key={category.id} value={category.name}>
                               {category.name}
+                              {currentUser && currentUser.isAdmin && category.count === 0 && (
+                                <span className="remove-category">
+                                  ({category.count})
+                                  <CloseOutlined
+                                    onClick={(event: React.MouseEvent<HTMLSpanElement, MouseEvent>) =>
+                                      handleRemoveCategory(category, event)
+                                    }
+                                  />
+                                </span>
+                              )}
                             </Option>
                           ))}
                       </Select>
