@@ -5,6 +5,7 @@ import { MessageOutlined } from '@ant-design/icons';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
+import { useQueryParam, ArrayParam } from 'use-query-params';
 
 // Components
 import Tag from '../tag/tag.component';
@@ -29,6 +30,7 @@ interface IProps {
 const LinkItem: React.FC<IProps> = ({ link, index }) => {
   const { currentUser } = useCurrentUser();
   const { updateVoteLinks } = useLinks();
+  const [qsCategories, setQsCategories] = useQueryParam<string[]>('categories', ArrayParam);
 
   const history = useHistory();
   const { Title } = Typography;
@@ -42,6 +44,11 @@ const LinkItem: React.FC<IProps> = ({ link, index }) => {
     } else {
       updateVoteLinks(link.id, currentUser, 'add');
     }
+  };
+
+  const handleSelectCategory = (category: string, event: React.MouseEvent<HTMLElement, MouseEvent>): void => {
+    event.preventDefault();
+    setQsCategories([category]);
   };
 
   const [ref, inView] = useInView({
@@ -63,13 +70,21 @@ const LinkItem: React.FC<IProps> = ({ link, index }) => {
       <a className="link-item-data" href={link.url} target="_blank">
         <div>
           {link.categories.length > 0 && (
-            <div className="tags">
-              {link.categories.map((category: string, index: number) => (
-                <Tag isButton key={`${category}${index}`} text={category} color="green" />
-              ))}
-            </div>
+            <Tooltip title="You can now filter by categories by clicking those tags" placement="topLeft">
+              <div className="tags">
+                {link.categories.map((category: string, index: number) => (
+                  <Tag
+                    onClick={(event: React.MouseEvent<HTMLElement, MouseEvent>) => handleSelectCategory(category, event)}
+                    isButton
+                    key={`${category}${index}`}
+                    text={category}
+                    color="green"
+                  />
+                ))}
+              </div>
+            </Tooltip>
           )}
-          <Tooltip title={link.description}>
+          <Tooltip title={link.description} placement="topLeft">
             <Title ellipsis={{ rows: 3 }} level={4}>
               {link.description}
             </Title>

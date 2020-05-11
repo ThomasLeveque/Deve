@@ -4,10 +4,13 @@ import { Row, Col, Typography, Tooltip, Badge } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { Highlight } from 'react-instantsearch-dom';
+import { motion } from 'framer-motion';
 
+// Components
 import Tag from '../../tag/tag.component';
 import UnderlineLink from '../../underline-link/underline-link.component';
 
+// Others
 import { ALgoliaLink } from '../../../models/algolia-link.model';
 import { useSearch } from '../../../providers/search/search.provider';
 import { getDomain } from '../../../utils/format-string.util';
@@ -25,10 +28,10 @@ const SearchLinkItem: React.FC<IProps> = ({ link }) => {
   const { Title } = Typography;
 
   return (
-    <div className="search-link-item">
+    <motion.div whileHover={{ scale: 1.02, transition: { duration: 0.2, ease: 'easeOut' } }} className="search-link-item">
       <a className="search-link-item-data" href={link.url} target="_blank">
         <div>
-          <Tooltip title={link.description}>
+          <Tooltip title={link.description} placement="topLeft">
             <Title ellipsis={{ rows: 2 }} level={4}>
               <Highlight tagName="span" hit={link} attribute="description" />
             </Title>
@@ -61,7 +64,7 @@ const SearchLinkItem: React.FC<IProps> = ({ link }) => {
           <MessageOutlined className="icon" />
         </Badge>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

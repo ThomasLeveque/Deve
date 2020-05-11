@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
-import { PageHeader, Row, Col, Divider, Space } from 'antd';
+import { PageHeader, Row, Col, Divider, Space, Tooltip } from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { Formik, Form, FormikHelpers, FormikProps, Field } from 'formik';
 import { motion } from 'framer-motion';
@@ -54,7 +54,8 @@ const LinkDetailPage: React.FC = () => {
   const commentsRef: firebase.firestore.Query = firestore
     .collection('links')
     .doc(linkId)
-    .collection('comments').orderBy('createdAt', 'desc');
+    .collection('comments')
+    .orderBy('createdAt', 'desc');
 
   useEffect(() => {
     const unsubcribeLink = linkRef.onSnapshot(handleLinkSnapshot, handleLinkError);
@@ -108,6 +109,10 @@ const LinkDetailPage: React.FC = () => {
     }
   };
 
+  const handleSelectedCategory = (category: string): void => {
+    history.push(`/?categories=${category}`);
+  };
+
   if (!isLinkLoaded) {
     return <Loading />;
   }
@@ -126,15 +131,22 @@ const LinkDetailPage: React.FC = () => {
             <h1 className="H3">{link.description}</h1>
             <UnderlineLink type="not-link-external">On {getDomain(link.url)}</UnderlineLink>
           </a>
-          <div className="tags">
-            {link.categories.length > 0 && (
-              <>
+
+          {link.categories.length > 0 && (
+            <Tooltip title="You can now filter by categories by clicking those tags" placement="topRight">
+              <div className="tags">
                 {link.categories.map((category: string, index: number) => (
-                  <Tag key={`${category}${index}`} text={category} color="green" />
+                  <Tag
+                    isButton
+                    onClick={() => handleSelectedCategory(category)}
+                    key={`${category}${index}`}
+                    text={category}
+                    color="green"
+                  />
                 ))}
-              </>
-            )}
-          </div>
+              </div>
+            </Tooltip>
+          )}
         </div>
         <Row align="bottom" className="author light P">
           <Col span={12} className="break-word P">
