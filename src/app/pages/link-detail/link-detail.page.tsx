@@ -195,7 +195,7 @@ const LinkDetailPage: React.FC = () => {
             }}
           </Formik>
 
-          {isCommentsLoaded && (
+          {isCommentsLoaded && link.commentCount > 0 && (
             <div className="comment-list">
               {Object.keys(comments).map((commentId: string, index: number) => {
                 const comment = comments[commentId];
