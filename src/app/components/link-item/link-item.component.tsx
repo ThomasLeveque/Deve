@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Row, Col, Typography, Tooltip } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
@@ -27,7 +27,7 @@ interface IProps {
   index: number;
 }
 
-const LinkItem: React.FC<IProps> = ({ link, index }) => {
+const LinkItem: React.FC<IProps> = memo(({ link, index }) => {
   const { currentUser } = useCurrentUser();
   const { updateVoteLinks } = useLinks();
   const [qsCategories, setQsCategories] = useQueryParam<string[]>('categories', ArrayParam);
@@ -109,6 +109,6 @@ const LinkItem: React.FC<IProps> = ({ link, index }) => {
       </div>
     </motion.div>
   );
-};
+});
 
 export default LinkItem;
