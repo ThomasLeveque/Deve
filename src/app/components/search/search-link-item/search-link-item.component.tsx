@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Row, Col, Typography, Tooltip, Badge } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
@@ -22,7 +22,7 @@ interface IProps {
   index?: number;
 }
 
-const SearchLinkItem: React.FC<IProps> = ({ link }) => {
+const SearchLinkItem: React.FC<IProps> = memo(({ link }) => {
   const { toggleSearch } = useSearch();
   const history = useHistory();
   const { Title } = Typography;
@@ -66,6 +66,6 @@ const SearchLinkItem: React.FC<IProps> = ({ link }) => {
       </div>
     </motion.div>
   );
-};
+});
 
 export default SearchLinkItem;
