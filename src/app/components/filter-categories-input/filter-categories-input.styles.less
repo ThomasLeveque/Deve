@@ -1,0 +1,43 @@
+@import '../../../assets/styles/colors.less';
+@import '../../../assets/styles/vars.less';
+
+.filter-categories-input {
+  margin-bottom: 20px;
+  width: 100%;
+
+  &-container {
+    position: relative;
+    width: 100%;
+  }
+
+  &-item {
+    width: 100%;
+    height: 42px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 400;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), height 0s;
+    background-color: white;
+    padding: 0 @inputHorizontalPadding 0 calc(@resetIconSize + @inputHorizontalPadding + 10px);
+
+    &:focus {
+      color: black;
+      box-shadow: @inputShadow;
+    }
+
+    &::placeholder {
+      color: @dark-gray-2;
+      opacity: 1;
+    }
+  }
+
+  &-icon {
+    left: @inputHorizontalPadding;
+    font-size: @resetIconSize;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: @my-primary-color;
+  }
+}
