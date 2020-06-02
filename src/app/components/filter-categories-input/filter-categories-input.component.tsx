@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, CloseCircleFilled } from '@ant-design/icons';
 
 import './filter-categories-input.styles.less';
 
@@ -8,10 +8,11 @@ interface IProps {
   name: string;
   placeholder: string;
   type?: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFilterCategoriesReset: () => void;
 }
 
-const FilterCategoriesInput: React.FC<IProps> = ({ onChange, value, name, placeholder, type = 'text' }) => {
+const FilterCategoriesInput: React.FC<IProps> = ({ onChange, onFilterCategoriesReset, value, name, placeholder, type = 'text' }) => {
   return (
     <div className="filter-categories-input">
       <div className="filter-categories-input-container">
@@ -24,7 +25,8 @@ const FilterCategoriesInput: React.FC<IProps> = ({ onChange, value, name, placeh
           autoComplete="off"
           className="filter-categories-input-item"
         />
-        {<SearchOutlined className="filter-categories-input-icon" />}
+        <SearchOutlined className="filter-categories-input-icon search" />
+        {value.length > 0 && <CloseCircleFilled className="filter-categories-input-icon reset pointer" onClick={onFilterCategoriesReset} />}
       </div>
     </div>
   );

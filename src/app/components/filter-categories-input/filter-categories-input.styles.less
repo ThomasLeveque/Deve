@@ -19,7 +19,7 @@
     border: none;
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), height 0s;
     background-color: white;
-    padding: 0 @inputHorizontalPadding 0 calc(@resetIconSize + @inputHorizontalPadding + 10px);
+    padding: 0 calc(@resetIconSize + @inputHorizontalPadding + 10px);
 
     &:focus {
       color: black;
@@ -33,11 +33,19 @@
   }
 
   &-icon {
-    left: @inputHorizontalPadding;
     font-size: @resetIconSize;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    color: @my-primary-color;
+
+    &.search {
+      color: @my-primary-color;
+      left: @inputHorizontalPadding;
+    }
+
+    &.reset {
+      color: @dark-gray-2;
+      right: @inputHorizontalPadding;
+    }
   }
 }

@@ -13,13 +13,17 @@ import useDebounce from '../../hooks/debounce.hook';
 import './filter-bar.styles.less';
 
 const FilterBar: React.FC = () => {
-  const [searchValue, setSearchValue] = useState<string>('')
+  const [searchValue, setSearchValue] = useState<string>('');
   const { usedCategories } = useCategories();
   const [qsCategories = [], setQsCategories] = useQueryParam<string[]>('categories', ArrayParam);
   const debouncedSearchValue = useDebounce(searchValue, 300);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleFilterCategoriesSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
+  };
+
+  const handleFilterCategoriesReset = () => {
+    setSearchValue('');
   };
 
   const addQsCategories = (categoryName: string): string[] => {
@@ -33,7 +37,14 @@ const FilterBar: React.FC = () => {
   return (
     <div className="filter-bar">
       <h4>Filter by categories :</h4>
-      <FilterCategoriesInput onChange={handleSearch} value={searchValue} name="search" placeholder="Search a category..." type="text" />
+      <FilterCategoriesInput
+        onFilterCategoriesReset={handleFilterCategoriesReset}
+        onChange={handleFilterCategoriesSearch}
+        value={searchValue}
+        name="search"
+        placeholder="Search a category..."
+        type="text"
+      />
       <Tag isButton text="all" color={qsCategories?.length ? 'black' : 'green'} onClick={() => setQsCategories([])} />
       {qsCategories &&
         qsCategories.map((categoryName: string) => {
