@@ -23,9 +23,6 @@ const LinkList: React.FC = () => {
   const isLargeDesktop = useMediaQuery(IS_LARGE_DESKTOP);
 
   const { links, linksLoaded, loadMoreLinks, loadingMoreLinks, hasMoreLinks } = useLinks();
-  if (!linksLoaded) {
-    return <Loading />;
-  }
 
   const getColumnSize = (): number => {
     if (isMobile) {
@@ -43,7 +40,11 @@ const LinkList: React.FC = () => {
 
   useEffect(() => {
     setColumnSize(getColumnSize());
-  }, [isMobile, isTablet, isDesktop, isLargeDesktop, isLargeMobile])
+  }, [isMobile, isTablet, isDesktop, isLargeDesktop, isLargeMobile]);
+
+  if (!linksLoaded) {
+    return <Loading />;
+  }
 
   return (
     <div className="link-list">

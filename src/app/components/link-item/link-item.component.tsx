@@ -16,7 +16,7 @@ import LikeButton from '../like-button/like-button.component';
 import { useLinks } from '../../providers/links/links.provider';
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { IVote } from '../../interfaces/vote.interface';
-import { GLOBAL_GRID_SIZE, LINKS_TRANSITION_DElAY } from '../../utils/constants.util';
+import { GLOBAL_GRID_SIZE, LINKS_TRANSITION_DElAY, PAGE_EASING, HOVER_EASING } from '../../utils/constants.util';
 import { Link } from '../../models/link.model';
 import { getDomain } from '../../utils/format-string.util';
 
@@ -61,11 +61,11 @@ const LinkItem: React.FC<IProps> = memo(({ link, index, columnSize }) => {
   
   return (
     <motion.div
-      transition={{ delay: itemDelay, ease: 'easeOut' }}
+      transition={{ delay: itemDelay, ease: PAGE_EASING, duration: 0.6 }}
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : 20 }}
       className="link-item"
-      whileHover={{ scale: 1.02, transition: { duration: 0.2, ease: 'easeOut' } }}
+      whileHover={{ scale: 1.02, transition: { duration: 0.4, ease: HOVER_EASING } }}
       ref={ref}
     >
       <a className="link-item-data" href={link.url} target="_blank">

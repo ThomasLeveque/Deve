@@ -1,8 +1,13 @@
 @import '../../../assets/styles/vars.less';
+@import '../../../assets/styles/media-queries.less';
 
 .home-page {
   padding-left: calc(@filterBarWidth + @filterBarGlobalMargin);
   padding-bottom: @globalVerticalPadding;
+
+  .is-responsive({
+    padding-left: 0;
+  });
 
   &-top {
     width: 100%;

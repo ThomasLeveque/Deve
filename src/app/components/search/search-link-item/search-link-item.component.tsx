@@ -14,6 +14,7 @@ import UnderlineLink from '../../underline-link/underline-link.component';
 import { ALgoliaLink } from '../../../models/algolia-link.model';
 import { useSearch } from '../../../providers/search/search.provider';
 import { getDomain } from '../../../utils/format-string.util';
+import { HOVER_EASING } from '../../../utils/constants.util';
 
 import './search-link-item.styles.less';
 
@@ -28,7 +29,7 @@ const SearchLinkItem: React.FC<IProps> = memo(({ link }) => {
   const { Title } = Typography;
 
   return (
-    <motion.div whileHover={{ scale: 1.02, transition: { duration: 0.2, ease: 'easeOut' } }} className="search-link-item">
+    <motion.div whileHover={{ scale: 1.02, transition: { duration: 0.6, ease: HOVER_EASING } }} className="search-link-item">
       <a className="search-link-item-data" href={link.url} target="_blank">
         <div>
           <Tooltip title={link.description} placement="topLeft">

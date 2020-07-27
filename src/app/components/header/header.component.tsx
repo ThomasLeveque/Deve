@@ -6,6 +6,7 @@ import { useMediaQuery } from 'beautiful-react-hooks';
 
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { useSearch } from '../../providers/search/search.provider';
+import { IS_MOBILE } from '../../utils/constants.util';
 
 import './header.styles.less';
 
@@ -14,7 +15,7 @@ const Header: React.FC = () => {
   const { isSearchOpen, toggleSearch } = useSearch();
   const history = useHistory();
 
-  const isMobile = useMediaQuery('(max-width: 768px)')
+  const isMobile = useMediaQuery(IS_MOBILE)
 
   const menu = (
     <Menu className="user-dropdown">

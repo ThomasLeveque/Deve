@@ -1,8 +1,21 @@
 @import '../assets/styles/colors.less';
 @import '../assets/styles/vars.less';
+@import '../assets/styles/media-queries.less';
 
 .app {
-  margin: 0 @globalHorizontalPadding 0 @globalHorizontalPadding;
+  margin: 0 @globalHorizontalPadding;
   padding-top: calc(@headerHeight + @globalVerticalPadding);
   position: relative;
+
+  .is-tablet({
+    margin: 0 @globalHorizontalPadding * 0.8;
+  });
+
+  .is-large-mobile({
+    margin: 0 @globalHorizontalPadding * 0.65;
+  });
+
+  .is-mobile({
+    margin: 0 @globalHorizontalPadding * 0.5;
+  });
 }

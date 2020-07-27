@@ -1,5 +1,6 @@
 @import '../../../assets/styles/vars.less';
 @import '../../../assets/styles/colors.less';
+@import '../../../assets/styles/media-queries.less';
 
 .link-detail-page {
   padding-bottom: @globalVerticalPadding;
@@ -15,6 +16,10 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+
+      .is-mobile({
+        flex-direction: column-reverse;
+      });
 
       &-link {
         margin-bottom: 26px;
@@ -42,6 +47,16 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-end;
+
+        .is-mobile({
+          justify-content: flex-start;
+          align-items: flex-start;
+
+          .tag:first-child {
+            margin-left: 0;
+            margin-bottom: 20px;
+          }
+        });
 
         .tag {
           margin: 0 0 6px 6px;

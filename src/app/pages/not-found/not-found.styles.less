@@ -1,4 +1,5 @@
 @import '../../../assets/styles/vars.less';
+@import '../../../assets/styles/media-queries.less';
 
 .not-found {
   display: flex;
@@ -8,4 +9,10 @@
   height: calc(100vh - @headerHeight - (@globalVerticalPadding * 2));
   flex-wrap: wrap;
   text-align: center;
+
+  .is-mobile({
+    h1 {
+      font-size: 30px;
+    }
+  });
 }

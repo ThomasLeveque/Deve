@@ -1,5 +1,6 @@
 @import '../../../../assets/styles/colors.less';
 @import '../../../../assets/styles/vars.less';
+@import '../../../../assets/styles/media-queries.less';
 
 .search-modal {
   z-index: 20;
@@ -17,6 +18,18 @@
     height: calc(100% - (@globalVerticalPadding * 2));
     width: calc(100% - (@globalHorizontalPadding * 2));
     cursor: initial;
+
+    .is-tablet({
+      width: calc(100% - (@globalHorizontalPadding * 0.8 * 2));
+    });
+  
+    .is-large-mobile({
+      width: calc(100% - (@globalHorizontalPadding * 0.65 * 2));
+    });
+  
+    .is-mobile({
+      width: calc(100% - (@globalHorizontalPadding * 0.5 * 2));
+    });
   }
 
   &-content {

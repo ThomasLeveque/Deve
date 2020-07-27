@@ -20,4 +20,7 @@ export const IS_TABLET = `(min-width: ${MAX_LARGE_MOBILE + 1}px) and (max-width:
 export const IS_DESKTOP = `(min-width: ${MAX_TABLET + 1}px) and (max-width: ${MAX_DESKTOP}px)`;
 export const IS_LARGE_DESKTOP = `(min-width: ${MAX_DESKTOP + 1}px)`;
 
-export const IS_RESPONSIVE = `(max-width: ${MAX_TABLET}px)`
+export const IS_RESPONSIVE = `(max-width: ${MAX_TABLET}px)`;
+
+export const PAGE_EASING = [0.6, 0.01, -0.05, 0.9];
+export const HOVER_EASING = [0.43, 0.13, 0.23, 0.96];
