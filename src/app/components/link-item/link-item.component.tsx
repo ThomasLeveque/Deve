@@ -16,7 +16,7 @@ import LikeButton from '../like-button/like-button.component';
 import { useLinks } from '../../providers/links/links.provider';
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { IVote } from '../../interfaces/vote.interface';
-import { ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/constants.util';
+import { GLOBAL_GRID_SIZE, LINKS_TRANSITION_DElAY } from '../../utils/constants.util';
 import { Link } from '../../models/link.model';
 import { getDomain } from '../../utils/format-string.util';
 
@@ -25,9 +25,10 @@ import './link-item.styles.less';
 interface IProps {
   link: Link;
   index: number;
+  columnSize: number;
 }
 
-const LinkItem: React.FC<IProps> = memo(({ link, index }) => {
+const LinkItem: React.FC<IProps> = memo(({ link, index, columnSize }) => {
   const { currentUser } = useCurrentUser();
   const { updateVoteLinks } = useLinks();
   const [qsCategories, setQsCategories] = useQueryParam<string[]>('categories', ArrayParam);
@@ -56,8 +57,8 @@ const LinkItem: React.FC<IProps> = memo(({ link, index }) => {
     triggerOnce: true
   });
 
-  const itemDelay: number = (index % ITEMS_PER_LIGNE) * LINKS_TRANSITION_DElAY;
-
+  const itemDelay: number = (index % (GLOBAL_GRID_SIZE / columnSize)) * LINKS_TRANSITION_DElAY;
+  
   return (
     <motion.div
       transition={{ delay: itemDelay, ease: 'easeOut' }}
