@@ -96,10 +96,10 @@ const HomePage: React.FC = () => {
           <AnimatePresence exitBeforeEnter initial={false}>
             {qsCategories.length > 0 && (
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 30 }}
-                transition={{ duration: 0.6, ease: HOVER_EASING }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.2, ease: HOVER_EASING }}
               >
                 <Button
                   onClick={() => setQsCategories([])}
