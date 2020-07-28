@@ -2,19 +2,24 @@ import React from 'react';
 import { InstantSearch } from 'react-instantsearch-dom';
 import { Divider } from 'antd';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useMediaQuery } from 'beautiful-react-hooks';
 
+// Components
 import SearchFilterBar from '../search-filter-bar/search-filter-bar.component';
 import SearchLinkList from '../search-link-list/search-link-list.component';
 import SearchHeader from '../search-header/search-header.component';
 
+// Others
 import { searchClient, indexName } from '../../../algolia/algolia.config';
 import { useSearch } from '../../../providers/search/search.provider';
 import { animateModalContainer, animateModal } from './search-modal.animate';
+import { IS_RESPONSIVE } from '../../../utils/constants.util';
 
 import './search-modal.styles.less';
 
 const SearchModal: React.FC = () => {
   const { toggleSearch, isSearchOpen } = useSearch();
+  const isReponsive = useMediaQuery(IS_RESPONSIVE); 
 
   return (
     <AnimatePresence exitBeforeEnter>
@@ -30,8 +35,12 @@ const SearchModal: React.FC = () => {
                 <div className="search-modal-content">
                   <SearchHeader />
                   <div className="search-modal-data">
-                    <SearchFilterBar />
-                    <Divider type="vertical" />
+                    {!isReponsive && (
+                      <>
+                        <SearchFilterBar />
+                        <Divider type="vertical" />
+                      </>
+                    )}
                     <SearchLinkList />
                   </div>
                 </div>

@@ -5,6 +5,7 @@ import { MessageOutlined } from '@ant-design/icons';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { Highlight } from 'react-instantsearch-dom';
 import { motion } from 'framer-motion';
+import { useMediaQuery } from 'beautiful-react-hooks';
 
 // Components
 import Tag from '../../tag/tag.component';
@@ -14,7 +15,7 @@ import UnderlineLink from '../../underline-link/underline-link.component';
 import { ALgoliaLink } from '../../../models/algolia-link.model';
 import { useSearch } from '../../../providers/search/search.provider';
 import { getDomain } from '../../../utils/format-string.util';
-import { HOVER_EASING } from '../../../utils/constants.util';
+import { HOVER_EASING, IS_MOBILE } from '../../../utils/constants.util';
 
 import './search-link-item.styles.less';
 
@@ -26,6 +27,7 @@ interface IProps {
 const SearchLinkItem: React.FC<IProps> = memo(({ link }) => {
   const { toggleSearch } = useSearch();
   const history = useHistory();
+  const isMobile = useMediaQuery(IS_MOBILE);
   const { Title } = Typography;
 
   return (
@@ -33,7 +35,7 @@ const SearchLinkItem: React.FC<IProps> = memo(({ link }) => {
       <a className="search-link-item-data" href={link.url} target="_blank">
         <div>
           <Tooltip title={link.description} placement="topLeft">
-            <Title ellipsis={{ rows: 2 }} level={4}>
+            <Title ellipsis={{ rows: isMobile ? 3 : 2 }} level={4}>
               <Highlight tagName="span" hit={link} attribute="description" />
             </Title>
           </Tooltip>
@@ -46,16 +48,16 @@ const SearchLinkItem: React.FC<IProps> = memo(({ link }) => {
           )}
         </div>
         <Row align="bottom" className="author light">
-          <Col span={12} className="break-word">
+          <Col span={isMobile ? 24 : 12} className="break-word">
             <UnderlineLink type="not-link-external">On {getDomain(link.url)}</UnderlineLink>
           </Col>
-          <Col span={12} className="text-align-right P">
+          <Col span={isMobile ? 24 : 12} className={`${isMobile ? '' : 'text-align-right'} P`}>
             by {link.postedBy.displayName} | {distanceInWordsToNow(link.createdAt)} ago
           </Col>
         </Row>
       </a>
       <div
-        className="search-link-item-actions text-align-center flex column justify-content-center pointer"
+        className={`search-link-item-actions text-align-center flex ${isMobile ? 'row' : 'column'} justify-content-center pointer`}
         onClick={() => {
           toggleSearch(false);
           history.push(`/links/${link.objectID}`);
