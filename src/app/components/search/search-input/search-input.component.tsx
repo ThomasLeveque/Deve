@@ -8,7 +8,7 @@ import './search-input.styles.less';
 const SearchInput: React.FC<SearchBoxProvided> = ({ currentRefinement, refine }) => {
   const [value, setValue] = useState<string>(currentRefinement);
 
-  const inputRef = useRef(null)
+  const inputRef = useRef(null);
 
   const handleSearchSubmit = (event: any): void => {
     if (event.key && event.key !== 'Enter') {
@@ -21,6 +21,7 @@ const SearchInput: React.FC<SearchBoxProvided> = ({ currentRefinement, refine })
   const handleSearchReset = (): void => {
     setValue('');
     refine('');
+    inputRef.current.focus();
   };
 
   return (
