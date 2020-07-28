@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQueryParam, ArrayParam } from 'use-query-params';
+import { motion } from 'framer-motion';
 
 // Components
 import Tag from '../tag/tag.component';
@@ -9,6 +10,7 @@ import FilterCategoriesInput from '../filter-categories-input/filter-categories-
 import { useCategories } from '../../providers/categories/categories.provider';
 import Category from '../../models/category.model';
 import useDebounce from '../../hooks/debounce.hook';
+import { PAGE_EASING } from '../../utils/constants.util';
 
 import './filter-bar.styles.less';
 
@@ -35,7 +37,13 @@ const FilterBar: React.FC = () => {
   };
 
   return (
-    <div className="filter-bar">
+    <motion.div
+      className="filter-bar"
+      transition={{ duration: 0.6, ease: PAGE_EASING }}
+      exit={{ x: '-100%' }}
+      initial={{ x: '-100%' }}
+      animate={{ x: 0 }}
+    >
       <div className="filter-bar-container">
         <h4>Filter by categories :</h4>
         <FilterCategoriesInput
@@ -79,7 +87,7 @@ const FilterBar: React.FC = () => {
             );
           })}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
