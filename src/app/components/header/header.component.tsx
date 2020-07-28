@@ -2,9 +2,11 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Dropdown, Menu, Button } from 'antd';
 import { LogoutOutlined, CloseOutlined, SearchOutlined, DownOutlined, LoginOutlined } from '@ant-design/icons';
+import { useMediaQuery } from 'beautiful-react-hooks';
 
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { useSearch } from '../../providers/search/search.provider';
+import { IS_MOBILE } from '../../utils/constants.util';
 
 import './header.styles.less';
 
@@ -12,6 +14,8 @@ const Header: React.FC = () => {
   const { currentUser, handleLogout } = useCurrentUser();
   const { isSearchOpen, toggleSearch } = useSearch();
   const history = useHistory();
+
+  const isMobile = useMediaQuery(IS_MOBILE)
 
   const menu = (
     <Menu className="user-dropdown">
@@ -23,6 +27,17 @@ const Header: React.FC = () => {
       </Menu.Item>
     </Menu>
   );
+
+  const renderUserName = (): string => {
+    const { displayName } = currentUser;
+
+    if (!isMobile) {
+      return displayName;
+    }
+
+    const initialsName = displayName.split(' ').map((nameItem: string) => nameItem[0]);
+    return initialsName.join('').toUpperCase();
+  }
 
   return (
     <header className="header">
@@ -40,13 +55,13 @@ const Header: React.FC = () => {
       <div>
         <span className="search" onClick={() => toggleSearch(!isSearchOpen)}>
           {isSearchOpen ? <CloseOutlined className="search-icon" /> : <SearchOutlined className="search-icon" />}
-          {isSearchOpen ? 'Close' : 'Search'}
+          {!isMobile && <span className="search-text">{isSearchOpen ? 'Close' : 'Search'}</span>}
         </span>
         <div className="header-button">
           {currentUser ? (
             <Dropdown placement="bottomRight" overlay={menu} trigger={['click']}>
               <Button type="link">
-                {currentUser.displayName} <DownOutlined />
+                {renderUserName()} <DownOutlined />
               </Button>
             </Dropdown>
           ) : (
@@ -58,8 +73,9 @@ const Header: React.FC = () => {
                 }
                 history.push('/signin');
               }}
+              icon={<LoginOutlined />}
             >
-              Sign in <LoginOutlined />
+              {!isMobile && 'Sign in'}
             </Button>
           )}
         </div>

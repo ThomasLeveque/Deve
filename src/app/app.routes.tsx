@@ -33,7 +33,7 @@ const AppRoutes = () => {
           {currentUser ? <Redirect to="/" /> : <SignInAndSignUpPage />}
         </RouteTransition>
         <RouteTransition exact path="/forgot" slideUp={SLIDE_UP_ROUTE}>
-          currentUser ? <Redirect to="/" /> : <ForgotPasswordPage />
+          {currentUser ? <Redirect to="/" /> : <ForgotPasswordPage />}
         </RouteTransition>
         <RouteTransition path="/links/:linkId" fadeIn={false} slide={SLIDE_ROUTE}>
           <LinkDetailPage />

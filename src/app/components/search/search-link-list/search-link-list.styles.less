@@ -1,9 +1,15 @@
 @import '../../../../assets/styles/colors.less';
 @import '../../../../assets/styles/vars.less';
+@import '../../../../assets/styles/media-queries.less';
 
 .search-link-list {
   width: calc(100% - @filterBarWidth);
   height: 100%;
   overflow-y: auto;
   padding: @globalVerticalPadding @globalHorizontalPadding @globalVerticalPadding @filterBarGlobalMargin;
+
+  .is-responsive({
+    width: 100%;
+    padding: @filterBarGlobalMargin;
+  });
 }

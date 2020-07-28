@@ -1,0 +1,22 @@
+.media(@min, @max, @styles) {
+  @media (min-width: @min) 
+    and (max-width: @max) {
+      @styles();
+  }
+}
+
+.is-responsive(@styles) {
+  .media(0px, 1023px, @styles)
+}
+
+.is-mobile(@styles) {
+  .media(0px, 575px, @styles)
+}
+
+.is-large-mobile(@styles) {
+  .media(576px, 767px, @styles)
+}
+
+.is-tablet(@styles) {
+  .media(768px, 1023px, @styles)
+}
