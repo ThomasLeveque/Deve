@@ -3,7 +3,7 @@ import { useLocation, Switch, Route } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { PAGE_EASING } from '../../utils/constants.util';
 
-const transition = { duration: 0.6, ease: PAGE_EASING };
+const transition = { duration: 0.4, ease: PAGE_EASING };
 
 interface RoutesProps {
   exitBeforeEnter?: boolean;
