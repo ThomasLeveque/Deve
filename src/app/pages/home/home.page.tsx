@@ -48,7 +48,7 @@ const HomePage: React.FC = () => {
   }, [isResponsive]);
 
   useEffect(() => {
-    if (isSearchOpen && isFilterOpen) {
+    if (isSearchOpen && isFilterOpen && isResponsive) {
       setIsFilterOpen(false);
     }
   }, [isSearchOpen]);
