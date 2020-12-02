@@ -1,3 +1,5 @@
+@import '../../../assets/styles/media-queries.less';
+
 @additionalDividerMargin: 10px;
 
 .sign-in-and-sign-up-page {
@@ -24,6 +26,11 @@
 
   .ant-tabs {
     padding: 50px 70px;
+
+    .is-mobile({
+      padding: 30px;
+    });
+
     &-bar {
       margin-bottom: 30px;
     }

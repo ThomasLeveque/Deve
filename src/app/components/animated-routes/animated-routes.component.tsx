@@ -1,6 +1,9 @@
 import React from 'react';
 import { useLocation, Switch, Route } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { PAGE_EASING } from '../../utils/constants.util';
+
+const transition = { duration: 0.4, ease: PAGE_EASING };
 
 interface RoutesProps {
   exitBeforeEnter?: boolean;
@@ -56,7 +59,7 @@ export const MountTransition: React.FC<MountTransitionProps> = ({ children, slid
     exit={{ opacity: fadeOut ? 0 : 1, x: fadeOut ? slide : 0, y: fadeOut ? slideUp : 0 }}
     initial={{ opacity: fadeIn ? 0 : 1, x: fadeIn ? slide : 0, y: fadeIn ? slideUp : 0 }}
     animate={{ opacity: 1, x: 0, y: 0 }}
-    transition={{ ease: 'easeOut' }}
+    transition={transition}
   >
     {children}
   </motion.div>

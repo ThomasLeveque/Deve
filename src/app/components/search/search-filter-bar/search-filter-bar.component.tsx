@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Components
 import RefinementCategories from '../refinement-categories/refinement-categories.component';
 import ClearRefinementCategories from '../clear-refinement-categories/clear-refinement-categories.component';
 

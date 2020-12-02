@@ -1,5 +1,6 @@
 @import '../../../../assets/styles/colors.less';
 @import '../../../../assets/styles/vars.less';
+@import '../../../../assets/styles/media-queries.less';
 
 .search-link-item {
   overflow: hidden;
@@ -11,6 +12,10 @@
   flex-direction: row;
   justify-content: space-between;
   transition: box-shadow 0.4s @bezier;
+
+  .is-mobile({
+    flex-direction: column;
+  });
 
   &:hover {
     box-shadow: @cardShadow;
@@ -29,14 +34,27 @@
       justify-content: space-between;
       align-items: flex-start;
 
+      .is-mobile({
+        flex-direction: column-reverse;
+      });
+
       .tags {
         max-width: 600px;
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-end;
 
+        .is-mobile({
+          justify-content: flex-start;
+          margin-bottom: 10px;
+        });
+
         .tag {
           margin: 0 0 6px 6px;
+
+          .is-mobile({
+            margin: 0 6px 6px 0;
+          });
         }
       }
     }
@@ -74,6 +92,14 @@
     .author {
       margin-top: 20px;
       color: black;
+
+      .is-mobile({
+        margin-top: 16px;
+
+        div:first-child {
+          margin-bottom: 8px;
+        }
+      });
     }
   }
 
@@ -81,6 +107,12 @@
     border-left: 1px solid @light-gray-1;
     padding: 0 22px;
     color: black;
+
+    .is-mobile({
+      border-left: none;
+      border-top: 1px solid @light-gray-1;
+      padding: 14px 0;
+    });
 
     span.icon {
       font-size: 24px;

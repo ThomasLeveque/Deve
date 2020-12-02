@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Row, Col, Typography, Tooltip } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
@@ -16,7 +16,7 @@ import LikeButton from '../like-button/like-button.component';
 import { useLinks } from '../../providers/links/links.provider';
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
 import { IVote } from '../../interfaces/vote.interface';
-import { ITEMS_PER_LIGNE, LINKS_TRANSITION_DElAY } from '../../utils/constants.util';
+import { GLOBAL_GRID_SIZE, LINKS_TRANSITION_DElAY, PAGE_EASING, HOVER_EASING } from '../../utils/constants.util';
 import { Link } from '../../models/link.model';
 import { getDomain } from '../../utils/format-string.util';
 
@@ -25,9 +25,10 @@ import './link-item.styles.less';
 interface IProps {
   link: Link;
   index: number;
+  columnSize: number;
 }
 
-const LinkItem: React.FC<IProps> = ({ link, index }) => {
+const LinkItem: React.FC<IProps> = memo(({ link, index, columnSize }) => {
   const { currentUser } = useCurrentUser();
   const { updateVoteLinks } = useLinks();
   const [qsCategories, setQsCategories] = useQueryParam<string[]>('categories', ArrayParam);
@@ -56,15 +57,15 @@ const LinkItem: React.FC<IProps> = ({ link, index }) => {
     triggerOnce: true
   });
 
-  const itemDelay: number = (index % ITEMS_PER_LIGNE) * LINKS_TRANSITION_DElAY;
-
+  const itemDelay: number = (index % (GLOBAL_GRID_SIZE / columnSize)) * LINKS_TRANSITION_DElAY;
+  
   return (
     <motion.div
-      transition={{ delay: itemDelay, ease: 'easeOut' }}
+      transition={{ delay: itemDelay, ease: PAGE_EASING, duration: 0.6 }}
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : 20 }}
       className="link-item"
-      whileHover={{ scale: 1.02, transition: { duration: 0.2, ease: 'easeOut' } }}
+      whileHover={{ scale: 1.02, transition: { duration: 0.4, ease: HOVER_EASING } }}
       ref={ref}
     >
       <a className="link-item-data" href={link.url} target="_blank">
@@ -109,6 +110,6 @@ const LinkItem: React.FC<IProps> = ({ link, index }) => {
       </div>
     </motion.div>
   );
-};
+});
 
 export default LinkItem;

@@ -1,5 +1,6 @@
 @import '../../../../assets/styles/colors.less';
 @import '../../../../assets/styles/vars.less';
+@import '../../../../assets/styles/media-queries.less';
 
 .search-header {
   width: 100%;
@@ -11,9 +12,25 @@
   position: relative;
   z-index: 30;
 
+  .is-mobile({
+    padding: 0 20px;
+  });
+
+  .is-large-mobile({
+    padding: 0 20px;
+  });
+
   h2 {
     color: white;
     margin-bottom: 0;
+
+    .is-mobile({
+      font-size: 16px;
+    });
+
+    .is-large-mobile({
+      font-size: 22px;
+    });
   }
 
   > svg {

@@ -2,18 +2,18 @@ import React, { createContext, useState, useEffect, memo, useContext } from 'rea
 
 import { firestore } from '../../firebase/firebase.service';
 import Category from '../../models/category.model';
-import { formatError } from '../../utils/format-string.util';
 import NotifContext from '../../contexts/notif/notif.context';
+import { CategoryMapping } from '../../interfaces/category-mapping.interface';
 
 interface ICategoriesContext {
   categories: Category[];
-  usedCategories: Category[];
+  usedCategories: CategoryMapping;
   categoriesLoaded: boolean;
 }
 
 export const CategoriesContext = createContext<ICategoriesContext>({
   categories: [],
-  usedCategories: [],
+  usedCategories: {},
   categoriesLoaded: false
 });
 
@@ -21,18 +21,33 @@ export const useCategories = () => useContext(CategoriesContext);
 
 const CategoriesProvider: React.FC = memo(({ children }) => {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [usedCategories, setUsedCategories] = useState<Category[]>([]);
+  const [usedCategories, setUsedCategories] = useState<CategoryMapping>({});
   const [categoriesLoaded, setCategoriesLoaded] = useState<boolean>(false);
 
   const { openNotification } = useContext(NotifContext);
 
   const handleSnapshot = (snapshot: firebase.firestore.QuerySnapshot) => {
-    const categories: Category[] = snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => new Category(doc));
-    const sortByNamesCategories = categories.sort((a, b) => {
-      return a.name.localeCompare(b.name);
+    const categories: CategoryMapping = {};
+    snapshot.docs
+      // Sort all categoriesNames by name
+      .sort((a: firebase.firestore.DocumentSnapshot, b: firebase.firestore.DocumentSnapshot) => a.data().name.localeCompare(b.data().name))
+      .map((doc: firebase.firestore.DocumentSnapshot) => {
+        const categoryName = doc.data().name;
+        categories[categoryName] = new Category(doc);
+      });
+    const allCategories: Category[] = Object.keys(categories).map((categoryName: string) => {
+      // Save the category to send it to allCategories array
+      const category = categories[categoryName];
+
+      // Filter Categories object to keep only the usedCategories
+      if (categories[categoryName].count === 0) {
+        delete categories[categoryName];
+      }
+      return category;
     });
-    setCategories(sortByNamesCategories);
-    setUsedCategories(sortByNamesCategories.filter((category: Category) => category.count !== 0));
+
+    setCategories(allCategories);
+    setUsedCategories(categories);
     setCategoriesLoaded(true);
   };
 

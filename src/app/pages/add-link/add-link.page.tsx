@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik, FormikHelpers, Form, Field, FormikProps } from 'formik';
 import { Row, Col, PageHeader, Space, Select } from 'antd';
+import { useMediaQuery } from 'beautiful-react-hooks';
 import { LoadingOutlined, PlusOutlined, CloseCircleFilled, CloseCircleOutlined, SmileOutlined, CloseOutlined } from '@ant-design/icons';
 
 // Components
@@ -20,6 +21,7 @@ import { isError, isValid as isValidCategory } from '../../utils/form.util';
 import Category from '../../models/category.model';
 import { useNotification } from '../../contexts/notif/notif.context';
 import { formatError } from '../../utils/format-string.util';
+import { IS_MOBILE } from '../../utils/constants.util';
 
 import './add-link.styles.less';
 
@@ -36,6 +38,7 @@ const AddLinkPage: React.FC = () => {
   const { openNotification } = useNotification();
   const history = useHistory();
   const { Option } = Select;
+  const isMobile = useMediaQuery(IS_MOBILE);
 
   const [categoryToAdd, setCategoryToAdd] = useState<string>('');
   const [addCategoryLoading, setAddCategoryLoading] = React.useState<boolean>(false);
@@ -122,7 +125,7 @@ const AddLinkPage: React.FC = () => {
                     component={FormInput}
                   />
                 </Col>
-                <Col span={12}>
+                <Col span={isMobile ? 24 : 12}>
                   <Field
                     autoComplete="off"
                     name="url"
@@ -133,7 +136,7 @@ const AddLinkPage: React.FC = () => {
                     component={FormInput}
                   />
                 </Col>
-                <Col span={12}>
+                <Col span={isMobile ? 24 : 12}>
                   <div className="custom-select">
                     <label htmlFor="categories">Categories</label>
                     <div className="custom-select-container">
@@ -210,7 +213,7 @@ const AddLinkPage: React.FC = () => {
                 </Col>
               </Row>
               <div className="add-link-buttons">
-                <Space size="middle">
+                <Space size="middle" direction={isMobile ? 'vertical' : 'horizontal'} align="end">
                   <CustomButton
                     type="button"
                     text="Reset"

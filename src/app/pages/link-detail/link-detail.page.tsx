@@ -24,7 +24,7 @@ import { IVote } from '../../interfaces/vote.interface';
 import { useLinks } from '../../providers/links/links.provider';
 import { getDomain } from '../../utils/format-string.util';
 import { useNotification } from '../../contexts/notif/notif.context';
-import { SLIDE_ROUTE } from '../../utils/constants.util';
+import { SLIDE_ROUTE, PAGE_EASING } from '../../utils/constants.util';
 import { Comment } from '../../models/comment.model';
 
 import './link-detail.styles.less';
@@ -121,7 +121,7 @@ const LinkDetailPage: React.FC = () => {
     <motion.div
       initial={{ opacity: 0, x: SLIDE_ROUTE }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ ease: 'easeOut' }}
+      transition={{ duration: 0.6, ease: PAGE_EASING }}
       className="link-detail-page"
     >
       <PageHeader onBack={history.goBack} title={<h2>Link detail</h2>} />
