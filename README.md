@@ -2,7 +2,7 @@
 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](http://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/for-you.svg)](https://forthebadge.com)
 
-A template to start a new project using Next.js
+The place to pratice technical watch
 
 ## Install
 
