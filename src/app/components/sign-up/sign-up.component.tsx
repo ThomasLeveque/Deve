@@ -7,7 +7,6 @@ import { FormInput } from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
 
 // Others
-import { register, createUserProfileDocument } from '../../firebase/firebase.service';
 import { IRegisterInitialState } from '../../interfaces/initial-states.type';
 import { registerSchema } from '../../schemas/user.schema';
 import { formatError } from '../../utils/format-string.util';

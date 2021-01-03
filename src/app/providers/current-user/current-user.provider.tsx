@@ -48,15 +48,19 @@ const CurrentUserProvider: React.FC = memo(({ children }) => {
           setCurrentUser(null);
           setCurrentUserLoaded(true);
         }
+        // unsubscribe to prevent onAuthStateChanged when signin or signup method are fired
         unsubscribe();
       },
       (err: firebase.auth.Error) => {
         openNotification('Cannot check for user auth', 'Try to reload', 'error');
         console.error(err);
         setCurrentUserLoaded(true);
+        // unsubscribe to prevent onAuthStateChanged when signin or signup method are fired
         unsubscribe();
       }
     );
+
+    return () => unsubscribe();
   }, []);
 
   const handleLoginWithGoogle = async (): Promise<void> => {

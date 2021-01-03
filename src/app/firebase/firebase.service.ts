@@ -30,6 +30,10 @@ export const resetPassword = async (email: string): Promise<void> => {
   return auth.sendPasswordResetEmail(email);
 };
 
+export const signInWithGoogle = async (): Promise<firebase.auth.UserCredential> => {
+  return auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+};
+
 export const createUserProfileDocument = async (userAuth: firebase.User, additionalData?: any): Promise<CurrentUser> => {
   if (!userAuth) return;
   const userRef: firebase.firestore.DocumentReference = firestore.doc(`users/${userAuth.uid}`);
@@ -55,9 +59,5 @@ export const createUserProfileDocument = async (userAuth: firebase.User, additio
 
   return new CurrentUser(snapshot);
 };
-
-export const googleProvider: firebase.auth.GoogleAuthProvider_Instance = new firebase.auth.GoogleAuthProvider();
-googleProvider.setCustomParameters({ prompt: 'select_account' });
-export const signInWithGoogle = async (): Promise<firebase.auth.UserCredential> => auth.signInWithPopup(googleProvider);
 
 export default firebase;
