@@ -7,7 +7,9 @@ import { IfirebaseConfig } from './firebase.interface';
 import CurrentUser from '../models/current-user.model';
 
 const firebaseConfig = ((domain: string): IfirebaseConfig => firebaseRoutes[domain] || firebaseConfigProd)(window.document.domain);
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
