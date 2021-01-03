@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, memo, useContext } from 'react';
+import { QuerySnapshot } from '@firebase/firestore-types';
 
 import { firestore } from '../../firebase/firebase.service';
 import Category from '../../models/category.model';
@@ -26,12 +27,12 @@ const CategoriesProvider: React.FC = memo(({ children }) => {
 
   const { openNotification } = useContext(NotifContext);
 
-  const handleSnapshot = (snapshot: firebase.firestore.QuerySnapshot) => {
+  const handleSnapshot = (snapshot: QuerySnapshot) => {
     const categories: CategoryMapping = {};
     snapshot.docs
       // Sort all categoriesNames by name
-      .sort((a: firebase.firestore.DocumentSnapshot, b: firebase.firestore.DocumentSnapshot) => a.data().name.localeCompare(b.data().name))
-      .map((doc: firebase.firestore.DocumentSnapshot) => {
+      .sort((a, b) => a.data().name.localeCompare(b.data().name))
+      .map(doc => {
         const categoryName = doc.data().name;
         categories[categoryName] = new Category(doc);
       });

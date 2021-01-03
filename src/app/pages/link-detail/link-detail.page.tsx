@@ -5,6 +5,7 @@ import { PageHeader, Row, Col, Divider, Space, Tooltip } from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { Formik, Form, FormikHelpers, FormikProps, Field } from 'formik';
 import { motion } from 'framer-motion';
+import { DocumentSnapshot, QuerySnapshot } from '@firebase/firestore-types';
 
 // Components
 import Loading from '../../components/loading/loading.component';
@@ -50,8 +51,8 @@ const LinkDetailPage: React.FC = () => {
   const [isCommentsLoaded, setIsCommentsLoaded] = React.useState<boolean>(false);
 
   const alreadyLiked: boolean = !!(link && link.votes.find((vote: IVote) => currentUser && vote.voteBy.id === currentUser.id));
-  const linkRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
-  const commentsRef: firebase.firestore.Query = firestore
+  const linkRef = firestore.collection('links').doc(linkId);
+  const commentsRef = firestore
     .collection('links')
     .doc(linkId)
     .collection('comments')
@@ -66,7 +67,7 @@ const LinkDetailPage: React.FC = () => {
     };
   }, [linkId]);
 
-  const handleLinkSnapshot = (doc: firebase.firestore.DocumentSnapshot) => {
+  const handleLinkSnapshot = (doc: DocumentSnapshot) => {
     const link: Link = new Link(doc);
     setLink(link);
     setIsLinkLoaded(true);
@@ -78,9 +79,9 @@ const LinkDetailPage: React.FC = () => {
     setIsLinkLoaded(true);
   };
 
-  const handleCommentsSnapshot = ({ docs }: firebase.firestore.QuerySnapshot) => {
+  const handleCommentsSnapshot = ({ docs }: QuerySnapshot) => {
     const comments: CommentsMap = {};
-    docs.map((doc: firebase.firestore.QueryDocumentSnapshot) => (comments[doc.id] = new Comment(doc)));
+    docs.map(doc => (comments[doc.id] = new Comment(doc)));
     setComments(comments);
     setIsCommentsLoaded(true);
   };

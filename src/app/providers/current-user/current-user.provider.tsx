@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, memo, useContext } from 'react';
+import { User as AuthUser, Error as AuthError } from '@firebase/auth-types';
 
 import { auth, createUserProfileDocument, logout, login, register, signInWithGoogle } from '../../firebase/firebase.service';
 import CurrentUser from '../../models/current-user.model';
@@ -33,7 +34,7 @@ const CurrentUserProvider: React.FC = memo(({ children }) => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(
-      async (userAuth: firebase.User | null) => {
+      async (userAuth: AuthUser | null) => {
         if (userAuth) {
           try {
             const currentUser = await createUserProfileDocument(userAuth);
@@ -51,7 +52,7 @@ const CurrentUserProvider: React.FC = memo(({ children }) => {
         // unsubscribe to prevent onAuthStateChanged when signin or signup method are fired
         unsubscribe();
       },
-      (err: firebase.auth.Error) => {
+      (err: AuthError) => {
         openNotification('Cannot check for user auth', 'Try to reload', 'error');
         console.error(err);
         setCurrentUserLoaded(true);

@@ -1,4 +1,5 @@
 import CurrentUser from './current-user.model';
+import { DocumentSnapshot } from '@firebase/firestore-types';
 
 export class Comment {
   id?: string;
@@ -7,7 +8,7 @@ export class Comment {
   updatedAt: number;
   text: string;
 
-  constructor(json: firebase.firestore.DocumentSnapshot) {
+  constructor(json: DocumentSnapshot) {
     const jsonData = json.data();
 
     this.id = json.id;

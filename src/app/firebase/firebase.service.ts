@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import { User as AuthUser, UserCredential } from '@firebase/auth-types';
 
 import { firebaseRoutes, firebaseConfigProd } from './firebase.config';
 import { IfirebaseConfig } from './firebase.interface';
@@ -14,11 +15,11 @@ if (!firebase.apps.length) {
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-export const register = async (email: string, password: string): Promise<firebase.auth.UserCredential> => {
+export const register = async (email: string, password: string): Promise<UserCredential> => {
   return auth.createUserWithEmailAndPassword(email, password);
 };
 
-export const login = async (email: string, password: string): Promise<firebase.auth.UserCredential> => {
+export const login = async (email: string, password: string): Promise<UserCredential> => {
   return auth.signInWithEmailAndPassword(email, password);
 };
 
@@ -30,18 +31,18 @@ export const resetPassword = async (email: string): Promise<void> => {
   return auth.sendPasswordResetEmail(email);
 };
 
-export const signInWithGoogle = async (): Promise<firebase.auth.UserCredential> => {
+export const signInWithGoogle = async (): Promise<UserCredential> => {
   return auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
 };
 
-export const createUserProfileDocument = async (userAuth: firebase.User, additionalData?: any): Promise<CurrentUser> => {
+export const createUserProfileDocument = async (userAuth: AuthUser, additionalData?: any): Promise<CurrentUser> => {
   if (!userAuth) return;
-  const userRef: firebase.firestore.DocumentReference = firestore.doc(`users/${userAuth.uid}`);
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
 
-  const snapshot: firebase.firestore.DocumentSnapshot = await userRef.get();
+  const snapshot = await userRef.get();
 
   if (!snapshot.exists) {
-    const { displayName, email }: firebase.User = userAuth;
+    const { displayName, email } = userAuth;
     const createdAt: number = Date.now();
     const updatedAt: number = Date.now();
 
@@ -53,7 +54,7 @@ export const createUserProfileDocument = async (userAuth: firebase.User, additio
       updatedAt,
       ...additionalData
     });
-    const snapshot: firebase.firestore.DocumentSnapshot = await userRef.get();
+    const snapshot = await userRef.get();
     return new CurrentUser(snapshot);
   }
 

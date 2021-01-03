@@ -1,3 +1,5 @@
+import { DocumentSnapshot } from '@firebase/firestore-types';
+
 export default class CurrentUser {
   id: string;
   displayName: string | null;
@@ -6,7 +8,7 @@ export default class CurrentUser {
   createdAt?: number;
   updatedAt?: number;
 
-  constructor(json: firebase.firestore.DocumentSnapshot) {
+  constructor(json: DocumentSnapshot) {
     const jsonData = json.data();
 
     this.id = json.id;

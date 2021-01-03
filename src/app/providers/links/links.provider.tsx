@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, memo, useContext } from 'react';
+import { DocumentSnapshot, Query } from '@firebase/firestore-types';
 import { useQueryParam, StringParam, ArrayParam } from 'use-query-params';
 
 import firebaseApp, { firestore } from '../../firebase/firebase.service';
@@ -46,14 +47,14 @@ const LinksProvider: React.FC = memo(({ children }) => {
   const [linksLoaded, setLinksLoaded] = useState<boolean>(false);
   const [loadingMoreLinks, setLoadingMoreLinks] = useState<boolean>(false);
   const [hasMoreLinks, setHasMoreLinks] = useState<boolean>(true);
-  const [cursor, setCursor] = React.useState<firebase.firestore.DocumentSnapshot>(null);
+  const [cursor, setCursor] = React.useState<DocumentSnapshot>(null);
 
   const [qsSortby] = useQueryParam<string>('sortby', StringParam);
   const [qsCategories] = useQueryParam<string[]>('categories', ArrayParam);
 
   const { openNotification } = useContext(NotifContext);
 
-  const getQuery = (): firebase.firestore.Query => {
+  const getQuery = (): Query => {
     let linkRef: any = firestore.collection('links');
 
     if (qsCategories?.length) {
@@ -75,12 +76,12 @@ const LinksProvider: React.FC = memo(({ children }) => {
     try {
       if (cursor) {
         setLoadingMoreLinks(true);
-        const snapshot: firebase.firestore.QuerySnapshot = await getQuery()
+        const snapshot = await getQuery()
           .startAfter(cursor)
           .limit(LINKS_PER_PAGE)
           .get();
         let links: { [id: string]: Link } = {};
-        snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => (links[doc.id] = new Link(doc)));
+        snapshot.docs.map(doc => (links[doc.id] = new Link(doc)));
         const _cursor = snapshot.docs[snapshot.docs.length - 1];
         setHasMoreLinks(!snapshot.empty);
         setLoadingMoreLinks(false);
@@ -119,13 +120,13 @@ const LinksProvider: React.FC = memo(({ children }) => {
       for (const category of categories) {
         const selectedCategory = allCategories.find((_category: Category) => _category.name === category);
         selectedCategory.count++;
-        const categoryRef: firebase.firestore.DocumentReference = firestore.doc(`categories/${selectedCategory.id}`);
+        const categoryRef = firestore.doc(`categories/${selectedCategory.id}`);
         await categoryRef.update('count', selectedCategory.count);
       }
-      const linksRef: firebase.firestore.CollectionReference = firestore.collection('links');
+      const linksRef = firestore.collection('links');
       const linkRef = await linksRef.add(newLink);
 
-      const linkSnapshot: firebase.firestore.DocumentSnapshot = await linkRef.get();
+      const linkSnapshot = await linkRef.get();
       const newLinkFromFirestore = new Link(linkSnapshot);
       setLinks(prevLinks => ({ [linkSnapshot.id]: newLinkFromFirestore, ...prevLinks }));
       openNotification(`Link have been added`, '', 'success');
@@ -136,8 +137,8 @@ const LinksProvider: React.FC = memo(({ children }) => {
   };
 
   const addCommentLink = async (commentText: string, linkId: string, currentUser: CurrentUser) => {
-    const linkRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
-    const commentsRef: firebase.firestore.CollectionReference = linkRef.collection('comments');
+    const linkRef = firestore.collection('links').doc(linkId);
+    const commentsRef = linkRef.collection('comments');
 
     const increment = 1;
     const newComment: Comment = {
@@ -167,8 +168,8 @@ const LinksProvider: React.FC = memo(({ children }) => {
   };
 
   const updateVoteLinks = async (linkId: string, currentUser: CurrentUser, type: UpdateVoteLinksType) => {
-    const voteRef: firebase.firestore.DocumentReference = firestore.collection('links').doc(linkId);
-    const doc: firebase.firestore.DocumentSnapshot = await voteRef.get();
+    const voteRef = firestore.collection('links').doc(linkId);
+    const doc = await voteRef.get();
     const previousVotes: IVote[] = doc.data().votes;
     const { id, displayName } = currentUser;
     const vote: IVote = {
@@ -204,11 +205,11 @@ const LinksProvider: React.FC = memo(({ children }) => {
     const asyncEffect = async () => {
       try {
         setLinksLoaded(false);
-        const snapshot: firebase.firestore.QuerySnapshot = await getQuery()
+        const snapshot = await getQuery()
           .limit(LINKS_PER_PAGE)
           .get();
         let links: LinksMap = {};
-        snapshot.docs.map((doc: firebase.firestore.DocumentSnapshot) => (links[doc.id] = new Link(doc)));
+        snapshot.docs.map(doc => (links[doc.id] = new Link(doc)));
         const _cursor = snapshot.docs[snapshot.docs.length - 1];
         setHasMoreLinks(!snapshot.empty);
         setLinksLoaded(true);
