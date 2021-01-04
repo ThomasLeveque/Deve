@@ -45,10 +45,10 @@ const ProfilPage: React.FC = () => {
               disabled
             />
           </Descriptions.Item>
-          <Descriptions.Item labelStyle={{ marginTop: 10 }} label="Created at">
+          <Descriptions.Item labelStyle={{ marginTop: 10 }} label="Created">
             <h4>{distanceInWordsToNow(currentUser.createdAt)} ago</h4>
           </Descriptions.Item>
-          <Descriptions.Item labelStyle={{ marginTop: 10 }} label="Updated at">
+          <Descriptions.Item labelStyle={{ marginTop: 10 }} label="Updated">
             <h4>{distanceInWordsToNow(currentUser.updatedAt)} ago</h4>
           </Descriptions.Item>
         </Descriptions>

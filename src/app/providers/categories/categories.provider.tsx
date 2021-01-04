@@ -28,27 +28,21 @@ const CategoriesProvider: React.FC = memo(({ children }) => {
   const { openNotification } = useContext(NotifContext);
 
   const handleSnapshot = (snapshot: QuerySnapshot) => {
-    const categories: CategoryMapping = {};
-    snapshot.docs
+    const usedCategories = snapshot.docs
       // Sort all categoriesNames by name
       .sort((a, b) => a.data().name.localeCompare(b.data().name))
-      .map(doc => {
-        const categoryName = doc.data().name;
-        categories[categoryName] = new Category(doc);
-      });
-    const allCategories: Category[] = Object.keys(categories).map((categoryName: string) => {
-      // Save the category to send it to allCategories array
-      const category = categories[categoryName];
+      .reduce((acc, doc) => {
+        const categoryData = doc.data() as Category;
+        if (categoryData.count > 0) {
+          acc[categoryData.name] = new Category(doc);
+        }
+        return acc;
+      }, {} as CategoryMapping);
 
-      // Filter Categories object to keep only the usedCategories
-      if (categories[categoryName].count === 0) {
-        delete categories[categoryName];
-      }
-      return category;
-    });
+    const allCategories: Category[] = snapshot.docs.map(doc => new Category(doc));
 
     setCategories(allCategories);
-    setUsedCategories(categories);
+    setUsedCategories(usedCategories);
     setCategoriesLoaded(true);
   };
 
