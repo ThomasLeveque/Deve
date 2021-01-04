@@ -42,13 +42,14 @@ export const createUserProfileDocument = async (userAuth: AuthUser, additionalDa
   const snapshot = await userRef.get();
 
   if (!snapshot.exists) {
-    const { displayName, email } = userAuth;
+    const { displayName, email, photoURL } = userAuth;
     const createdAt: number = Date.now();
     const updatedAt: number = Date.now();
 
     await userRef.set({
       displayName,
       email,
+      photoURL,
       isAdmin: false,
       createdAt,
       updatedAt,

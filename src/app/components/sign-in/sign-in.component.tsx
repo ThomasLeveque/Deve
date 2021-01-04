@@ -73,13 +73,7 @@ const SignIn: React.FC = () => {
             component={FormInput}
           />
           {firebaseError && <p className="error-text text-align-center">{firebaseError}</p>}
-          <CustomButton
-            text="Sign in"
-            buttonType="primary"
-            type="submit"
-            disabled={isSubmitting || !isValid || withGoogleLoading}
-            loading={isSubmitting}
-          />
+          <CustomButton text="Sign in" buttonType="primary" type="submit" disabled={isSubmitting || !isValid} loading={isSubmitting} />
           <UnderlineLink type="insider" to="/forgot">
             Forgot password ?
           </UnderlineLink>
@@ -91,7 +85,7 @@ const SignIn: React.FC = () => {
             hasIcon
             Icon={GoogleOutlined}
             loading={withGoogleLoading}
-            disabled={withGoogleLoading || isSubmitting}
+            disabled={withGoogleLoading}
             onClick={authenticateUserWithGoogle}
           />
         </Form>

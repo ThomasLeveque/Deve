@@ -11,7 +11,7 @@ const SignInAndSignUpPage: React.FC = () => {
 
   return (
     <div className="sign-in-and-sign-up-page">
-      <Tabs size="large" animated defaultActiveKey="1">
+      <Tabs size="large" defaultActiveKey="1">
         <TabPane tab="Sign in" key="1">
           <SignIn />
         </TabPane>

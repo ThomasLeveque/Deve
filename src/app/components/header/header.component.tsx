@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Dropdown, Menu, Button } from 'antd';
-import { LogoutOutlined, CloseOutlined, SearchOutlined, DownOutlined, LoginOutlined } from '@ant-design/icons';
+import { LogoutOutlined, UserOutlined, CloseOutlined, SearchOutlined, DownOutlined, LoginOutlined } from '@ant-design/icons';
 import { useMediaQuery } from 'beautiful-react-hooks';
 
 import { useCurrentUser } from '../../providers/current-user/current-user.provider';
@@ -15,11 +15,17 @@ const Header: React.FC = () => {
   const { isSearchOpen, toggleSearch } = useSearch();
   const history = useHistory();
 
-  const isMobile = useMediaQuery(IS_MOBILE)
+  const isMobile = useMediaQuery(IS_MOBILE);
 
   const menu = (
     <Menu className="user-dropdown">
       <Menu.Item key="0">
+        <div className="pointer" onClick={() => history.push('/profil')}>
+          <UserOutlined />
+          Your profil
+        </div>
+      </Menu.Item>
+      <Menu.Item key="1">
         <div className="pointer" onClick={handleLogout}>
           <LogoutOutlined />
           Sign out
@@ -37,7 +43,7 @@ const Header: React.FC = () => {
 
     const initialsName = displayName.split(' ').map((nameItem: string) => nameItem[0]);
     return initialsName.join('').toUpperCase();
-  }
+  };
 
   return (
     <header className="header">

@@ -27,9 +27,7 @@
   .ant-tabs {
     padding: 50px 70px;
 
-    .is-mobile({
-      padding: 30px;
-    });
+    .is-mobile({padding: 30px;});
 
     &-bar {
       margin-bottom: 30px;
@@ -38,13 +36,19 @@
     &-nav {
       width: 100%;
 
-      .ant-tabs-tab {
-        margin: 0;
-        width: 50%;
-        text-align: center;
-        font-size: 18px;
-        text-transform: uppercase;
-        font-weight: 400;
+      &-list {
+        width: 100%;
+
+        .ant-tabs-tab {
+          margin: 0;
+          width: 50%;
+          text-align: center;
+          font-size: 18px;
+          text-transform: uppercase;
+          font-weight: 400;
+          display: flex;
+          justify-content: center;
+        }
       }
     }
   }

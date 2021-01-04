@@ -6,6 +6,7 @@ const AddLinkPage = lazy(() => import('./pages/add-link/add-link.page'));
 const SignInAndSignUpPage = lazy(() => import('./pages/sign-in-and-sign-up/sign-in-and-sign-up.page'));
 const ForgotPasswordPage = lazy(() => import('./pages/forgot-password/forgot-password.page'));
 const LinkDetailPage = lazy(() => import('./pages/link-detail/link-detail.page'));
+const ProfilPage = lazy(() => import('./pages/profil/profil.page'));
 
 import Loading from './components/loading/loading.component';
 import NotFound from './pages/not-found/not-found.page';
@@ -25,6 +26,9 @@ const AppRoutes = () => {
         </RouteTransition>
         <RouteTransition path="/" exact>
           <HomePage />
+        </RouteTransition>
+        <RouteTransition exact path="/profil" slide={SLIDE_ROUTE}>
+          {currentUser ? <ProfilPage /> : <Redirect to="/signin" />}
         </RouteTransition>
         <RouteTransition exact path="/add" slide={SLIDE_ROUTE}>
           {currentUser ? <AddLinkPage /> : <Redirect to="/signin" />}
