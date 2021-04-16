@@ -10,7 +10,6 @@ import CurrentUser from '../models/current-user.model';
 const firebaseConfig = ((domain: string): IfirebaseConfig => firebaseRoutes[domain] || firebaseConfigProd)(window.document.domain);
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
-  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 }
 
 export const auth = firebase.auth();
